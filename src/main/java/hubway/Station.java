@@ -39,7 +39,8 @@ public class Station {
 		last_day = stationDF.parse((String)stationObj.get("last_day"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-        	e.printStackTrace();
+        	// e.printStackTrace();
+			System.out.println("Missing date(s) for " + station);
 		}
 	}
 

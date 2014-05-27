@@ -62,12 +62,7 @@ public class mongo {
 
 				if (start.station.equalsIgnoreCase(dest.station))
 					continue;
-				
-//					Double diffLat = Math.abs(dest.lat-start.lat);
-//					Double diffLng = Math.abs(dest.lng-start.lng);
-//					
-//					Double dist = Math.sqrt(diffLat*diffLat + diffLng*diffLng);
-//					
+						
 				Double dist = distFrom(dest.lat, dest.lng, start.lat, start.lng);
 														
 				if (dist < minDist)
@@ -97,7 +92,7 @@ public class mongo {
 
 	// stolen from the internets.
 	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
-	    double earthRadius = 3958.75;
+	    double earthRadius = 3958.75; //units?
 	    double dLat = Math.toRadians(lat2-lat1);
 	    double dLng = Math.toRadians(lng2-lng1);
 	    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
