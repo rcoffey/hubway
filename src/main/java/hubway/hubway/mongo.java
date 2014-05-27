@@ -1,6 +1,4 @@
-package hubway.hubway;
-
-import hubway.Station;
+package hubway;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;

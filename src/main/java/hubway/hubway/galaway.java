@@ -1,4 +1,4 @@
-package hubway.hubway;
+package hubway;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
