@@ -4,18 +4,19 @@ import hubway.Station;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Calculator {
-	public static void printMinMaxStations(ArrayList<Station> stationList) {
+	public static void printMinMaxStations(List<Station> bostonStations) {
 		Double minDist = Double.MAX_VALUE;
 		Double maxDist = Double.MIN_VALUE;            
 		Station maxStationStart = null, maxStationDest = null, minStationStart = null, minStationDest = null; 
 				
-		for (Iterator<Station> itStart = stationList.iterator(); itStart.hasNext();) {
+		for (Iterator<Station> itStart = bostonStations.iterator(); itStart.hasNext();) {
 			Station start = (Station) itStart.next();
 
 
-			for (Iterator<Station> itDest = stationList.iterator(); itDest.hasNext();) {
+			for (Iterator<Station> itDest = bostonStations.iterator(); itDest.hasNext();) {
 				Station dest = (Station) itDest.next();
 
 				if (start.station.equalsIgnoreCase(dest.station))
