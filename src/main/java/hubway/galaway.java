@@ -19,7 +19,7 @@ public class galaway {
 	public static void main(String[] args) {
 		Logger logger = LoggerFactory.getLogger(galaway.class);
 		@SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext("spring.galaway.beans.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring.galaway.beans.xml");
 		MongoTemplate client = (MongoTemplate) context.getBean("mongoTemplate");
 		DB galawayDb = client.getDb();
 		if(!galawayDb.isAuthenticated()){
