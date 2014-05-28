@@ -1,4 +1,4 @@
-package hubway.hubway;
+package hubway;
 
 import hubway.Station;
 
