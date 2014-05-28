@@ -1,5 +1,13 @@
 package hubway;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.json.JSONObject;
+
 import hubway.utility.Calculator;
 
 public class MongoStationPair {
@@ -18,4 +26,24 @@ public class MongoStationPair {
 		tripCount = 0;
 	}
 	
+	public int addTrips(String urlToQuery){
+		try {
+			URL query = new URL(urlToQuery + "&start_station=" + station1.id + "&end_station=" + station2.id);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(query.openStream()));
+        
+			String json = reader.readLine(); // it's only one line
+			//JSONObject bostonStations = new JSONObject(json);
+			
+			//System.out.println(bostonStations.toString(2));
+        
+        } catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 2; // really return the number of trips added.
+	}
 }

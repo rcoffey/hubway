@@ -24,6 +24,13 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class galaway {
+	private static String HubwayURL = "http://hubwaydatachallenge.org/api/v1/";
+	private static String HubwayCredentials = "/?format=json&username=cbaltera&api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6";
+	private static String HubwayStationURL = HubwayURL + "station" + HubwayCredentials;
+	private static String HubwayTripURL = HubwayURL + "trip" + HubwayCredentials;
+	private static String HubwayStationCapacityURL = HubwayURL + "stationcapacity" + HubwayCredentials;
+	private static String HubwayStationStatusURL = HubwayURL + "stationstatus" + HubwayCredentials;
+	
 	public static void main(String[] args) {
 		Logger logger = LoggerFactory.getLogger(galaway.class);
 		@SuppressWarnings("resource")
@@ -46,10 +53,10 @@ public class galaway {
         Calculator.printMinMaxStations(stationList);        
         
         try {
-			URL stationQuery = new URL("http://hubwaydatachallenge.org/api/v1/station/?format=json&username=cbaltera&api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6&name__icontains=Boston");
+			URL stationQuery = new URL(HubwayStationURL + "&name__icontains=Boston");
 			BufferedReader stationReader = new BufferedReader(new InputStreamReader(stationQuery.openStream()));
         
-			String stationJSON = stationReader.readLine(); // hopefully it's one line
+			String stationJSON = stationReader.readLine(); // it's only one line
 			JSONObject bostonStations = new JSONObject(stationJSON);
 			
 			System.out.println(bostonStations.toString(2));
