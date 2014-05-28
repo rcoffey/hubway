@@ -1,5 +1,7 @@
 package hubway;
 
+import hubway.utility.Calculator;
+
 import java.util.ArrayList;
 
 
@@ -15,13 +17,15 @@ public class StationPair {
 	public ArrayList<Trip> trips21; // from station2 to station1
 	
 	
+	// can we make this (or some variant) usable from mongo data, without having to 
+	// go through the Trip class?
 	
 	
 	public StationPair(Station station1, Station station2) {
 		this.station1 = station1;
 		this.station2 = station2;
 		
-		geoDist = mongo.distFrom(station1.lat, station1.lng, station2.lat, station2.lng);
+		geoDist = Calculator.distFrom(station1.lat, station1.lng, station2.lat, station2.lng);
 		tripCount = 0;
 	}
 	
@@ -35,5 +39,17 @@ public class StationPair {
 		} else {
 			trips21.add(trip);
 		}
+	}
+	
+	public double computeAvgTime() {
+		double totalTime = 0.0; // in seconds
+		for (Trip trip : trips12){
+			totalTime += trip.duration;
+		}
+		for (Trip trip : trips21) {
+			totalTime += trip.duration;
+		}
+		
+		return totalTime/tripCount;
 	}
 }
