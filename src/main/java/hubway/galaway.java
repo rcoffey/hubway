@@ -1,31 +1,38 @@
 package hubway;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.googlecode.mjorm.MongoDao;
 import com.googlecode.mjorm.MongoDaoImpl;
-import com.googlecode.mjorm.ObjectIterator;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
-import com.googlecode.mjorm.convert.ConversionContext;
-import com.googlecode.mjorm.convert.ConversionException;
-import com.googlecode.mjorm.convert.JavaType;
-import com.googlecode.mjorm.convert.TypeConversionHints;
-import com.googlecode.mjorm.convert.TypeConverter;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 
 public class galaway {
+	private static String HubwayURL = "http://hubwaydatachallenge.org/api/v1/";
+	private static String HubwayCredentials = "/?format=json&username=cbaltera&api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6";
+	private static String HubwayStationURL = HubwayURL + "station"
+			+ HubwayCredentials;
+	private static String HubwayTripURL = HubwayURL + "trip"
+			+ HubwayCredentials;
+	private static String HubwayStationCapacityURL = HubwayURL
+			+ "stationcapacity" + HubwayCredentials;
+	private static String HubwayStationStatusURL = HubwayURL + "stationstatus"
+			+ HubwayCredentials;
+
 	public static void main(String[] args) {
 		Logger logger = LoggerFactory.getLogger(galaway.class);
 		// Get the Beans
@@ -57,6 +64,25 @@ public class galaway {
 		System.out.println("There are " + stationList.size() + " stations");
 
 		printMinMaxStations(stationList);
+
+		try {
+			URL stationQuery = new URL(HubwayStationURL
+					+ "&name__icontains=Boston");
+			BufferedReader stationReader = new BufferedReader(
+					new InputStreamReader(stationQuery.openStream()));
+
+			String stationJSON = stationReader.readLine(); // it's only one line
+			JSONObject bostonStations = new JSONObject(stationJSON);
+
+			System.out.println(bostonStations.toString(2));
+
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private static void printMinMaxStations(List<Station> stationList) {
@@ -126,4 +152,21 @@ public class galaway {
 		return (double) (dist * meterConversion);
 	}
 
+	/**
+	 * hubway api url/queries: http://hubwaydatachallenge.org/api/v1/station/
+	 * ?format
+	 * =json&username=cbaltera&api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6
+	 * &name__icontains=Boston
+	 * 
+	 * The api doesn't have municipality available for stations. nb_docks is a
+	 * in a separate schema from the basic station info. nb_bikes and
+	 * nb_emptyDocks are also available. Trip data appears to be the same, so
+	 * maybe keep stations in mongo and get trips from the hubway api.
+	 * 
+	 * http://hubwaydatachallenge.org/api/v1/trip/
+	 * ?format=json&username=cbaltera
+	 * &api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6
+	 * &duration__gt=3600&start_station
+	 * =33&start_date__gte=2011-08-01&end_date__lte=2011-08-31
+	 */
 }
