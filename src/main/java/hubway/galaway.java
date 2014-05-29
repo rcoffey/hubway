@@ -1,11 +1,10 @@
+package hubway;
 
+import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.HubwayQuery;
 import hubway.utility.IntegerConverter;
 
-
-import hubway.utility.Calculator;
-import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -52,6 +51,7 @@ public class galaway {
 				new BasicDBObject(), Station.class).readAll();
 
 		System.out.println("There are " + stationList.size() + " stations");
+		System.out.println(stationList.toString());
 
 		Calculator.printMinMaxStations(stationList);
 
@@ -62,8 +62,6 @@ public class galaway {
 		System.out.println(bostonStations.toString(2));
 
 	}
-
-
 
 	/**
 	 * hubway api url/queries: http://hubwaydatachallenge.org/api/v1/station/

@@ -18,6 +18,7 @@ public class Station {
 	}
 
 	public String id;
+	public String _mongoId;
 	public String terminal;
 	public String station, municipality;
 	public Integer nb_docks;
@@ -29,7 +30,16 @@ public class Station {
 	}
 
 	@Id
-	@Property
+	@Property(field = "_id")
+	public String getMongoId() {
+		return _mongoId;
+	}
+
+	public void setMongoId(String mongoId_) {
+		_mongoId = mongoId_;
+	}
+
+	@Property(field = "id")
 	public String getId() {
 		return id;
 	}
