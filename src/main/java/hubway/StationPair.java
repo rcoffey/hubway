@@ -21,7 +21,7 @@ public class StationPair {
 		this.station1 = station1;
 		this.station2 = station2;
 		
-		geoDist = mongo.distFrom(station1.lat, station1.lng, station2.lat, station2.lng);
+		//geoDist = mongo.distFrom(station1.lat, station1.lng, station2.lat, station2.lng);
 		tripCount = 0;
 	}
 	

@@ -35,6 +35,8 @@
 			<artifactId>spring-data-mongodb</artifactId>
 			<version>1.2.0.RELEASE</version>
 		</dependency>
+
+		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -46,14 +48,36 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.7</version>
 		</dependency>
+
+		<!-- MJORM for creating Mongo -> Java Object templates -->
+		<!-- http://www.infoq.com/articles/mongodb-java-orm-bcd -->
+		<dependency>
+			<groupId>com.googlecode</groupId>
+			<artifactId>mongo-java-orm</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.mongodb.morphia</groupId> -->
+<!-- 			<artifactId>morphia</artifactId> -->
+<!-- 			<version>0.107</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>cglib</groupId> -->
+<!-- 			<artifactId>cglib-nodep</artifactId> -->
+<!-- 			<version>[2.1_3,)</version> -->
+<!-- 			<type>jar</type> -->
+<!-- 			<optional>true</optional> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.thoughtworks.proxytoys</groupId> -->
+<!-- 			<artifactId>proxytoys</artifactId> -->
+<!-- 			<version>1.0</version> -->
+<!-- 			<type>jar</type> -->
+<!-- 			<optional>true</optional> -->
+<!-- 		</dependency> -->
 	</dependencies>
 	<build>
-<!-- 		<resources> -->
-<!-- 			<resource> -->
-<!-- 				<directory>src/main/resources</directory> -->
-<!-- 				<filtering>false</filtering> -->
-<!-- 			</resource> -->
-<!-- 		</resources> -->
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -65,5 +89,12 @@
 
 		</pluginManagement>
 	</build>
-
+	<repositories>
+		<repository>
+			<id>mjorm-webdav-maven-repo</id>
+			<name>mjorm maven repository</name>
+			<url>http://mongo-java-orm.googlecode.com/svn/maven/repo/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 </project>

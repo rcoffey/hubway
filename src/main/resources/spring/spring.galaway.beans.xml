@@ -17,29 +17,6 @@
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg ref="galaway" />
 	</bean>
-	<!-- <bean id="mongoServer" class="com.mongodb.ServerAddress"> -->
-	<!-- <constructor-arg value="ds049868.mongolab.com" /> -->
-	<!-- <constructor-arg value="49868" /> -->
-	<!-- </bean> -->
-	<!-- <mong -->
-
-	<!-- <bean id="mongoCredential" class="com.mongodb.MongoCredential"> -->
-	<!-- <constructor-arg value="galaway" /> -->
-	<!-- <constructor-arg value="galaway" /> -->
-	<!-- <constructor-arg value="g,a,l,a,w,a,y" /> -->
-	<!-- </bean> -->
-
-	<!-- <bean id="mongoClient" class="com.mongodb.MongoClient"> -->
-	<!-- <constructor-arg> -->
-	<!-- <list value-type="com.mongodb.ServerAddress"> -->
-	<!-- <ref bean="mongoServer" /> -->
-	<!-- </list> -->
-	<!-- </constructor-arg> -->
-	<!-- <constructor-arg> -->
-	<!-- <list value-type="org.mongodb.MongoCredential"> -->
-	<!-- <ref bean="mongoCredential" /> -->
-	<!-- </list> -->
-	<!-- </constructor-arg> -->
 
 
 </beans>
