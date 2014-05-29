@@ -27,14 +27,17 @@ public class MongoStationPair {
 	}
 	
 	public int addTrips(String urlToQuery){
+		// probably will want to call this by dates, because we're limited
+		// to 100 results per query
+		// or allow for repeat querying the "next" URL
 		try {
 			URL query = new URL(urlToQuery + "&start_station=" + station1.id + "&end_station=" + station2.id);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(query.openStream()));
         
 			String json = reader.readLine(); // it's only one line
-			//JSONObject bostonStations = new JSONObject(json);
+			JSONObject trips = new JSONObject(json);
 			
-			//System.out.println(bostonStations.toString(2));
+			System.out.println(trips.get("meta"));
         
         } catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
