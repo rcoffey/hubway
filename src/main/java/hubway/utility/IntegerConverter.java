@@ -1,4 +1,4 @@
-package hubway;
+package hubway.utility;
 
 import com.googlecode.mjorm.convert.ConversionContext;
 import com.googlecode.mjorm.convert.JavaType;
