@@ -6,6 +6,7 @@ import hubway.utility.DateConverter;
 import hubway.utility.HubwayQuery;
 import hubway.utility.IntegerConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -53,8 +54,15 @@ public class galaway {
 
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
+		
+		List<MongoStationPair> stationPairList = new ArrayList<MongoStationPair>();
+		for (Station station1 : stationList) {
+			for (Station station2 : stationList) {
+				stationPairList.add(new MongoStationPair(station1, station2));
+			}
+		}
 
-		MongoStationPair nearest = Calculator.printMinMaxStations(stationList);
+		MongoStationPair test = Calculator.printMinMaxStations(stationList);
 
 		HubwayQuery hubwayQuerier = (HubwayQuery) context
 				.getBean("hubwayQuerier");
@@ -62,24 +70,14 @@ public class galaway {
 				"&name__icontains=Boston");
 		System.out.println(bostonStations.toString(2));
 		
-		nearest.addTrips(hubwayQuerier);
+		test.addTrips(hubwayQuerier);
+		//the below will query for all trips among all stationpairs, so a lot.
+		//thus commenting out for checkin
+		/**
+		for (MongoStationPair stationPair : stationPairList) {
+			stationPair.addTrips(hubwayQuerier);
+		}*/
 
 	}
 
-	/**
-	 * hubway api url/queries: http://hubwaydatachallenge.org/api/v1/station/
-	 * ?format =json&username=cbaltera&api_key=25f3498d4e7f722
-	 * a0ed6f3757542669b443e21a6 &name__icontains=Boston
-	 * 
-	 * The api doesn't have municipality available for stations. nb_docks is a
-	 * in a separate schema from the basic station info. nb_bikes and
-	 * nb_emptyDocks are also available. Trip data appears to be the same, so
-	 * maybe keep stations in mongo and get trips from the hubway api.
-	 * 
-	 * http://hubwaydatachallenge.org/api/v1/trip/
-	 * ?format=json&username=cbaltera
-	 * &api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6
-	 * &duration__gt=3600&start_station
-	 * =33&start_date__gte=2011-08-01&end_date__lte=2011-08-31
-	 */
 }
