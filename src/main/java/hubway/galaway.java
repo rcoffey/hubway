@@ -54,16 +54,15 @@ public class galaway {
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
-		MongoStationPair furthest = Calculator.printMinMaxStations(stationList);
-		
-		//furthest.addTrips(HubwayTripURL);
-
+		MongoStationPair nearest = Calculator.printMinMaxStations(stationList);
 
 		HubwayQuery hubwayQuerier = (HubwayQuery) context
 				.getBean("hubwayQuerier");
 		JSONObject bostonStations = hubwayQuerier.query("station",
 				"&name__icontains=Boston");
 		System.out.println(bostonStations.toString(2));
+		
+		nearest.addTrips(hubwayQuerier);
 
 	}
 

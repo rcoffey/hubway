@@ -50,9 +50,7 @@ public class Calculator {
 		System.out.println("maxStationDest.station() = " + maxStationDest.station + ", " + maxStationDest.municipality);
 		System.out.println("maxDist() = " + maxDist);
 		
-		System.out.println(maxStationStart.toString());
-		
-		return new MongoStationPair(maxStationStart, maxStationDest);
+		return new MongoStationPair(maxStationStart, maxStationStart);
 	}
 
 	// stolen from the internets.

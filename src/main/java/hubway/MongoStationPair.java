@@ -1,14 +1,9 @@
 package hubway;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.json.JSONObject;
 
 import hubway.utility.Calculator;
+import hubway.utility.HubwayQuery;
 
 public class MongoStationPair {
 	public Station station1, station2;
@@ -26,29 +21,25 @@ public class MongoStationPair {
 		tripCount = 0;
 	}
 	
-	public int addTrips(String urlToQuery){
-		// probably will want to call this by dates, because we're limited
-		// to 100 results per query
-		// or allow for repeat querying the "next" URL
-		// when there's no further results, the "next" URL is not present under "meta".
-		try {
-			URL query = new URL(urlToQuery + "&start_station=" + station1.id + "&end_station=" + station2.id);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(query.openStream()));
-        
-			String json = reader.readLine(); // it's only one line
-			JSONObject trips = new JSONObject(json);
-			
-			System.out.println(trips.get("meta"));
+	public int addTrips(HubwayQuery querier){
+		String queryString = "&start_station=" + station1.id + "&end_station=" + station2.id;
+		JSONObject tripData = querier.query("trip", queryString);
+		// actual trips are under "objects"
+		JSONObject trips = tripData.getJSONObject("objects");
+		
+		// if there are >100 such trips, there is a "next" entry under "meta"
+		// and we need to repeat the query with an offset
+		JSONObject meta = tripData.getJSONObject("meta");
+		int offset = 100;
+		while (meta.has("next") && !meta.isNull("next")) { 
+			tripData = querier.query("trip", queryString + "&offset="+offset);
+			meta = tripData.getJSONObject("meta");
+			System.out.println("Offset is " + offset + tripData.toString(2));
+			offset +=100;
+		} 
+		//System.out.println(trips.toString(2));
 			// "next" url starts after "http://hubwaydatachallenge.org"
-			// might be worth changing the saved strings to make that usable
-        
-        } catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		return 2; // really return the number of trips added.
 	}
