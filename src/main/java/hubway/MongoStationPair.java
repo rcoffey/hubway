@@ -8,7 +8,7 @@ import hubway.utility.HubwayQuery;
 
 public class MongoStationPair {
 	public Station station1, station2;
-	public double geoDist; // distance as the crow flies, ie geodesic
+	public double geoDist; // distance as the crow flies, ie geodesic, in miles
 	public int tripCount; // both directions
 	public int trips12, trips21; // trips start to destination
 	public double avgTime; // how long it takes on average to make a trip (in seconds)
@@ -22,7 +22,7 @@ public class MongoStationPair {
 		
 		geoDist = Calculator.distFrom(station1.lat, station1.lng, station2.lat, station2.lng);
 		tripCount = 0;
-		minTime = -1; // uninformative default
+		minTime = -1; // impossible default
 	}
 	
 	public int addTrips(HubwayQuery querier){
@@ -57,6 +57,7 @@ public class MongoStationPair {
 		System.out.println("These trips took on average " + avgTime/60 + " minutes.");
 		System.out.println("The longest took " + maxTime/60 + " minutes, and the shortest " +
 				minTime/60 + " minutes.");
+		System.out.println("The maximum speed was " + geoDist / (((double)minTime)/3600) + " mph.");
 		return tripCount; 
 	}
 	
