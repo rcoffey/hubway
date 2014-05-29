@@ -215,3 +215,4 @@ pip-log.txt
 .mr.developer.cfg
 /target
 target/classes/properties/galaway.properties
+target/classes/properties/galaway.properties

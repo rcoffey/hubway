@@ -51,7 +51,7 @@ public class galaway {
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
-		Calculator.printMinMaxStations(stationList);
+		MongoStationPair test = Calculator.printMinMaxStations(stationList);
 
 		HubwayQuery hubwayQuerier = (HubwayQuery) context.getBean("hubwayQuerier");
 		JSONObject birthdayRides = hubwayQuerier.query("trip", "&start_date__gte=2011-08-01&end_date__lte=2011-08-31");
@@ -60,6 +60,18 @@ public class galaway {
 		WundergroundQueryBuilder wunderground = (WundergroundQueryBuilder) context.getBean("wundergroundQueryBuilder");
 		JSONObject birthdayWeather = wunderground.queryHistorical("20130821", "MA/Boston");
 		System.out.println(wunderground.getMostRecentQuery() + birthdayWeather.toString());
+		
+		JSONObject bostonStations = hubwayQuerier.query("station",
+				"&name__icontains=Boston");
+		System.out.println(bostonStations.toString(2));
+		
+		test.addTrips(hubwayQuerier);
+		//the below will query for all trips among all stationpairs, so a lot.
+		//thus commenting out for checkin
+		/**
+		for (MongoStationPair stationPair : stationPairList) {
+			stationPair.addTrips(hubwayQuerier);
+		}*/
 	}
 
 	/**
