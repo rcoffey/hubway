@@ -4,6 +4,7 @@ import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.HubwayQuery;
 import hubway.utility.IntegerConverter;
+import hubway.utility.WundergroundQueryBuilder;
 
 import java.util.List;
 
@@ -26,15 +27,13 @@ public class galaway {
 		Logger logger = LoggerFactory.getLogger(galaway.class);
 		// Get the Beans
 		@SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"spring/spring.galaway.beans.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring.galaway.beans.xml");
 
 		// Connect to Mongo
 		MongoTemplate client = (MongoTemplate) context.getBean("mongoTemplate");
 		DB galawayDb = client.getDb();
 		if (!galawayDb.isAuthenticated()) {
-			logger.error("Authentication failed for mongoDb :"
-					+ client.toString());
+			logger.error("Authentication failed for mongoDb :" + client.toString());
 		}
 
 		// Use mjorm to map our results to our java Stations.
@@ -47,20 +46,20 @@ public class galaway {
 		MongoDao dao = new MongoDaoImpl(galawayDb, mapper);
 		// Actually go get the stations. The empty BasicDBObject is basically a
 		// select * query
-		List<Station> stationList = dao.findObjects("Stations",
-				new BasicDBObject(), Station.class).readAll();
+		List<Station> stationList = dao.findObjects("Stations", new BasicDBObject(), Station.class).readAll();
 
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
 		Calculator.printMinMaxStations(stationList);
 
-		HubwayQuery hubwayQuerier = (HubwayQuery) context
-				.getBean("hubwayQuerier");
-		JSONObject bostonStations = hubwayQuerier.query("station",
-				"&name__icontains=Boston");
-		System.out.println(bostonStations.toString(2));
+		HubwayQuery hubwayQuerier = (HubwayQuery) context.getBean("hubwayQuerier");
+		JSONObject birthdayRides = hubwayQuerier.query("trip", "&start_date__gte=2011-08-01&end_date__lte=2011-08-31");
+		System.out.println(birthdayRides.length());
 
+		WundergroundQueryBuilder wunderground = (WundergroundQueryBuilder) context.getBean("wundergroundQueryBuilder");
+		JSONObject birthdayWeather = wunderground.queryHistorical("20130821", "MA/Boston");
+		System.out.println(wunderground.getMostRecentQuery() + birthdayWeather.toString());
 	}
 
 	/**
