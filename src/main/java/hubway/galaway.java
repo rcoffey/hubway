@@ -65,26 +65,10 @@ public class galaway {
 
 		System.out.println("There are " + stationList.size() + " stations");
 
-		Calculator.printMinMaxStations(stationList);
+		MongoStationPair furthest = Calculator.printMinMaxStations(stationList);
+		
+		//furthest.addTrips(HubwayTripURL);
 
-		try {
-			URL stationQuery = new URL(HubwayStationURL
-					+ "&name__icontains=Boston");
-			BufferedReader stationReader = new BufferedReader(
-					new InputStreamReader(stationQuery.openStream()));
-
-			String stationJSON = stationReader.readLine(); // it's only one line
-			JSONObject bostonStations = new JSONObject(stationJSON);
-
-			System.out.println(bostonStations.toString(2));
-
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 

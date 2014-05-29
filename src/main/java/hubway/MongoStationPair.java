@@ -30,6 +30,7 @@ public class MongoStationPair {
 		// probably will want to call this by dates, because we're limited
 		// to 100 results per query
 		// or allow for repeat querying the "next" URL
+		// when there's no further results, the "next" URL is not present under "meta".
 		try {
 			URL query = new URL(urlToQuery + "&start_station=" + station1.id + "&end_station=" + station2.id);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(query.openStream()));
@@ -38,6 +39,8 @@ public class MongoStationPair {
 			JSONObject trips = new JSONObject(json);
 			
 			System.out.println(trips.get("meta"));
+			// "next" url starts after "http://hubwaydatachallenge.org"
+			// might be worth changing the saved strings to make that usable
         
         } catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
