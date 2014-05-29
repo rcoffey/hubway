@@ -1,10 +1,9 @@
 package hubway;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+import hubway.utility.DateConverter;
+import hubway.utility.HubwayQuery;
+import hubway.utility.IntegerConverter;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,16 +21,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 
 public class galaway {
-	private static String HubwayURL = "http://hubwaydatachallenge.org/api/v1/";
-	private static String HubwayCredentials = "/?format=json&username=cbaltera&api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6";
-	private static String HubwayStationURL = HubwayURL + "station"
-			+ HubwayCredentials;
-	private static String HubwayTripURL = HubwayURL + "trip"
-			+ HubwayCredentials;
-	private static String HubwayStationCapacityURL = HubwayURL
-			+ "stationcapacity" + HubwayCredentials;
-	private static String HubwayStationStatusURL = HubwayURL + "stationstatus"
-			+ HubwayCredentials;
 
 	public static void main(String[] args) {
 		Logger logger = LoggerFactory.getLogger(galaway.class);
@@ -65,24 +54,12 @@ public class galaway {
 
 		printMinMaxStations(stationList);
 
-		try {
-			URL stationQuery = new URL(HubwayStationURL
-					+ "&name__icontains=Boston");
-			BufferedReader stationReader = new BufferedReader(
-					new InputStreamReader(stationQuery.openStream()));
+		HubwayQuery hubwayQuerier = (HubwayQuery) context
+				.getBean("hubwayQuerier");
+		JSONObject bostonStations = hubwayQuerier.query("station",
+				"&name__icontains=Boston");
+		System.out.println(bostonStations.toString(2));
 
-			String stationJSON = stationReader.readLine(); // it's only one line
-			JSONObject bostonStations = new JSONObject(stationJSON);
-
-			System.out.println(bostonStations.toString(2));
-
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private static void printMinMaxStations(List<Station> stationList) {
@@ -154,9 +131,8 @@ public class galaway {
 
 	/**
 	 * hubway api url/queries: http://hubwaydatachallenge.org/api/v1/station/
-	 * ?format
-	 * =json&username=cbaltera&api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6
-	 * &name__icontains=Boston
+	 * ?format =json&username=cbaltera&api_key=25f3498d4e7f722
+	 * a0ed6f3757542669b443e21a6 &name__icontains=Boston
 	 * 
 	 * The api doesn't have municipality available for stations. nb_docks is a
 	 * in a separate schema from the basic station info. nb_bikes and

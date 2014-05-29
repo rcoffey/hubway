@@ -1,4 +1,4 @@
-package hubway;
+package hubway.utility;
 
 import java.text.DateFormat;
 import java.text.ParseException;
