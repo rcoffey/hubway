@@ -53,6 +53,9 @@ public class MongoStationPair {
 		System.out.println("There are " + tripCount + " trips from " + station1.station + 
 				" to " + station2.station + ".");
 		
+		if (tripCount == 0) {
+			return tripCount;
+		}
 		avgTime = totalTime/tripCount; // in seconds, so don't worry about int division
 		System.out.println("These trips took on average " + avgTime/60 + " minutes.");
 		System.out.println("The longest took " + maxTime/60 + " minutes, and the shortest " +
@@ -64,6 +67,9 @@ public class MongoStationPair {
 	private int computeTime(JSONArray trips) {
 		int time = 0;
 		int longest, shortest, tripTime;
+		// handle empty array case
+		if (trips.length() == 0)
+			return 0;
 		JSONObject trip = trips.getJSONObject(0);
 		longest = trip.getInt("duration");
 		shortest = trip.getInt("duration");

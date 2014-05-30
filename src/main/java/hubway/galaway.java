@@ -57,6 +57,7 @@ public class galaway {
 		MongoStationPair test = Calculator.printMinMaxStations(stationList);
 
 		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
+		/**
 		JSONObject birthdayRides = hubwayQuerier.query("trip", "&start_date__gte=2011-08-01&end_date__lte=2011-08-31");
 		System.out.println(birthdayRides.length());
 
@@ -68,6 +69,7 @@ public class galaway {
 		System.out.println(bostonStations.toString(2));
 
 		test.addTrips(hubwayQuerier);
+		*/
 		
 		// does it make sense to print the list of station name / station id pairs here?
 		
@@ -90,12 +92,15 @@ public class galaway {
 		System.out.println("You are going to " + destStation.station);
 		
 		MongoStationPair stationsOfInterest = new MongoStationPair(startStation, destStation);
+		System.out.println("They are " + stationsOfInterest.geoDist + " miles apart as the crow flies.");
+		// but you will have to travel at least navigableDistance to make the trip
 		stationsOfInterest.addTrips(hubwayQuerier);
 
-
+		/**
 		PlacesQueryBuilder places = (PlacesQueryBuilder) context.getBean("placesQueryBuilder");
 		JSONObject placesResponse = places.queryMbtaNear(42.351313, -71.116174, 500);
 		System.out.println(places.getMostRecentQuery() + placesResponse.toString(2));
+		*/
 	}
 
 	/**
