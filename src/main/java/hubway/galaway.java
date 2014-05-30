@@ -98,7 +98,7 @@ public class galaway {
 		input.close();
 
 		DaoQuery query = dao.createQuery();
-		query.eq("hubwayId", startStationId);
+		query.eq("_id", startStationId);
 		query.setCollection("Stations");
 		Station startStation = query.findObject(Station.class);
 		if (startStation == null) {
@@ -107,7 +107,7 @@ public class galaway {
 		}
 		System.out.println("You are starting at " + startStation.station);
 		query.clear();
-		query.eq("hubwayId", destStationId);
+		query.eq("_id", destStationId);
 		query.setCollection("Stations");
 		Station destStation = query.findObject(Station.class);
 		if (destStation == null) {
