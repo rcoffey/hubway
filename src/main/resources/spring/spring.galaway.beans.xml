@@ -29,5 +29,10 @@
 		<constructor-arg value="${wunderground.url}" />
 		<constructor-arg value="${wunderground.credentials}" />
 	</bean>
+	
+		<bean id="placesQueryBuilder" class="hubway.utility.PlacesQueryBuilder">
+		<constructor-arg value="${googleplaces.url}" />
+		<constructor-arg value="${googleplaces.credentials}" />
+	</bean>
 
 </beans>

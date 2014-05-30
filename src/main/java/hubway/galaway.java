@@ -4,10 +4,10 @@ import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
+import hubway.utility.PlacesQueryBuilder;
 import hubway.utility.WundergroundQueryBuilder;
 
 import java.util.List;
-import java.util.Scanner;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -61,27 +61,29 @@ public class galaway {
 		WundergroundQueryBuilder wunderground = (WundergroundQueryBuilder) context.getBean("wundergroundQueryBuilder");
 		JSONObject birthdayWeather = wunderground.queryHistorical("20130821", "MA/Boston");
 		System.out.println(wunderground.getMostRecentQuery() + birthdayWeather.toString());
-		
-		JSONObject bostonStations = hubwayQuerier.query("station",
-				"&name__icontains=Boston");
+
+		JSONObject bostonStations = hubwayQuerier.query("station", "&name__icontains=Boston");
 		System.out.println(bostonStations.toString(2));
-		
+
 		test.addTrips(hubwayQuerier);
-		//the below will query for all trips among all stationpairs, so a lot.
-		//thus commenting out for checkin
+		// the below will query for all trips among all stationpairs, so a lot.
+		// thus commenting out for checkin
 		/**
-		for (MongoStationPair stationPair : stationPairList) {
-			stationPair.addTrips(hubwayQuerier);
-		}*/
-		
-		System.out.println("Please enter your start station:");
-		Scanner input = new Scanner(System.in);
-		String startStation = input.nextLine();
-		System.out.println(startStation);
-		System.out.println("Please enter your destination station:");
-		String destStation = input.nextLine();
-		System.out.println(destStation);
-		
+		 * for (MongoStationPair stationPair : stationPairList) {
+		 * stationPair.addTrips(hubwayQuerier); }
+		 */
+
+		// System.out.println("Please enter your start station:");
+		// Scanner input = new Scanner(System.in);
+		// String startStation = input.nextLine();
+		// System.out.println(startStation);
+		// System.out.println("Please enter your destination station:");
+		// String destStation = input.nextLine();
+		// System.out.println(destStation);
+
+		PlacesQueryBuilder places = (PlacesQueryBuilder) context.getBean("placesQueryBuilder");
+		JSONObject placesResponse = places.queryMbtaNear(42.351313, -71.116174, 500);
+		System.out.println(places.getMostRecentQuery() + placesResponse.toString(2));
 	}
 
 	/**
