@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import com.googlecode.mjorm.MongoDao;
 import com.googlecode.mjorm.MongoDaoImpl;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
+import com.googlecode.mjorm.query.DaoQuery;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 
@@ -74,14 +75,23 @@ public class galaway {
 			stationPair.addTrips(hubwayQuerier);
 		}*/
 		
-		System.out.println("Please enter your start station:");
+		System.out.println("Please enter your start station id:");
 		Scanner input = new Scanner(System.in);
-		String startStation = input.nextLine();
-		System.out.println(startStation);
-		System.out.println("Please enter your destination station:");
-		String destStation = input.nextLine();
-		System.out.println(destStation);
-		
+		String startStationName = input.nextLine();
+		System.out.println("Please enter your destination station id:");
+		String destStationName = input.nextLine();
+		input.close();
+
+		DaoQuery query = dao.createQuery();
+		query.eq("id", startStationName);
+		query.setCollection("Stations");
+		Station startStation = query.findObject(Station.class);
+		System.out.println(startStation.toString());
+		query.clear();
+		query.eq("id", destStationName);
+		query.setCollection("Stations");
+		Station destStation = query.findObject(Station.class);
+		System.out.println(destStation.toString());
 	}
 
 	/**
