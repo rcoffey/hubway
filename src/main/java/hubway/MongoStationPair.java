@@ -65,14 +65,17 @@ public class MongoStationPair {
 			System.out.println("The maximum speed was " + geoDist / (((double) minTime) / 3600) + " mph.");
 		}
 		return tripCount;
+
 	}
 
 	private int computeTime(JSONArray trips) {
 		int time = 0;
 		int longest, shortest, tripTime;
-		if (trips.length() < 1) {
+
+		// handle empty array case
+		if (trips.length() == 0)
 			return 0;
-		}
+
 		JSONObject trip = trips.getJSONObject(0);
 		longest = trip.getInt("duration");
 		shortest = trip.getInt("duration");

@@ -39,7 +39,7 @@ public class Station {
 		_mongoId = mongoId_;
 	}
 
-	@Property(field = "id")
+	@Property(field = "hubwayId")
 	public String getId() {
 		return id;
 	}
