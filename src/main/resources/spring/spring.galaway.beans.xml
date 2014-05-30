@@ -44,5 +44,12 @@
 		<constructor-arg value="${google.directions.url}" />
 		<constructor-arg value="${google.credentials}" />
 	</bean>
+	
+	<bean id="locationEnricher" class="hubway.LocationDataEnricher">
+		<constructor-arg ref="wundergroundQueryBuilder" />
+		<constructor-arg ref="placesQueryBuilder" />
+		<constructor-arg ref="directionsQueryBuilder" />
+		<constructor-arg ref="distanceQueryBuilder" />
+	</bean>
 
 </beans>

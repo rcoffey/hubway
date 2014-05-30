@@ -6,8 +6,10 @@ import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -120,6 +122,11 @@ public class galaway {
 		// trip
 		stationsOfInterest.addTrips(hubwayQuerier);
 
+		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+		Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
+				destStation.getLatLng(), 500);
+		System.out.print("Done");
 		/**
 		 * PlacesQueryBuilder places = (PlacesQueryBuilder)
 		 * context.getBean("placesQueryBuilder"); JSONObject placesResponse =

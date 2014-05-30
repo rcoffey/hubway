@@ -5,16 +5,15 @@ import java.util.Date;
 import com.googlecode.mjorm.annotations.Entity;
 import com.googlecode.mjorm.annotations.Id;
 import com.googlecode.mjorm.annotations.Property;
+import com.javadocmd.simplelatlng.LatLng;
 
 @Entity
 public class Station {
 	@Override
 	public String toString() {
-		return "Station [id=" + id + ", terminal=" + terminal + ", station="
-				+ station + ", municipality=" + municipality + ", nb_docks="
-				+ nb_docks + ", lat=" + lat + ", lng=" + lng
-				+ ", install_date=" + install_date + ", last_day=" + last_day
-				+ "]";
+		return "Station [id=" + id + ", terminal=" + terminal + ", station=" + station + ", municipality="
+				+ municipality + ", nb_docks=" + nb_docks + ", lat=" + lat + ", lng=" + lng + ", install_date="
+				+ install_date + ", last_day=" + last_day + "]";
 	}
 
 	public String id;
@@ -120,4 +119,7 @@ public class Station {
 		this.install_date = install_date;
 	}
 
+	public LatLng getLatLng() {
+		return new LatLng(lat, lng);
+	}
 }
