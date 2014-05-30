@@ -55,7 +55,7 @@ public class MongoStationPair {
 
 		System.out.println("There are " + tripCount + " trips between " + station1.station + " and " + station2.station
 				+ ".");
-		if (totalTime < 0) {
+		if (totalTime > 0) {
 			avgTime = totalTime / tripCount; // in seconds, so don't worry about
 												// int
 												// division

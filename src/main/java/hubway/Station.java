@@ -1,7 +1,5 @@
 package hubway;
 
-import java.util.Date;
-
 import com.googlecode.mjorm.annotations.Entity;
 import com.googlecode.mjorm.annotations.Id;
 import com.googlecode.mjorm.annotations.Property;

@@ -75,16 +75,6 @@ public class galaway {
 		 * stationPair.addTrips(hubwayQuerier); }
 		 */
 
-		// System.out.println("Please enter your start station:");
-		// Scanner input = new Scanner(System.in);
-		// String startStation = input.nextLine();
-		// System.out.println(startStation);
-		// System.out.println("Please enter your destination station:");
-		// String destStation = input.nextLine();
-		// System.out.println(destStation);
-
-		// test.addTrips(hubwayQuerier);
-
 		// does it make sense to print the list of station name / station id
 		// pairs here?
 
