@@ -7,6 +7,7 @@ import hubway.utility.IntegerConverter;
 import hubway.utility.WundergroundQueryBuilder;
 
 import java.util.List;
+import java.util.Scanner;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -72,6 +73,15 @@ public class galaway {
 		for (MongoStationPair stationPair : stationPairList) {
 			stationPair.addTrips(hubwayQuerier);
 		}*/
+		
+		System.out.println("Please enter your start station:");
+		Scanner input = new Scanner(System.in);
+		String startStation = input.nextLine();
+		System.out.println(startStation);
+		System.out.println("Please enter your destination station:");
+		String destStation = input.nextLine();
+		System.out.println(destStation);
+		
 	}
 
 	/**
