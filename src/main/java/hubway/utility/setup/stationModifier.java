@@ -34,7 +34,9 @@ public class stationModifier {
 		DBCollection stations = galawayDb.getCollection("Stations");
 		DBObject query = new BasicDBObject(); // select * query
 		
-		// remove all existing stations from Stations collection
+		/* This block is to insert stations
+		 * 
+		 * // remove all existing stations from Stations collection
 		//stations.remove(query);
 		
 		// get station info from hubway api
@@ -56,6 +58,11 @@ public class stationModifier {
 							.add("lat", lat).add("lng", lng).get();
 			stations.insert(stationObj);
 			System.out.println("Inserted " + station.getString("name"));
+		}*/
+		
+		/* this block is to add trip data to stations */
+		for (DBObject station : stations.find()) {
+			
 		}
 		
 	}

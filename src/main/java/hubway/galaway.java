@@ -92,7 +92,6 @@ public class galaway {
 			System.out.println("No such station!");
 			return;
 		}
-		System.out.println("You are starting at " + startStation.station);
 		query.clear();
 		query.eq("_id", destStationId);
 		query.setCollection("Stations");
@@ -101,15 +100,13 @@ public class galaway {
 			System.out.println("No such station!");
 			return;
 		}
-		System.out.println("You are going to " + destStation.station);
 
 		MongoStationPair stationsOfInterest = new MongoStationPair(startStation, destStation);
 		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
 		stationsOfInterest.setNavDist(distance);
-		System.out.println("They are " + stationsOfInterest.geoDist + " miles apart as the crow flies.");
-		System.out.println("But you will have to travel at least " + stationsOfInterest.navDist + " miles "
-				+ "to complete the trip.");
 		stationsOfInterest.addTrips(hubwayQuerier);
+		
+		stationsOfInterest.info();
 		
 		/**
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
