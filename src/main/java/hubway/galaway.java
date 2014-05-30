@@ -2,6 +2,7 @@ package hubway;
 
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
+import hubway.utility.DistanceQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
@@ -71,10 +72,6 @@ public class galaway {
 		 * "&name__icontains=Boston");
 		 * System.out.println(bostonStations.toString(2));
 		 * 
-		 * // test.addTrips(hubwayQuerier); // the below will query for all
-		 * trips among all stationpairs, so a lot. // thus commenting out for
-		 * checkin /** for (MongoStationPair stationPair : stationPairList) {
-		 * stationPair.addTrips(hubwayQuerier); }
 		 */
 
 		// does it make sense to print the list of station name / station id
@@ -107,16 +104,20 @@ public class galaway {
 		System.out.println("You are going to " + destStation.station);
 
 		MongoStationPair stationsOfInterest = new MongoStationPair(startStation, destStation);
+		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
+		stationsOfInterest.setNavDist(distance);
 		System.out.println("They are " + stationsOfInterest.geoDist + " miles apart as the crow flies.");
-		// but you will have to travel at least navigableDistance to make the
-		// trip
+		System.out.println("But you will have to travel at least " + stationsOfInterest.navDist + " miles "
+				+ "to complete the trip.");
 		stationsOfInterest.addTrips(hubwayQuerier);
-
+		
+		/**
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
 		Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
 				destStation.getLatLng(), 500);
 		System.out.print("Done");
+		*/
 		/**
 		 * PlacesQueryBuilder places = (PlacesQueryBuilder)
 		 * context.getBean("placesQueryBuilder"); JSONObject placesResponse =

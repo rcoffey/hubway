@@ -71,16 +71,6 @@ public class Station {
 		this.nb_docks = nb_docks;
 	}
 
-
-	@Property()
-	public Date getInstall_date() {
-		return install_date;
-	}
-
-	public void setInstall_date(Date install_date) {
-		this.install_date = install_date;
-	}
-
 	public LatLng getLatLng() {
 		return new LatLng(lat, lng);
 	}
