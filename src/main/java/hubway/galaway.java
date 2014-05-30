@@ -2,7 +2,7 @@ package hubway;
 
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
-import hubway.utility.HubwayQuery;
+import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 import hubway.utility.WundergroundQueryBuilder;
 
@@ -54,7 +54,7 @@ public class galaway {
 
 		MongoStationPair test = Calculator.printMinMaxStations(stationList);
 
-		HubwayQuery hubwayQuerier = (HubwayQuery) context.getBean("hubwayQuerier");
+		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
 		JSONObject birthdayRides = hubwayQuerier.query("trip", "&start_date__gte=2011-08-01&end_date__lte=2011-08-31");
 		System.out.println(birthdayRides.length());
 
