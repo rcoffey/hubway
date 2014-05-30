@@ -50,8 +50,8 @@ public class MongoStationPair {
 			offset +=100;
 		} 
 
-		System.out.println("There are " + tripCount + " trips between " + station1.station + 
-				" and " + station2.station + ".");
+		System.out.println("There are " + tripCount + " trips from " + station1.station + 
+				" to " + station2.station + ".");
 		
 		avgTime = totalTime/tripCount; // in seconds, so don't worry about int division
 		System.out.println("These trips took on average " + avgTime/60 + " minutes.");
