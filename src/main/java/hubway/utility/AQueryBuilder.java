@@ -15,7 +15,7 @@ public abstract class AQueryBuilder {
 	protected String _url;
 	protected String _credentials;
 	protected String _mostRecentQuery = "";
-	final protected Logger logger = LoggerFactory.getLogger(HubwayQuery.class);
+	final protected Logger logger = LoggerFactory.getLogger(HubwayQueryBuilder.class);
 
 	public AQueryBuilder(final String url_, final String credentials_) {
 		_url = url_;

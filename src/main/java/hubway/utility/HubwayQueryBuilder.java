@@ -2,8 +2,8 @@ package hubway.utility;
 
 import org.json.JSONObject;
 
-public class HubwayQuery extends AQueryBuilder {
-	public HubwayQuery(String url_, String credentials_) {
+public class HubwayQueryBuilder extends AQueryBuilder {
+	public HubwayQueryBuilder(String url_, String credentials_) {
 		super(url_, credentials_);
 	}
 

@@ -2,8 +2,9 @@ package hubway;
 
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
-import hubway.utility.HubwayQuery;
+import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
+import hubway.utility.PlacesQueryBuilder;
 import hubway.utility.WundergroundQueryBuilder;
 
 import java.util.List;
@@ -55,21 +56,20 @@ public class galaway {
 
 		MongoStationPair test = Calculator.printMinMaxStations(stationList);
 
-		HubwayQuery hubwayQuerier = (HubwayQuery) context.getBean("hubwayQuerier");
+		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
 		JSONObject birthdayRides = hubwayQuerier.query("trip", "&start_date__gte=2011-08-01&end_date__lte=2011-08-31");
 		System.out.println(birthdayRides.length());
 
 		WundergroundQueryBuilder wunderground = (WundergroundQueryBuilder) context.getBean("wundergroundQueryBuilder");
 		JSONObject birthdayWeather = wunderground.queryHistorical("20130821", "MA/Boston");
 		System.out.println(wunderground.getMostRecentQuery() + birthdayWeather.toString());
-		
-		JSONObject bostonStations = hubwayQuerier.query("station",
-				"&name__icontains=Boston");
+
+		JSONObject bostonStations = hubwayQuerier.query("station", "&name__icontains=Boston");
 		System.out.println(bostonStations.toString(2));
-		
+
 		test.addTrips(hubwayQuerier);
-		//the below will query for all trips among all stationpairs, so a lot.
-		//thus commenting out for checkin
+		// the below will query for all trips among all stationpairs, so a lot.
+		// thus commenting out for checkin
 		/**
 		for (MongoStationPair stationPair : stationPairList) {
 			stationPair.addTrips(hubwayQuerier);
@@ -92,6 +92,11 @@ public class galaway {
 		query.setCollection("Stations");
 		Station destStation = query.findObject(Station.class);
 		System.out.println(destStation.toString());
+
+
+		PlacesQueryBuilder places = (PlacesQueryBuilder) context.getBean("placesQueryBuilder");
+		JSONObject placesResponse = places.queryMbtaNear(42.351313, -71.116174, 500);
+		System.out.println(places.getMostRecentQuery() + placesResponse.toString(2));
 	}
 
 	/**

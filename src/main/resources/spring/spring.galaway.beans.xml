@@ -20,7 +20,7 @@
 		<constructor-arg ref="galaway" />
 	</bean>
 
-	<bean id="hubwayQuerier" class="hubway.utility.HubwayQuery">
+	<bean id="hubwayQuerier" class="hubway.utility.HubwayQueryBuilder">
 		<constructor-arg value="${hubway.url}" />
 		<constructor-arg value="${hubway.credentials}" />
 	</bean>
@@ -28,6 +28,11 @@
 	<bean id="wundergroundQueryBuilder" class="hubway.utility.WundergroundQueryBuilder">
 		<constructor-arg value="${wunderground.url}" />
 		<constructor-arg value="${wunderground.credentials}" />
+	</bean>
+	
+		<bean id="placesQueryBuilder" class="hubway.utility.PlacesQueryBuilder">
+		<constructor-arg value="${googleplaces.url}" />
+		<constructor-arg value="${googleplaces.credentials}" />
 	</bean>
 
 </beans>

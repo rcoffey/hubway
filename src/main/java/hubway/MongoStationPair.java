@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import hubway.utility.Calculator;
-import hubway.utility.HubwayQuery;
+import hubway.utility.HubwayQueryBuilder;
 
 public class MongoStationPair {
 	public Station station1, station2;
@@ -25,7 +25,7 @@ public class MongoStationPair {
 		minTime = -1; // impossible default
 	}
 	
-	public int addTrips(HubwayQuery querier){
+	public int addTrips(HubwayQueryBuilder querier){
 		// if we only care about trip count, we can get that from meta.total_count
 		// and skip the repeat querying.
 		String queryString = "&start_station=" + station1.id + "&end_station=" + station2.id;
