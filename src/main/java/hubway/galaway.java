@@ -2,6 +2,8 @@ package hubway;
 
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
+import hubway.utility.DirectionsQueryBuilder;
+import hubway.utility.DistanceQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 import hubway.utility.PlacesQueryBuilder;
@@ -19,6 +21,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import com.googlecode.mjorm.MongoDao;
 import com.googlecode.mjorm.MongoDaoImpl;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
+import com.javadocmd.simplelatlng.LatLng;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 
@@ -65,7 +68,7 @@ public class galaway {
 		JSONObject bostonStations = hubwayQuerier.query("station", "&name__icontains=Boston");
 		System.out.println(bostonStations.toString(2));
 
-		test.addTrips(hubwayQuerier);
+		// test.addTrips(hubwayQuerier);
 		// the below will query for all trips among all stationpairs, so a lot.
 		// thus commenting out for checkin
 		/**
@@ -84,6 +87,16 @@ public class galaway {
 		PlacesQueryBuilder places = (PlacesQueryBuilder) context.getBean("placesQueryBuilder");
 		JSONObject placesResponse = places.queryMbtaNear(42.351313, -71.116174, 500);
 		System.out.println(places.getMostRecentQuery() + placesResponse.toString(2));
+
+		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
+		LatLng origin = new LatLng(test.station1.getLat(), test.station1.getLng());
+		LatLng destination = new LatLng(test.station2.getLat(), test.station2.getLng());
+		JSONObject distanceBike = distance.queryDistanceBetween(origin, destination, "bicycling");
+		System.out.println(distance.getMostRecentQuery() + distanceBike.toString());
+
+		DirectionsQueryBuilder direction = (DirectionsQueryBuilder) context.getBean("directionsQueryBuilder");
+		JSONObject directions = direction.queryDirections(origin, destination, "bicycling");
+		System.out.println(direction.getMostRecentQuery() + directions.toString());
 	}
 
 	/**

@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.javadocmd.simplelatlng.LatLng;
+
 public abstract class AQueryBuilder {
 
 	protected String _url;
@@ -43,5 +45,9 @@ public abstract class AQueryBuilder {
 			logger.error("Unable to read result of query " + query_, e);
 		}
 		return null;
+	}
+
+	protected String latLngToString(LatLng latLng_) {
+		return latLng_.getLatitude() + "," + latLng_.getLongitude();
 	}
 }
