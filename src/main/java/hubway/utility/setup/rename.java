@@ -1,4 +1,4 @@
-package hubway.utility;
+package hubway.utility.setup;
 
 import hubway.galaway;
 

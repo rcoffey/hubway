@@ -84,11 +84,19 @@ public class galaway {
 		query.eq("hubwayId", startStationId);
 		query.setCollection("Stations");
 		Station startStation = query.findObject(Station.class);
+		if (startStation==null) {
+			System.out.println("No such station!");
+			return;
+		}
 		System.out.println("You are starting at " + startStation.station);
 		query.clear();
 		query.eq("hubwayId", destStationId);
 		query.setCollection("Stations");
 		Station destStation = query.findObject(Station.class);
+		if (destStation==null){
+			System.out.println("No such station!");
+			return;
+		}
 		System.out.println("You are going to " + destStation.station);
 		
 		MongoStationPair stationsOfInterest = new MongoStationPair(startStation, destStation);
@@ -103,20 +111,4 @@ public class galaway {
 		*/
 	}
 
-	/**
-	 * hubway api url/queries: http://hubwaydatachallenge.org/api/v1/station/
-	 * ?format =json&username=cbaltera&api_key=25f3498d4e7f722
-	 * a0ed6f3757542669b443e21a6 &name__icontains=Boston
-	 * 
-	 * The api doesn't have municipality available for stations. nb_docks is a
-	 * in a separate schema from the basic station info. nb_bikes and
-	 * nb_emptyDocks are also available. Trip data appears to be the same, so
-	 * maybe keep stations in mongo and get trips from the hubway api.
-	 * 
-	 * http://hubwaydatachallenge.org/api/v1/trip/
-	 * ?format=json&username=cbaltera
-	 * &api_key=25f3498d4e7f722a0ed6f3757542669b443e21a6
-	 * &duration__gt=3600&start_station
-	 * =33&start_date__gte=2011-08-01&end_date__lte=2011-08-31
-	 */
 }
