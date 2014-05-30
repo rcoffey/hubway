@@ -31,8 +31,18 @@
 	</bean>
 	
 		<bean id="placesQueryBuilder" class="hubway.utility.PlacesQueryBuilder">
-		<constructor-arg value="${googleplaces.url}" />
-		<constructor-arg value="${googleplaces.credentials}" />
+		<constructor-arg value="${google.places.url}" />
+		<constructor-arg value="${google.credentials}" />
+	</bean>
+
+	<bean id="distanceQueryBuilder" class="hubway.utility.DistanceQueryBuilder">
+		<constructor-arg value="${google.distance.url}" />
+		<constructor-arg value="${google.credentials}" />
+	</bean>
+	
+		<bean id="directionsQueryBuilder" class="hubway.utility.DirectionsQueryBuilder">
+		<constructor-arg value="${google.directions.url}" />
+		<constructor-arg value="${google.credentials}" />
 	</bean>
 
 </beans>
