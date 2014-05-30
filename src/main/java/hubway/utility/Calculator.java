@@ -42,12 +42,12 @@ public class Calculator {
 			}
 		}            
 
-		System.out.println("minStationStart.station() = " + minStationStart.station + ", " + minStationStart.municipality);
-		System.out.println("minStationDest.station() = " + minStationDest.station + ", " + minStationDest.municipality);
+		System.out.println("minStationStart.station() = " + minStationStart.station );
+		System.out.println("minStationDest.station() = " + minStationDest.station );
 		System.out.println("minDist() = " + minDist);
 		
-		System.out.println("maxStationStart.station() = " + maxStationStart.station + ", " + maxStationStart.municipality);
-		System.out.println("maxStationDest.station() = " + maxStationDest.station + ", " + maxStationDest.municipality);
+		System.out.println("maxStationStart.station() = " + maxStationStart.station);
+		System.out.println("maxStationDest.station() = " + maxStationDest.station);
 		System.out.println("maxDist() = " + maxDist);
 		
 		return new MongoStationPair(maxStationStart, maxStationStart);
