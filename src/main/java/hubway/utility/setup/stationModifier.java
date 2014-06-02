@@ -34,9 +34,9 @@ public class stationModifier {
 		DBCollection stations = galawayDb.getCollection("Stations");
 		DBObject query = new BasicDBObject(); // select * query
 		
-		/* This block is to insert stations
-		 * 
-		 * // remove all existing stations from Stations collection
+		/* This block is to insert stations */
+		  
+		/* // remove all existing stations from Stations collection
 		//stations.remove(query);
 		
 		// get station info from hubway api
@@ -61,9 +61,28 @@ public class stationModifier {
 		}*/
 		
 		/* this block is to add trip data to stations */
+		/*
+		// use skip and limit to run on only part of the collection at a given time
+		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
+		String queryString;
+		JSONObject tripData;
+		int count;
 		for (DBObject station : stations.find()) {
+			// look up trips with this _id as &start_station=
+			queryString = "&start_station=" + station.get("_id");
+			tripData = hubwayQuerier.query("trip", queryString).getJSONObject("meta");
+			count = tripData.getInt("total_count");
+			// set count as tripsFrom
+			station.put("tripsFrom", count);
 			
-		}
+			// look up trips with this _id as &end_station=
+			queryString = "&end_station=" + station.get("_id");
+			tripData = hubwayQuerier.query("trip", queryString).getJSONObject("meta");
+			count = tripData.getInt("total_count");
+			// set count as tripsTo
+			station.put("tripsTo", count);
+			stations.save(station);
+		}*/
 		
 	}
 }

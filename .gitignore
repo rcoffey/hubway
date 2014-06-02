@@ -216,3 +216,4 @@ pip-log.txt
 /target
 target/classes/properties/galaway.properties
 target/classes/properties/galaway.properties
+*.stackdump

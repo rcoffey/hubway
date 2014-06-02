@@ -89,7 +89,7 @@ public class galaway {
 		query.setCollection("Stations");
 		Station startStation = query.findObject(Station.class);
 		if (startStation == null) {
-			System.out.println("No such station!");
+			System.out.println("No such station as " + startStationId + "!");
 			return;
 		}
 		query.clear();
@@ -97,7 +97,7 @@ public class galaway {
 		query.setCollection("Stations");
 		Station destStation = query.findObject(Station.class);
 		if (destStation == null) {
-			System.out.println("No such station!");
+			System.out.println("No such station as " + destStationId + "!");
 			return;
 		}
 

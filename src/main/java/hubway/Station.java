@@ -12,7 +12,7 @@ public class Station {
 		return "Station [id=" + id + ", station="
 				+ station + ", nb_docks="
 				+ nb_docks + ", lat=" + lat + ", lng=" + lng
-				+ "]";
+				+ ", " + tripsFrom + " trips from, " + tripsTo + " trips to]";
 
 	}
 
@@ -20,6 +20,7 @@ public class Station {
 	public String station;
 	public Integer nb_docks;
 	public Double lat, lng;
+	public int tripsFrom, tripsTo;
 
 	public Station() {
 		// TODO Auto-generated constructor stub
@@ -69,6 +70,24 @@ public class Station {
 
 	public void setNb_docks(Integer nb_docks) {
 		this.nb_docks = nb_docks;
+	}
+	
+	@Property
+	public int getTripsFrom() {
+		return tripsFrom;
+	}
+	
+	public void setTripsFrom(int tripsFrom) {
+		this.tripsFrom = tripsFrom;
+	}
+	
+	@Property
+	public int getTripsTo() {
+		return tripsTo;
+	}
+	
+	public void setTripsTo(int tripsTo) {
+		this.tripsTo = tripsTo;
 	}
 
 	public LatLng getLatLng() {
