@@ -22,10 +22,19 @@ public class TripInput {
 	public Date Date_Start;
 	public Date Date_End;
 
-	public int Station_Start;
-	public int Station_End;
+	public String Station_Start;
+	public String Station_End;
 	
 	public int Duration;
 	
 
+	public int Id;
+	public String Zip;
+	public String Status;
+
+	public String bike_nr;
+
+	public boolean subscription;
+	
 }
+
