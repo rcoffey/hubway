@@ -54,7 +54,7 @@ public class galaway {
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
-		MongoStationPair test = Calculator.printMinMaxStations(stationList);
+		StationPair test = Calculator.printMinMaxStations(stationList);
 
 		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
 
@@ -85,7 +85,7 @@ public class galaway {
 			return;
 		}
 
-		MongoStationPair stationsOfInterest = new MongoStationPair(startStation, destStation);
+		StationPair stationsOfInterest = new StationPair(startStation, destStation);
 		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
 		stationsOfInterest.setNavDist(distance);
 		stationsOfInterest.addTrips(hubwayQuerier);

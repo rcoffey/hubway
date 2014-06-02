@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import com.javadocmd.simplelatlng.LatLng;
 
-public class MongoStationPair {
+public class StationPair {
 	public Station station1, station2;
 	public double geoDist; // distance as the crow flies, ie geodesic, in miles
 	public double navDist; // navigable distance
@@ -22,7 +22,7 @@ public class MongoStationPair {
 	public String minDay, maxDay; // day of the week on which shortest/long trip
 									// took place
 
-	public MongoStationPair(Station station1, Station station2) {
+	public StationPair(Station station1, Station station2) {
 		this.station1 = station1;
 		this.station2 = station2;
 
