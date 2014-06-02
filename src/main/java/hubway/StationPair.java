@@ -6,6 +6,8 @@ import hubway.utility.HubwayQueryBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.javadocmd.simplelatlng.LatLng;
 
@@ -21,6 +23,7 @@ public class StationPair {
 									// (in seconds)
 	public String minDay, maxDay; // day of the week on which shortest/long trip
 									// took place
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public StationPair(Station station1, Station station2) {
 		this.station1 = station1;
@@ -44,7 +47,7 @@ public class StationPair {
 		navDist = Double.parseDouble(ans.substring(0,ans.length()-3));
 		} catch(Exception e){
 			navDist = -1.0;
-			System.out.println("Cannot set navigable distance for " + station1.station + " and "
+			logger.warn("Cannot set navigable distance for " + station1.station + " and "
 					+ station2.station + ". Error: " + e);
 		}
 		return navDist;
@@ -81,25 +84,25 @@ public class StationPair {
 	}
 	
 	public void info() {
-		System.out.println("Your start station is " + station1.station);
-		System.out.println("Your end station is " + station2.station);
-		System.out.println("They are " + geoDist + " miles apart as the crow flies.");
-		System.out.println("But you will have to travel at least " + navDist + " miles "
+		logger.info("Your start station is " + station1.station);
+		logger.info("Your end station is " + station2.station);
+		logger.info("They are " + geoDist + " miles apart as the crow flies.");
+		logger.info("But you will have to travel at least " + navDist + " miles "
 				+ "to complete the trip.");
-		System.out.println("There are " + tripCount + " trips between " + station1.station + 
+		logger.info("There are " + tripCount + " trips between " + station1.station + 
 				" and " + station2.station + ".");
 		if (station1.tripsFrom != 0 && station2.tripsTo != 0){
-			System.out.println("That is " + tripCount / (double)station1.tripsFrom * 100 + " percent "
+			logger.info("That is " + tripCount / (double)station1.tripsFrom * 100 + " percent "
 				+ "of the trips from " + station1.station);
-			System.out.println(" and " + tripCount/ (double)station2.tripsTo * 100 + " percent "
+			logger.info(" and " + tripCount/ (double)station2.tripsTo * 100 + " percent "
 				+ "of the trips to " + station2.station + ".");
 		}
-		System.out.println("These trips took on average " + avgTime / 60 + " minutes.");
-		System.out.println("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60
+		logger.info("These trips took on average " + avgTime / 60 + " minutes.");
+		logger.info("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60
 				+ " minutes.");
 		if (minTime != 0) {
 			double dist = (navDist == -1.0 ? geoDist : navDist);
-			System.out.println("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+			logger.info("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
 		}
 	}
 
