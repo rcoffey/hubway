@@ -14,7 +14,7 @@ public class StationPair {
 	public double geoDist; // distance as the crow flies, ie geodesic, in miles
 	public double navDist; // navigable distance
 	public int tripCount; // station1 to station2
-	//public int trips12, trips21; // trips start to destination
+	// public int trips12, trips21; // trips start to destination
 	public double avgTime; // how long it takes on average to make a trip (in
 							// seconds)
 	public double minTime, maxTime; // how long the shortest/longest trip took
@@ -31,15 +31,16 @@ public class StationPair {
 		minTime = -1; // impossible default
 		navDist = -1.0; // impossible default
 	}
-	
-	public double setNavDist(DistanceQueryBuilder distance){
-		LatLng origin = new LatLng(station1.getLat(), station1.getLng()); 
-		LatLng destination = new LatLng(station2.getLat(), station2.getLng()); 
-		JSONObject distanceBike =
-				  distance.queryDistanceBetween(origin, destination, "bicycling");
-		String ans = distanceBike.getJSONArray("rows").getJSONObject(0).getJSONArray("elements")
-				.getJSONObject(0).getJSONObject("distance").getString("text");
-		navDist = Double.parseDouble(ans.substring(0,ans.length()-3));
+
+	public double setNavDist(DistanceQueryBuilder distance) {
+		LatLng origin = new LatLng(station1.getLat(), station1.getLng());
+		LatLng destination = new LatLng(station2.getLat(), station2.getLng());
+		JSONObject distanceBike = distance.queryDistanceBetween(origin, destination, "bicycling");
+		if (distanceBike.length() > 0 && distanceBike.getJSONArray("rows").length() > 0) {
+			String ans = distanceBike.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0)
+					.getJSONObject("distance").getString("text");
+			navDist = Double.parseDouble(ans.substring(0, ans.length() - 3));
+		}
 		return navDist;
 	}
 
@@ -70,20 +71,20 @@ public class StationPair {
 		}
 
 		if (totalTime > 0) {
-			avgTime = totalTime / tripCount; // in seconds, so don't worry about int division
+			avgTime = totalTime / tripCount; // in seconds, so don't worry about
+												// int division
 		}
 		return tripCount;
 
 	}
-	
+
 	public void info() {
 		System.out.println("Your start station is " + station1.station);
 		System.out.println("Your end station is " + station2.station);
 		System.out.println("They are " + geoDist + " miles apart as the crow flies.");
-		System.out.println("But you will have to travel at least " + navDist + " miles "
-				+ "to complete the trip.");
-		System.out.println("There are " + tripCount + " trips between " + station1.station + 
-				" and " + station2.station + ".");
+		System.out.println("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
+		System.out.println("There are " + tripCount + " trips between " + station1.station + " and " + station2.station
+				+ ".");
 		System.out.println("These trips took on average " + avgTime / 60 + " minutes.");
 		System.out.println("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60
 				+ " minutes.");

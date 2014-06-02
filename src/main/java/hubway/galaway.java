@@ -1,5 +1,6 @@
 package hubway;
 
+import hubway.json.Route;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.DistanceQueryBuilder;
@@ -94,8 +95,26 @@ public class galaway {
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
-		Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
+		Map<String, Object> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
 				destStation.getLatLng(), 500);
+
+		Route bike = (Route) locationDataMap.get("bikeDirections");
+		Route transit = (Route) locationDataMap.get("transitDirections");
+		long bikeDist = bike.getTotalDistance();
+		long bikeDur = bike.getTotalDuration();
+		long transitDist = transit.getTotalDistance();
+		long transitDur = transit.getTotalDuration();
+
+		if (bikeDur > transitDur) {
+			System.out.println("Taking transit is faster");
+		} else {
+			System.out.println("Biking is faster");
+
+		}
+
+		if (bikeDist > transitDist) {
+			System.out.println("You travel farther by bike");
+		}
 		System.out.print("Done");
 	}
 
