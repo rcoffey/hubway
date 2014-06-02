@@ -54,25 +54,9 @@ public class galaway {
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
-		MongoStationPair test = Calculator.printMinMaxStations(stationList);
+		StationPair test = Calculator.printMinMaxStations(stationList);
 
 		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
-		/**
-		 * JSONObject birthdayRides = hubwayQuerier.query("trip",
-		 * "&start_date__gte=2011-08-01&end_date__lte=2011-08-31");
-		 * System.out.println(birthdayRides.length());
-		 * 
-		 * WundergroundQueryBuilder wunderground = (WundergroundQueryBuilder)
-		 * context.getBean("wundergroundQueryBuilder"); JSONObject
-		 * birthdayWeather = wunderground.queryHistorical("20130821",
-		 * "MA/Boston"); System.out.println(wunderground.getMostRecentQuery() +
-		 * birthdayWeather.toString());
-		 * 
-		 * JSONObject bostonStations = hubwayQuerier.query("station",
-		 * "&name__icontains=Boston");
-		 * System.out.println(bostonStations.toString(2));
-		 * 
-		 */
 
 		// does it make sense to print the list of station name / station id
 		// pairs here?
@@ -101,42 +85,18 @@ public class galaway {
 			return;
 		}
 
-		MongoStationPair stationsOfInterest = new MongoStationPair(startStation, destStation);
+		StationPair stationsOfInterest = new StationPair(startStation, destStation);
 		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
 		stationsOfInterest.setNavDist(distance);
 		stationsOfInterest.addTrips(hubwayQuerier);
-		
+
 		stationsOfInterest.info();
-		
-		/**
+
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
 		Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
 				destStation.getLatLng(), 500);
 		System.out.print("Done");
-		*/
-		/**
-		 * PlacesQueryBuilder places = (PlacesQueryBuilder)
-		 * context.getBean("placesQueryBuilder"); JSONObject placesResponse =
-		 * places.queryMbtaNear(42.351313, -71.116174, 500);
-		 * System.out.println(places.getMostRecentQuery() +
-		 * placesResponse.toString(2));
-		 * 
-		 * DistanceQueryBuilder distance = (DistanceQueryBuilder)
-		 * context.getBean("distanceQueryBuilder"); LatLng origin = new
-		 * LatLng(test.station1.getLat(), test.station1.getLng()); LatLng
-		 * destination = new LatLng(test.station2.getLat(),
-		 * test.station2.getLng()); JSONObject distanceBike =
-		 * distance.queryDistanceBetween(origin, destination, "bicycling");
-		 * System.out.println(distance.getMostRecentQuery() +
-		 * distanceBike.toString());
-		 * 
-		 * DirectionsQueryBuilder direction = (DirectionsQueryBuilder)
-		 * context.getBean("directionsQueryBuilder"); JSONObject directions =
-		 * direction.queryDirections(origin, destination, "bicycling");
-		 * System.out.println(direction.getMostRecentQuery() +
-		 * directions.toString());
-		 */
 	}
 
 }

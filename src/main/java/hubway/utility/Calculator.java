@@ -1,13 +1,13 @@
 package hubway.utility;
 
-import hubway.MongoStationPair;
+import hubway.StationPair;
 import hubway.Station;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class Calculator {
-	public static MongoStationPair printMinMaxStations(List<Station> stations) {
+	public static StationPair printMinMaxStations(List<Station> stations) {
 		Double minDist = Double.MAX_VALUE;
 		Double maxDist = Double.MIN_VALUE;
 		Station maxStationStart = null, maxStationDest = null, minStationStart = null, minStationDest = null;
@@ -46,7 +46,7 @@ public class Calculator {
 
 		System.out.println("maxDist() = " + maxDist);
 
-		return new MongoStationPair(maxStationStart, maxStationDest);
+		return new StationPair(maxStationStart, maxStationDest);
 	}
 
 	// stolen from the internets.
