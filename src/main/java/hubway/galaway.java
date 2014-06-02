@@ -77,33 +77,51 @@ public class galaway {
 			System.out.println("No such station as " + startStationId + "!");
 			return;
 		}
-		if (destStationId != 0) {
-			query.clear();
-			query.eq("_id", destStationId);
-			query.setCollection("Stations");
-			Station destStation = query.findObject(Station.class);
-			if (destStation == null) {
-				System.out.println("No such station as " + destStationId + "!");
-				return;
-			}
-
-			StationPair stationsOfInterest = new StationPair(startStation, destStation);
-			DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
-			stationsOfInterest.setNavDist(distance);
-			stationsOfInterest.addTrips(hubwayQuerier);
-
-			stationsOfInterest.info();
-
-			LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
-			JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
-			Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
-				destStation.getLatLng(), 500);
-			System.out.print("Done");
-		} else {
-			// proceed to suggest most popular destinations + data
-			// read most popular destination from station obj (this should be a stationpair)
-			// call info()
+		query.clear();
+		boolean advice = false;
+		if (destStationId == 0) {
+			destStationId = startStation.maxDest;
+			advice = true;
 		}
+		query.eq("_id", destStationId);
+		query.setCollection("Stations");
+		Station destStation = query.findObject(Station.class);
+		if (destStation == null) {
+			System.out.println("No such station as " + destStationId + "!");
+			return;
+		}
+		StationPair stationsOfInterest = new StationPair(startStation, destStation);
+		
+		if (advice){
+			System.out.println("Perhaps you would like to go to " + destStation.station 
+					+ ", the most popular trip from " + startStation.station);
+			// say something about the weather here?
+			produceOutput(stationsOfInterest, context, hubwayQuerier);
+			query.clear();
+			query.eq("_id", startStation.penMaxDest);
+			query.setCollection("Stations");
+			destStation = query.findObject(Station.class);
+			if (destStation != null) {
+				System.out.println("Or maybe you'd prefer " + destStation.station
+						+ ", the second most popular trip from " + startStation.station);
+				stationsOfInterest = new StationPair(startStation, destStation);
+				produceOutput(stationsOfInterest, context, hubwayQuerier);
+			}
+		} else {
+			produceOutput(stationsOfInterest, context, hubwayQuerier);
+		}
+		System.out.print("Done");
 	}
 
+	private static void produceOutput(StationPair stationsOfInterest, ApplicationContext context, HubwayQueryBuilder hubwayQuerier){
+		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
+		stationsOfInterest.setNavDist(distance);
+		stationsOfInterest.addTrips(hubwayQuerier);
+
+		stationsOfInterest.info();
+		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+		Map<String, JSONObject> locationDataMap = locationData.getLocationData(stationsOfInterest.station1.getLatLng(),
+				stationsOfInterest.station2.getLatLng(), 500);
+	}
 }

@@ -102,7 +102,9 @@ public class StationPair {
 				+ " minutes.");
 		if (minTime != 0) {
 			double dist = (navDist == -1.0 ? geoDist : navDist);
-			logger.info("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+			if (dist != 0) {
+				logger.info("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+			}
 		}
 	}
 

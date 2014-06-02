@@ -10,9 +10,9 @@ public class Station {
 	@Override
 	public String toString() {
 		return "Station [id=" + id + ", station="
-				+ station + ", nb_docks="
-				+ nb_docks + ", lat=" + lat + ", lng=" + lng
-				+ ", " + tripsFrom + " trips from, " + tripsTo + " trips to]";
+				+ station + ", penMaxDest=" + penMaxDest + ", nb_docks=" 
+				+ nb_docks + ", lat=" + lat + ", lng=" + lng + ", maxDest=" + maxDest 
+				+ ", tripsFrom=" + tripsFrom + ", tripsTo=" + tripsTo +"]";
 
 	}
 
@@ -20,7 +20,7 @@ public class Station {
 	public String station;
 	public Integer nb_docks;
 	public Double lat, lng;
-	public int tripsFrom, tripsTo;
+	public int tripsFrom, tripsTo, maxDest, penMaxDest;
 
 	public Station() {
 		// TODO Auto-generated constructor stub
@@ -52,6 +52,22 @@ public class Station {
 
 	public void setLat(Double lat) {
 		this.lat = lat;
+	}
+	
+	@Property
+	public int getMaxDest() {
+		return maxDest;
+	}
+	public void setMaxDest(int dest){
+		this.maxDest = dest;
+	}
+	
+	@Property
+	public int getPenMaxDest() {
+		return penMaxDest;
+	}
+	public void setPenMaxDest(int dest){
+		this.penMaxDest = dest;
 	}
 
 	@Property

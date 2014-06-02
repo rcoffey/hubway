@@ -84,5 +84,29 @@ public class stationModifier {
 			stations.save(station);
 		}*/
 		
+		// use trips to calculate most popular destination from given station
+		// store the station pair (or just store the station id if there are space constraints)
+		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
+		String queryString;
+		JSONObject tripData;
+		int count = 0;
+		int newCount;
+		DBObject maxStation;
+		for (DBObject station : stations.find()) {
+			System.out.println("Calculating most popular destination from " + station.get("name"));
+			maxStation = station;
+			queryString = "&start_station=" + station.get("_id");
+			for (DBObject dest : stations.find()) {
+				queryString += "&end_station=" + dest.get("_id");
+				tripData = hubwayQuerier.query("trip", queryString).getJSONObject("meta");
+				newCount = tripData.getInt("total_count");
+				if (count < newCount) {
+					maxStation = dest;
+					count = newCount;
+				}
+			}
+			station.put("maxDest", maxStation.get("_id"));
+			stations.save(station);
+		}
 	}
 }
