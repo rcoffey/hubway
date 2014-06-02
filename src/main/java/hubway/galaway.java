@@ -64,7 +64,8 @@ public class galaway {
 		System.out.println("Please enter your start station id:");
 		Scanner input = new Scanner(System.in);
 		int startStationId = input.nextInt();
-		System.out.println("Please enter your destination station id:");
+		System.out.println("Please enter your destination station id.  If you want advice on your destination"
+				+ " enter 0:");
 		int destStationId = input.nextInt();
 		input.close();
 
@@ -76,27 +77,33 @@ public class galaway {
 			System.out.println("No such station as " + startStationId + "!");
 			return;
 		}
-		query.clear();
-		query.eq("_id", destStationId);
-		query.setCollection("Stations");
-		Station destStation = query.findObject(Station.class);
-		if (destStation == null) {
-			System.out.println("No such station as " + destStationId + "!");
-			return;
-		}
+		if (destStationId != 0) {
+			query.clear();
+			query.eq("_id", destStationId);
+			query.setCollection("Stations");
+			Station destStation = query.findObject(Station.class);
+			if (destStation == null) {
+				System.out.println("No such station as " + destStationId + "!");
+				return;
+			}
 
-		StationPair stationsOfInterest = new StationPair(startStation, destStation);
-		DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
-		stationsOfInterest.setNavDist(distance);
-		stationsOfInterest.addTrips(hubwayQuerier);
+			StationPair stationsOfInterest = new StationPair(startStation, destStation);
+			DistanceQueryBuilder distance = (DistanceQueryBuilder) context.getBean("distanceQueryBuilder");
+			stationsOfInterest.setNavDist(distance);
+			stationsOfInterest.addTrips(hubwayQuerier);
 
-		stationsOfInterest.info();
+			stationsOfInterest.info();
 
-		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
-		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
-		Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
+			LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+			JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+			Map<String, JSONObject> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
 				destStation.getLatLng(), 500);
-		System.out.print("Done");
+			System.out.print("Done");
+		} else {
+			// proceed to suggest most popular destinations + data
+			// read most popular destination from station obj (this should be a stationpair)
+			// call info()
+		}
 	}
 
 }
