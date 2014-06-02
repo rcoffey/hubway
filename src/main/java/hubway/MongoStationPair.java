@@ -33,6 +33,8 @@ public class MongoStationPair {
 	}
 	
 	public double setNavDist(DistanceQueryBuilder distance){
+		// should probably come up with better error-prediction here
+		try{
 		LatLng origin = new LatLng(station1.getLat(), station1.getLng()); 
 		LatLng destination = new LatLng(station2.getLat(), station2.getLng()); 
 		JSONObject distanceBike =
@@ -40,13 +42,15 @@ public class MongoStationPair {
 		String ans = distanceBike.getJSONArray("rows").getJSONObject(0).getJSONArray("elements")
 				.getJSONObject(0).getJSONObject("distance").getString("text");
 		navDist = Double.parseDouble(ans.substring(0,ans.length()-3));
+		} catch(Exception e){
+			navDist = -1.0;
+			System.out.println("Cannot set navigable distance for " + station1.station + " and "
+					+ station2.station + ". Error: " + e);
+		}
 		return navDist;
 	}
 
 	public int addTrips(HubwayQueryBuilder querier) {
-		// if we only care about trip count, we can get that from
-		// meta.total_count
-		// and skip the repeat querying.
 		String queryString = "&start_station=" + station1.id + "&end_station=" + station2.id;
 		// if we want to specify registered vs. casual, add
 		// "&subscription_type=Registered" or "&subscription_type=Casual"
@@ -84,11 +88,19 @@ public class MongoStationPair {
 				+ "to complete the trip.");
 		System.out.println("There are " + tripCount + " trips between " + station1.station + 
 				" and " + station2.station + ".");
+		if (station1.tripsFrom != 0 && station2.tripsTo != 0){
+			System.out.println("That is " + tripCount / (double)station1.tripsFrom * 100 + " percent "
+				+ "of the trips from " + station1.station);
+			System.out.println(" and " + tripCount/ (double)station2.tripsTo * 100 + " percent "
+				+ "of the trips to " + station2.station + ".");
+		}
 		System.out.println("These trips took on average " + avgTime / 60 + " minutes.");
 		System.out.println("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60
 				+ " minutes.");
-		double dist = (navDist == -1.0 ? geoDist : navDist);
-		System.out.println("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+		if (minTime != 0) {
+			double dist = (navDist == -1.0 ? geoDist : navDist);
+			System.out.println("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+		}
 	}
 
 	private int computeTime(JSONArray trips) {
