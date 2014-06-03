@@ -1,5 +1,12 @@
 package hubway.utility;
 
+import hubway.json.Route;
+import hubway.json.RouteDeserializer;
+import hubway.json.RouteLeg;
+import hubway.json.RouteLegDeserializer;
+import hubway.json.RouteStep;
+import hubway.json.RouteStepDeserializer;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +17,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import com.javadocmd.simplelatlng.LatLng;
 
 public abstract class AQueryBuilder {
@@ -43,6 +54,31 @@ public abstract class AQueryBuilder {
 			logger.error("Unable to query using query " + query_, e);
 		} catch (IOException e) {
 			logger.error("Unable to read result of query " + query_, e);
+		}
+		return null;
+	}
+
+	public Route queryString(String query_) {
+		_mostRecentQuery = query_;
+		URL query;
+		try {
+			query = new URL(query_);
+
+			JsonReader jreader = new JsonReader(new InputStreamReader(query.openStream()));
+			JsonParser parser = new JsonParser();
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Route.class, new RouteDeserializer());
+			gsonBuilder.registerTypeAdapter(RouteLeg.class, new RouteLegDeserializer());
+			gsonBuilder.registerTypeAdapter(RouteStep.class, new RouteStepDeserializer());
+
+			Gson gson = gsonBuilder.create();
+			return gson.fromJson(parser.parse(jreader), Route.class);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return null;
 	}

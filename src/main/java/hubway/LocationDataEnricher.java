@@ -1,5 +1,6 @@
 package hubway;
 
+import hubway.json.Route;
 import hubway.utility.DirectionsQueryBuilder;
 import hubway.utility.DistanceQueryBuilder;
 import hubway.utility.PlacesQueryBuilder;
@@ -33,16 +34,12 @@ public class LocationDataEnricher {
 		return _weatherQueryBuilder.queryHistorical(date_, stateCity_);
 	}
 
-	public Map<String, JSONObject> getLocationData(LatLng origin_, LatLng destination_, int radius_) {
-		HashMap<String, JSONObject> results = new HashMap<String, JSONObject>(3);
+	public Map<String, Object> getLocationData(LatLng origin_, LatLng destination_, int radius_) {
+		HashMap<String, Object> results = new HashMap<String, Object>(4);
 		JSONObject mbtaOrigin = _placesQueryBuilder.queryMbtaNear(origin_, radius_);
-		logger.info("MBTAs near origin " + mbtaOrigin);
 		JSONObject mbtaDest = _placesQueryBuilder.queryMbtaNear(destination_, radius_);
-		logger.info("MBTAs near destination " + mbtaDest);
-		JSONObject directionsBike = _directionsQueryBuilder.queryDirections(origin_, destination_, "bicycling");
-		logger.info("Bicycling directions " + directionsBike);
-		JSONObject directionsTransit = _directionsQueryBuilder.queryDirections(origin_, destination_, "transit");
-		logger.info("Transit directions " + directionsTransit);
+		Route directionsBike = _directionsQueryBuilder.queryString(origin_, destination_, "bicycling");
+		Route directionsTransit = _directionsQueryBuilder.queryString(origin_, destination_, "transit");
 
 		results.put("mbtaOrigin", mbtaOrigin);
 		results.put("mbtaDestination", mbtaDest);
@@ -52,5 +49,4 @@ public class LocationDataEnricher {
 		return results;
 
 	}
-
 }

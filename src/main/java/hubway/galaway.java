@@ -1,5 +1,6 @@
 package hubway;
 
+import hubway.json.Route;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.DistanceQueryBuilder;
@@ -78,6 +79,7 @@ public class galaway {
 			return;
 		}
 		query.clear();
+
 		boolean advice = false;
 		if (destStationId == 0) {
 			destStationId = startStation.maxDest;
@@ -110,6 +112,29 @@ public class galaway {
 		} else {
 			produceOutput(stationsOfInterest, context, hubwayQuerier);
 		}
+
+		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+		Map<String, Object> locationDataMap = locationData.getLocationData(startStation.getLatLng(),
+				destStation.getLatLng(), 500);
+
+		Route bike = (Route) locationDataMap.get("bikeDirections");
+		Route transit = (Route) locationDataMap.get("transitDirections");
+		long bikeDist = bike.getTotalDistance();
+		long bikeDur = bike.getTotalDuration();
+		long transitDist = transit.getTotalDistance();
+		long transitDur = transit.getTotalDuration();
+
+		if (bikeDur > transitDur) {
+			System.out.println("Taking transit is faster");
+		} else {
+			System.out.println("Biking is faster");
+
+		}
+
+		if (bikeDist > transitDist) {
+			System.out.println("You travel farther by bike");
+		}
 		System.out.print("Done");
 	}
 
@@ -119,9 +144,5 @@ public class galaway {
 		stationsOfInterest.addTrips(hubwayQuerier);
 
 		stationsOfInterest.info();
-		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
-		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
-		Map<String, JSONObject> locationDataMap = locationData.getLocationData(stationsOfInterest.station1.getLatLng(),
-				stationsOfInterest.station2.getLatLng(), 500);
 	}
 }

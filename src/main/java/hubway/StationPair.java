@@ -16,7 +16,7 @@ public class StationPair {
 	public double geoDist; // distance as the crow flies, ie geodesic, in miles
 	public double navDist; // navigable distance
 	public int tripCount; // station1 to station2
-	//public int trips12, trips21; // trips start to destination
+	// public int trips12, trips21; // trips start to destination
 	public double avgTime; // how long it takes on average to make a trip (in
 							// seconds)
 	public double minTime, maxTime; // how long the shortest/longest trip took
@@ -34,21 +34,20 @@ public class StationPair {
 		minTime = -1; // impossible default
 		navDist = -1.0; // impossible default
 	}
-	
-	public double setNavDist(DistanceQueryBuilder distance){
+
+	public double setNavDist(DistanceQueryBuilder distance) {
 		// should probably come up with better error-prediction here
-		try{
-		LatLng origin = new LatLng(station1.getLat(), station1.getLng()); 
-		LatLng destination = new LatLng(station2.getLat(), station2.getLng()); 
-		JSONObject distanceBike =
-				  distance.queryDistanceBetween(origin, destination, "bicycling");
-		String ans = distanceBike.getJSONArray("rows").getJSONObject(0).getJSONArray("elements")
-				.getJSONObject(0).getJSONObject("distance").getString("text");
-		navDist = Double.parseDouble(ans.substring(0,ans.length()-3));
-		} catch(Exception e){
+		try {
+			LatLng origin = new LatLng(station1.getLat(), station1.getLng());
+			LatLng destination = new LatLng(station2.getLat(), station2.getLng());
+			JSONObject distanceBike = distance.queryDistanceBetween(origin, destination, "bicycling");
+			String ans = distanceBike.getJSONArray("rows").getJSONObject(0).getJSONArray("elements").getJSONObject(0)
+					.getJSONObject("distance").getString("text");
+			navDist = Double.parseDouble(ans.substring(0, ans.length() - 3));
+		} catch (Exception e) {
 			navDist = -1.0;
-			logger.warn("Cannot set navigable distance for " + station1.station + " and "
-					+ station2.station + ". Error: " + e);
+			logger.warn("Cannot set navigable distance for " + station1.station + " and " + station2.station
+					+ ". Error: " + e);
 		}
 		return navDist;
 	}
@@ -77,29 +76,27 @@ public class StationPair {
 		}
 
 		if (totalTime > 0) {
-			avgTime = totalTime / tripCount; // in seconds, so don't worry about int division
+			avgTime = totalTime / tripCount; // in seconds, so don't worry about
+												// int division
 		}
 		return tripCount;
 
 	}
-	
+
 	public void info() {
 		logger.info("Your start station is " + station1.station);
 		logger.info("Your end station is " + station2.station);
 		logger.info("They are " + geoDist + " miles apart as the crow flies.");
-		logger.info("But you will have to travel at least " + navDist + " miles "
-				+ "to complete the trip.");
-		logger.info("There are " + tripCount + " trips between " + station1.station + 
-				" and " + station2.station + ".");
-		if (station1.tripsFrom != 0 && station2.tripsTo != 0){
-			logger.info("That is " + tripCount / (double)station1.tripsFrom * 100 + " percent "
-				+ "of the trips from " + station1.station);
-			logger.info(" and " + tripCount/ (double)station2.tripsTo * 100 + " percent "
-				+ "of the trips to " + station2.station + ".");
+		logger.info("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
+		logger.info("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
+		if (station1.tripsFrom != 0 && station2.tripsTo != 0) {
+			logger.info("That is " + tripCount / (double) station1.tripsFrom * 100 + " percent " + "of the trips from "
+					+ station1.station);
+			logger.info(" and " + tripCount / (double) station2.tripsTo * 100 + " percent " + "of the trips to "
+					+ station2.station + ".");
 		}
 		logger.info("These trips took on average " + avgTime / 60 + " minutes.");
-		logger.info("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60
-				+ " minutes.");
+		logger.info("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60 + " minutes.");
 		if (minTime != 0) {
 			double dist = (navDist == -1.0 ? geoDist : navDist);
 			if (dist != 0) {
