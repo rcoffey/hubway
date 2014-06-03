@@ -16,6 +16,7 @@ import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 public class stationModifier {
 	public static void main(String[] args) {
@@ -61,7 +62,25 @@ public class stationModifier {
 		}
 		*/
 		
-		// this block is to reformat 
+		// this block is to reformat lat and lng into geojson syntax
+		/*double lat, lng;
+		String geoString;
+		JSONObject geo;
+		DBObject geoObj;
+		for (DBObject station : stations.find()) {
+			logger.info("Reformatting geometry for " + station.get("station"));
+		// get lat and lng from the station obj in the db
+			lat = (Double) station.get("lat");
+			lng = (Double) station.get("lng");
+		// construct geoJSON string
+			geoString = "{\"coordinates\": [" + lng + "," + lat + "], \"type\": \"Point\"}";
+		// turn into JSONObject
+			geoObj = (DBObject) JSON.parse(geoString);
+		// put into station with key "geometry"
+			station.put("geometry", geoObj);
+		// save station
+			stations.save(station);
+		}*/
 		
 		/* this block is to add trip data to stations */
 		/*

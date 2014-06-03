@@ -56,7 +56,7 @@ public class tripInputter {
 		List<TripInput> tripInputs = TripDataReader.extractStationCSV(fileName);
 		DBObject tripObj;
 		for (TripInput input : tripInputs) {
-			if (input.Station_Start.equals(input.Station_End)){
+			if (input.Station_Start==input.Station_End){
 				continue; // ignore joy-rides
 			}
 			logger.info("Inserting a trip from " + input.Station_Start + " to " + input.Station_End);

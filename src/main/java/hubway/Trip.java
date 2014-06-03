@@ -34,9 +34,7 @@ public class Trip {
 	}
 	
 	public Trip(TripInput input){
-		int start = Integer.parseInt(input.Station_Start.replaceAll("\"", ""));
-		int end = Integer.parseInt(input.Station_End.replaceAll("\"", ""));
-		new Trip(input.Id, input.Date_Start, input.Date_End, start, end, input.Duration);
+		new Trip(input.Id, input.Date_Start, input.Date_End, input.Station_Start, input.Station_End, input.Duration);
 	}
 	private Trip(int id, Date start_date, Date end_date, int start_station, int end_station, int duration){
 		this.start_station = start_station;

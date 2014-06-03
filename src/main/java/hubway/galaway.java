@@ -9,6 +9,7 @@ import hubway.utility.IntegerConverter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.json.JSONObject;
@@ -27,9 +28,10 @@ import com.mongodb.DB;
 
 public class galaway {
 
+	static Logger logger = LoggerFactory.getLogger(galaway.class);
+
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		Logger logger = LoggerFactory.getLogger(galaway.class);
 		// Get the Beans
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring.galaway.beans.xml");
 
@@ -85,7 +87,7 @@ public class galaway {
 			destStationId = startStation.maxDest;
 			advice = true;
 		}
-		
+
 		query.eq("_id", destStationId);
 		query.setCollection("Stations");
 		Station destStation = query.findObject(Station.class);
@@ -94,9 +96,9 @@ public class galaway {
 			return;
 		}
 		StationPair stationsOfInterest = new StationPair(startStation, destStation);
-		
-		if (advice){
-			System.out.println("Perhaps you would like to go to " + destStation.station 
+
+		if (advice) {
+			System.out.println("Perhaps you would like to go to " + destStation.station
 					+ ", the most popular trip from " + startStation.station);
 			produceOutput(stationsOfInterest, context, hubwayQuerier);
 			// can we pause here to allow user to read output?
@@ -115,36 +117,36 @@ public class galaway {
 			produceOutput(stationsOfInterest, context, hubwayQuerier);
 		}
 
-		
-		System.out.print("Done");
 	}
 
-	private static void produceOutput(StationPair stationsOfInterest, ApplicationContext context, HubwayQueryBuilder hubwayQuerier){
+	private static void produceOutput(StationPair stationsOfInterest, ApplicationContext context,
+			HubwayQueryBuilder hubwayQuerier) {
 		stationsOfInterest.addTrips(hubwayQuerier);
 
 		stationsOfInterest.info();
-		
+
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
-		
-		
 
 		//!CL	query for lat long using string
-		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder ) context.getBean("GeocodeQueryBuilder");
+		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder ) context.getBean("geocodeQueryBuilder");
 		JSONObject davis = geocodeQueryBuilder.queryByAddress("40 Holland St, Somerville MA");
-		
-		
-		Map<String, Object> locationDataMap = locationData.getLocationData(stationsOfInterest.station1.getLatLng(),
-				stationsOfInterest.station2.getLatLng(), 500);
 
+		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
+				stationsOfInterest.station2.getLatLng());
+
+		Map<String, JSONObject> hubways = locationData.getHubways(stationsOfInterest.station1.getLatLng(),
+				stationsOfInterest.station2.getLatLng(), 500);
+		
+		compareRoutes(locationDataMap);
 		Route bike = (Route) locationDataMap.get("bikeDirections");
 		Route transit = (Route) locationDataMap.get("transitDirections");
 		
 		long bikeDist = (long) (bike.getTotalDistance() * 0.000621371);
-		long bikeDur = bike.getTotalDuration() / 60;
+		double bikeDur = bike.getTotalDuration() / 60;
 		
 		long transitDist = (long) (transit.getTotalDistance() * 0.000621371);
-		long transitDur = transit.getTotalDuration() / 60;
+		double transitDur = transit.getTotalDuration() / 60;
 				
 		System.out.println("Bike Distance " + bikeDist);
 		System.out.println("Bike Duration " + bikeDur);
@@ -155,14 +157,44 @@ public class galaway {
 			System.out.println("Taking transit is faster");
 		} else {
 			System.out.println("Biking is faster");
-
-		}
-
-		if (bikeDist > transitDist) {
-			System.out.println("You travel farther by bike");
 		}
 		
 
-		
+
+	}
+
+
+	private static void compareRoutes(Map<String, Route> routeMap_) {
+		logger.info("Comparing " + routeMap_.size() + " routes for travel types : " + routeMap_.keySet().toString());
+		Entry<String, Route> quickest = null;
+		Entry<String, Route> mostEfficient = null;
+		for (Entry<String, Route> entry : routeMap_.entrySet()) {
+			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()) {
+				quickest = entry;
+			}
+
+			if (mostEfficient == null
+					|| entry.getValue().getNumberOfLegs() < mostEfficient.getValue().getNumberOfLegs()) {
+				mostEfficient = entry;
+			}
+		}
+		String results = "The quickest form of travel is " + quickest.getKey() + ", with a duration of "
+				+ quickest.getValue().getTotalDuration() + " minutes to travel "
+				+ quickest.getValue().getTotalDistance() + " miles.";
+		if (!quickest.getKey().equals(mostEfficient.getKey())) {
+			results = results + "\n However, " + mostEfficient.getKey()
+					+ " has fewer legs to the trip and should take " + mostEfficient.getValue().getTotalDuration()
+					+ " minutes to travel " + mostEfficient.getValue().getTotalDistance() + " miles.";
+		}
+		for (Entry<String, Route> entry : routeMap_.entrySet()) {
+			if (!entry.getKey().equals(quickest.getKey())) {
+				Route route = entry.getValue();
+				results += "\n Option : " + entry.getKey() + " would take " + route.getTotalDuration()
+						+ " minutes to travel " + route.getTotalDistance() + " miles over " + route.getNumberOfLegs()
+						+ " legs.";
+			}
+		}
+		System.out.println(results);
+
 	}
 }

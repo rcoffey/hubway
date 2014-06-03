@@ -36,7 +36,7 @@ public class RouteStep {
 	/**
 	 * @return the travel_mode
 	 */
-	public String getTravel_mode() {
+	public String getTravelMode() {
 		return travel_mode;
 	}
 
@@ -44,7 +44,7 @@ public class RouteStep {
 	 * @param travel_mode
 	 *            the travel_mode to set
 	 */
-	public void setTravel_mode(String travel_mode) {
+	public void setTravelMode(String travel_mode) {
 		this.travel_mode = travel_mode;
 	}
 
