@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class TripDataReader {
@@ -16,8 +17,8 @@ public class TripDataReader {
 	}
 
 	// /!CL reads from the file and parses it into an array of trips.
-	public static ArrayList<TripInput> extractStationCSV(String stations) {
-		ArrayList<TripInput> tripList = new ArrayList<TripInput>();
+	public static LinkedList<TripInput> extractStationCSV(String stations) {
+		LinkedList<TripInput> tripList = new LinkedList<TripInput>();
 		//int k = 0;
 		File file = new File(stations);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -27,7 +28,9 @@ public class TripDataReader {
 			String data = inputStream.nextLine();
 
 			// hashNext() loops line-by-line
+			int k = 0;
 			while (inputStream.hasNextLine()) {
+			//	k++; if(k>500) break;
 				// read single line, put in string
 				data = inputStream.nextLine();
 				String[] csvLine = data.split(",");
@@ -48,29 +51,16 @@ public class TripDataReader {
 					e.printStackTrace();
 				}
 
-				// parsing ints with some logic because there are quotes there,
-				// could probably be done better
-//				if (csvLine[4] == null || csvLine[4].trim().isEmpty())
 					trip.Station_Start = csvLine[4];
-//							Integer
-//							.parseInt(csvLine[4].subSequence(1,
-//									csvLine[4].length() - 1).toString());
-//				if (csvLine[6] == null || csvLine[6].trim().isEmpty())
 					trip.Station_End = csvLine[6];
-//				Integer.parseInt(csvLine[6].subSequence(
-//							1, csvLine[6].length() - 1).toString());
-//				if (csvLine[9] == null || csvLine[9].trim().isEmpty())
 					trip.Zip =csvLine[9]; 
-//					Integer.parseInt(csvLine[9].subSequence(1,
-//							csvLine[9].length() - 1).toString());
 
 				trip.bike_nr = (csvLine[7]);
 				trip.subscription = (csvLine[8].compareTo("Registered") == 0);//
 
 				tripList.add(trip);
 
-				// !CL load just 500 for now to test
-				// k++; if(k>500) break;
+				
 			}
 			inputStream.close();
 			System.out.println("stationList.size() = " + tripList.size());
