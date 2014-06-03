@@ -31,7 +31,8 @@ public class TestGetTrips {
 		System.out.println("endStationUsage");
 		printHighestEndUsage(tripList, endStationUsage);
 		System.out.println("totalStationUsage");
-		printHighestTotalUsage(tripList, totalStationUsage);
+		printHighestTotalUsage(tripList, totalStationUsage);		
+		
 		
 	}
 

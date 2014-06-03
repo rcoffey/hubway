@@ -13,7 +13,7 @@ import com.googlecode.mjorm.annotations.Property;
 public class Trip {
 	@Override
 	public String toString() {
-		return "Trip [startDay=" + startDay + ", endDay=" + endDay
+		return "Trip [_id=" + _id +", startDay=" + startDay + ", endDay=" + endDay
 				+ ", time=" + time + ", start_station=" + start_station
 				+ ", end_station=" + end_station + ", duration=" + duration + "]";
 	}
@@ -27,6 +27,8 @@ public class Trip {
 	// duration
 	public int duration;
 	
+	public int _id;
+	
 	public Trip() {
 		
 	}
@@ -34,12 +36,13 @@ public class Trip {
 	public Trip(TripInput input){
 		int start = Integer.parseInt(input.Station_Start.replaceAll("\"", ""));
 		int end = Integer.parseInt(input.Station_End.replaceAll("\"", ""));
-		new Trip(input.Date_Start, input.Date_End, start, end, input.Duration);
+		new Trip(input.Id, input.Date_Start, input.Date_End, start, end, input.Duration);
 	}
-	private Trip(Date start_date, Date end_date, int start_station, int end_station, int duration){
+	private Trip(int id, Date start_date, Date end_date, int start_station, int end_station, int duration){
 		this.start_station = start_station;
 		this.end_station = end_station;
 		this.duration = duration;
+		this._id = id;
 		
 		// remainder needs calculation
 		computeTime(start_date, end_date);

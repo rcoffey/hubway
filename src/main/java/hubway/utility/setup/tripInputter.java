@@ -17,7 +17,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import com.googlecode.mjorm.MongoDao;
 import com.googlecode.mjorm.MongoDaoImpl;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 
 
 public class tripInputter {
@@ -35,21 +39,38 @@ public class tripInputter {
 			logger.error("Authentication failed for mongoDb :" + client.toString());
 		}
 				
+		DBCollection trips = galawayDb.getCollection("trips");
+		DBObject query = new BasicDBObject(); // select * query
+		trips.remove(query);
+		
+		/*
+		// attempt to use mjorm to insert
 		AnnotationsDescriptorObjectMapper mapper = new AnnotationsDescriptorObjectMapper();
 		mapper.addClass(Trip.class);
 		mapper.registerTypeConverter(new IntegerConverter()); // do we need others?
 		MongoDao dao = new MongoDaoImpl(galawayDb, mapper);
+		*/
 		
 		// get array or whatever of tripInputs from clem
 		String fileName = "C:\\Users\\cbaltera\\Downloads\\hubway-updated-26-feb-2014\\hubwaydata_10_12_to_11_13.csv";
 		List<TripInput> tripInputs = TripDataReader.extractStationCSV(fileName);
+		DBObject tripObj;
 		for (TripInput input : tripInputs) {
 			if (input.Station_Start.equals(input.Station_End)){
 				continue; // ignore joy-rides
 			}
 			logger.info("Inserting a trip from " + input.Station_Start + " to " + input.Station_End);
 			Trip trip = new Trip(input);
-			dao.createObject("trips", trip);
+			//dao.createObject("trips", trip);
+			tripObj = BasicDBObjectBuilder.start()
+					.add("_id", trip._id)
+					.add("startDay", trip.startDay)
+					.add("endDay", trip.endDay)
+					.add("time", trip.time)
+					.add("start_station", trip.start_station)
+					.add("end_station", trip.end_station)
+					.add("duration", trip.duration).get();
+			trips.insert(tripObj);
 		}
 		
 		

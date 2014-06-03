@@ -27,10 +27,10 @@ public class TripDataReader {
 			Scanner inputStream = new Scanner(file);
 			String data = inputStream.nextLine();
 
-			// hashNext() loops line-by-line
+			// hasNext() loops line-by-line
 			int k = 0;
 			while (inputStream.hasNextLine()) {
-			//	k++; if(k>500) break;
+				k++; if(k>500) break;
 				// read single line, put in string
 				data = inputStream.nextLine();
 				String[] csvLine = data.split(",");

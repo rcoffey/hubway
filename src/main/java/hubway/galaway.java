@@ -29,9 +29,9 @@ public class galaway {
 
 	static Logger logger = LoggerFactory.getLogger(galaway.class);
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		// Get the Beans
-		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring.galaway.beans.xml");
 
 		// Connect to Mongo
@@ -100,7 +100,7 @@ public class galaway {
 			System.out.println("Perhaps you would like to go to " + destStation.station
 					+ ", the most popular trip from " + startStation.station);
 			produceOutput(stationsOfInterest, context, hubwayQuerier);
-			// can we pause here to allow reading of output?
+			// can we pause here to allow user to read output?
 			query.clear();
 			query.eq("_id", startStation.penMaxDest);
 			query.setCollection("Stations");
@@ -130,6 +130,10 @@ public class galaway {
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
 		compareRoutes(locationDataMap);
+
+		Map<String, JSONObject> hubways = locationData.getHubways(stationsOfInterest.station1.getLatLng(),
+				stationsOfInterest.station2.getLatLng(), 500);
+
 	}
 
 	private static void compareRoutes(Map<String, Route> routeMap_) {
