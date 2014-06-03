@@ -92,10 +92,10 @@ public class StationPair {
 		}
 		if (tripCount != 0){
 			System.out.println("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
-			if (station1.tripsFrom != 0 && station2.tripsTo != 0) {
-				System.out.println("That is " + tripCount / (double) station1.tripsFrom * 100 + " percent " + "of the trips from "
+			if (station1.tripsFrom.get("total") != 0 && station2.tripsTo.get("total") != 0) {
+				System.out.println("That is " + tripCount / (double) station1.tripsFrom.get("total") * 100 + " percent " + "of the trips from "
 						+ station1.station);
-				System.out.println(" and " + tripCount / (double) station2.tripsTo * 100 + " percent " + "of the trips to "
+				System.out.println(" and " + tripCount / (double) station2.tripsTo.get("total") * 100 + " percent " + "of the trips to "
 						+ station2.station + ".");
 			}
 			System.out.println("These trips took on average " + avgTime / 60 + " minutes.");
