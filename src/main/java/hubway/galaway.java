@@ -23,7 +23,9 @@ import com.googlecode.mjorm.MongoDaoImpl;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
 import com.googlecode.mjorm.query.DaoQuery;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 
 public class galaway {
 
@@ -52,12 +54,24 @@ public class galaway {
 		// Actually go get the stations. The empty BasicDBObject is basically a
 		// select * query
 		List<Station> stationList = dao.findObjects("Stations", new BasicDBObject(), Station.class).readAll();
-
+		
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
 		StationPair test = Calculator.printMinMaxStations(stationList);
-
+		double[] loc = {-71, 42};
+		//DBObject nearAns = dao.executeCommand(BasicDBObjectBuilder.start().add("geoNear", "Stations")
+		//		.add("near", loc).add("num", 1).get());
+		//DBObject nearRes = (DBObject) nearAns.get("results");
+		//System.out.println(((DBObject)nearRes.get("0")).get("obj"));
+		
+		
+		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 
+				BasicDBObjectBuilder.start().add("$near", loc).get()).get();
+		System.out.println(nearQuery);
+		Station nearStation = dao.findObject("Stations", nearQuery, Station.class);
+		System.out.println(nearStation);
+		
 		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
 
 		// does it make sense to print the list of station name / station id
