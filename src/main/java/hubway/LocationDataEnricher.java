@@ -49,16 +49,12 @@ public class LocationDataEnricher {
 	public Map<String, JSONObject> getHubways(LatLng origin_, LatLng destination_, int radius_) {
 		HashMap<String, JSONObject> results = new HashMap<String, JSONObject>(2);
 
-		JSONObject hubwayNear = getHubwayNear(origin_, radius_);
-		JSONObject hubwayDest = getHubwayNear(destination_, radius_);
+		JSONObject hubwayNear = _placesQueryBuilder.queryHubwayNear(origin_, radius_);
+		JSONObject hubwayDest = _placesQueryBuilder.queryHubwayNear(destination_, radius_);
 
 		results.put("hubwayNearOrigin", hubwayNear);
 		results.put("hubwayNearDestination", hubwayDest);
 		return results;
-	}
-
-	public JSONObject getHubwayNear(LatLng location_, int radius_) {
-		return _placesQueryBuilder.queryHubwayNear(location_, radius_);
 	}
 
 }
