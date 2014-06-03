@@ -36,9 +36,9 @@ public class LocationDataEnricher {
 
 	public Map<String, Route> getRoutes(LatLng origin_, LatLng destination_) {
 		HashMap<String, Route> results = new HashMap<String, Route>(2);
-		Route directionsBike = _directionsQueryBuilder.queryString(origin_, destination_, "bicycling");
-		Route directionsTransit = _directionsQueryBuilder.queryString(origin_, destination_, "transit");
-		Route directionsWalking = _directionsQueryBuilder.queryString(origin_, destination_, "walking");
+		Route directionsBike = _directionsQueryBuilder.queryRoute(origin_, destination_, "bicycling");
+		Route directionsTransit = _directionsQueryBuilder.queryRoute(origin_, destination_, "transit");
+		Route directionsWalking = _directionsQueryBuilder.queryRoute(origin_, destination_, "walking");
 
 		results.put("bicycling", directionsBike);
 		results.put("transit", directionsTransit);

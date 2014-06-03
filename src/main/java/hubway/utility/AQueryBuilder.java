@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.javadocmd.simplelatlng.LatLng;
 
@@ -28,11 +30,19 @@ public abstract class AQueryBuilder {
 	protected String _url;
 	protected String _credentials;
 	protected String _mostRecentQuery = "";
+	protected Gson _gson;
+	protected JsonParser _jsonParser;
 	final protected Logger logger = LoggerFactory.getLogger(HubwayQueryBuilder.class);
 
 	public AQueryBuilder(final String url_, final String credentials_) {
 		_url = url_;
 		_credentials = credentials_;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Route.class, new RouteDeserializer());
+		gsonBuilder.registerTypeAdapter(RouteLeg.class, new RouteLegDeserializer());
+		gsonBuilder.registerTypeAdapter(RouteStep.class, new RouteStepDeserializer());
+		_gson = gsonBuilder.create();
+		_jsonParser = new JsonParser();
 	}
 
 	public String getMostRecentQuery() {
@@ -58,25 +68,23 @@ public abstract class AQueryBuilder {
 		return null;
 	}
 
-	public Route queryString(String query_) {
-		_mostRecentQuery = query_;
+	public <T> Object queryAndDeserialize(String url_, Class<T> class_) {
+
 		URL query;
 		try {
-			query = new URL(query_);
-
+			query = new URL(url_);
 			JsonReader jreader = new JsonReader(new InputStreamReader(query.openStream()));
-			JsonParser parser = new JsonParser();
-			GsonBuilder gsonBuilder = new GsonBuilder();
-			gsonBuilder.registerTypeAdapter(Route.class, new RouteDeserializer());
-			gsonBuilder.registerTypeAdapter(RouteLeg.class, new RouteLegDeserializer());
-			gsonBuilder.registerTypeAdapter(RouteStep.class, new RouteStepDeserializer());
-
-			Gson gson = gsonBuilder.create();
-			return gson.fromJson(parser.parse(jreader), Route.class);
+			return _gson.fromJson(_jsonParser.parse(jreader), class_);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonSyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonIOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

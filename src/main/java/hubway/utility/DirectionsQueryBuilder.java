@@ -18,10 +18,10 @@ public class DirectionsQueryBuilder extends AQueryBuilder {
 		return super.query(url);
 	}
 
-	public Route queryString(LatLng origin_, LatLng dest_, String mode_) {
+	public Route queryRoute(LatLng origin_, LatLng dest_, String mode_) {
 		String url = _url + latLngToString(origin_) + "&destination=" + latLngToString(dest_) + "&mode=" + mode_
 				+ "&departure_time=" + System.currentTimeMillis() / 1000 + "&sensor=false";
-		return super.queryString(url);
+		return (Route) super.queryAndDeserialize(url, Route.class);
 	}
 
 }
