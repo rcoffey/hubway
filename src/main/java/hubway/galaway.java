@@ -154,9 +154,17 @@ public class galaway {
 				+ quickest.getValue().getTotalDuration() + " minutes to travel "
 				+ quickest.getValue().getTotalDistance() + " miles.";
 		if (!quickest.getKey().equals(mostEfficient.getKey())) {
-			results = results + " However, " + mostEfficient.getKey() + " has fewer legs to the trip and should take "
-					+ mostEfficient.getValue().getTotalDuration() + " minutes to travel "
-					+ mostEfficient.getValue().getTotalDistance() + " miles.";
+			results = results + "\n However, " + mostEfficient.getKey()
+					+ " has fewer legs to the trip and should take " + mostEfficient.getValue().getTotalDuration()
+					+ " minutes to travel " + mostEfficient.getValue().getTotalDistance() + " miles.";
+		}
+		for (Entry<String, Route> entry : routeMap_.entrySet()) {
+			if (!entry.getKey().equals(quickest.getKey())) {
+				Route route = entry.getValue();
+				results += "\n Option : " + entry.getKey() + " would take " + route.getTotalDuration()
+						+ " minutes to travel " + route.getTotalDistance() + " miles over " + route.getNumberOfLegs()
+						+ " legs.";
+			}
 		}
 		System.out.println(results);
 
