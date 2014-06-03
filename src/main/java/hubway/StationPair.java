@@ -90,8 +90,8 @@ public class StationPair {
 		if (navDist != -1.0){
 			System.out.println("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
 		}
-		System.out.println("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
 		if (tripCount != 0){
+			System.out.println("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
 			if (station1.tripsFrom != 0 && station2.tripsTo != 0) {
 				System.out.println("That is " + tripCount / (double) station1.tripsFrom * 100 + " percent " + "of the trips from "
 						+ station1.station);
@@ -106,6 +106,8 @@ public class StationPair {
 					System.out.println("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
 				}
 			}
+		} else {
+			System.out.println("No one has made this trip on Hubway before!");
 		}
 	}
 
