@@ -17,18 +17,12 @@ public class RouteStepDeserializer implements JsonDeserializer<RouteStep> {
 
 		final long duration = stepObject.getAsJsonObject("duration").get("value").getAsLong();
 		final long distance = stepObject.getAsJsonObject("distance").get("value").getAsLong();
-		// final String transit_details =
-		// stepObject.getAsJsonObject("transit_details").getAsJsonObject("line")
-		// .getAsJsonObject("vehicle").get("name").getAsString();
-		// String transport = "";
-		// if (transit_details != null && transit_details.has("line")) {
-		// transport =
-		// transit_details.getAsJsonObject("line.vehicle").get("Name").getAsString();
-		// }
+		final String travel_mode = stepObject.get("travel_mode").getAsString();
+
 		final RouteStep rs = new RouteStep();
 		rs.setDistance(distance);
 		rs.setDuration(duration);
-		// rs.setTravel_mode(transit_details);
+		rs.setTravelMode(travel_mode);
 
 		return rs;
 	}
