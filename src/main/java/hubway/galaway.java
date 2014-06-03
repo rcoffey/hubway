@@ -65,7 +65,8 @@ public class galaway {
 		System.out.println("Please enter your start station id:");
 		Scanner input = new Scanner(System.in);
 		int startStationId = input.nextInt();
-		System.out.println("Please enter your destination station id:");
+		System.out.println("Please enter your destination station id.  If you want advice on your destination"
+				+ " enter 0:");
 		int destStationId = input.nextInt();
 		input.close();
 
