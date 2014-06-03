@@ -4,6 +4,7 @@ import hubway.models.TripInput;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class TestGetTrips {
@@ -18,21 +19,24 @@ public class TestGetTrips {
 		String trips = "C:\\Users\\Clem\\Dev\\hubway\\src\\main\\resources\\hubwaydata_10_12_to_11_13.csv";
 
 		// !CL get the list of trips
-		ArrayList<TripInput> tripList = TripDataReader
+		LinkedList<TripInput> tripList = TripDataReader
 				.extractStationCSV(trips);
 
-
 		HashMap<String, Integer> startStationUsage = new 		HashMap<String, Integer> ();
+		HashMap<String, Integer> endStationUsage = new 		HashMap<String, Integer> ();
+		HashMap<String, Integer> totalStationUsage = new 		HashMap<String, Integer> ();
 
-		
+		System.out.println("printHighestStartUsage");
 		printHighestStartUsage(tripList, startStationUsage);
-		printHighestEndUsage(tripList, startStationUsage);
-		printHighestTotalUsage(tripList, startStationUsage);
+		System.out.println("endStationUsage");
+		printHighestEndUsage(tripList, endStationUsage);
+		System.out.println("totalStationUsage");
+		printHighestTotalUsage(tripList, totalStationUsage);
 		
 	}
 
 
-	private static void printHighestTotalUsage(ArrayList<TripInput> tripList,
+	private static void printHighestTotalUsage(LinkedList<TripInput> tripList,
 			HashMap<String, Integer> startStationUsage) {
 		// !CL for loop to cycle through things
 		for (TripInput tripInput : tripList) {			
@@ -83,7 +87,7 @@ public class TestGetTrips {
 		System.out.println("Lowest total point usage Station usage : " + min);
 	}
 	
-	private static void printHighestEndUsage(ArrayList<TripInput> tripList,
+	private static void printHighestEndUsage(LinkedList<TripInput> tripList,
 			HashMap<String, Integer> startStationUsage) {
 		// !CL for loop to cycle through things
 		for (TripInput tripInput : tripList) {			
@@ -125,7 +129,7 @@ public class TestGetTrips {
 		System.out.println("Lowest end point usage Station usage : " + min);
 	}
 	
-	private static void printHighestStartUsage(ArrayList<TripInput> tripList,
+	private static void printHighestStartUsage(LinkedList<TripInput> tripList,
 			HashMap<String, Integer> startStationUsage) {
 		// !CL for loop to cycle through things
 		for (TripInput tripInput : tripList) {			
