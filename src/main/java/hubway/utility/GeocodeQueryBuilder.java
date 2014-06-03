@@ -4,7 +4,6 @@ import org.json.JSONObject;
 
 import com.javadocmd.simplelatlng.LatLng;
 
-
 public class GeocodeQueryBuilder extends AQueryBuilder {
 
 	public GeocodeQueryBuilder(String url_, String credentials_) {
@@ -14,6 +13,11 @@ public class GeocodeQueryBuilder extends AQueryBuilder {
 	public JSONObject queryByAddress(String address) {
 		String url = _url + "address=" + address.replace(' ', '+') + "&sensor=false&key=" + _credentials;
 		return super.query(url);
+	}
+
+	public LatLng queryLatLng(String address) {
+		String url = _url + "address=" + address.replace(' ', '+') + "&sensor=false&key=" + _credentials;
+		return (LatLng) super.queryAndDeserialize(url, LatLng.class);
 	}
 
 }

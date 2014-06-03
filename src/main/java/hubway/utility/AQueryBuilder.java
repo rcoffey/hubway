@@ -1,5 +1,6 @@
 package hubway.utility;
 
+import hubway.json.GeocodeDeserializer;
 import hubway.json.Route;
 import hubway.json.RouteDeserializer;
 import hubway.json.RouteLeg;
@@ -41,6 +42,7 @@ public abstract class AQueryBuilder {
 		gsonBuilder.registerTypeAdapter(Route.class, new RouteDeserializer());
 		gsonBuilder.registerTypeAdapter(RouteLeg.class, new RouteLegDeserializer());
 		gsonBuilder.registerTypeAdapter(RouteStep.class, new RouteStepDeserializer());
+		gsonBuilder.registerTypeAdapter(LatLng.class, new GeocodeDeserializer());
 		_gson = gsonBuilder.create();
 		_jsonParser = new JsonParser();
 	}

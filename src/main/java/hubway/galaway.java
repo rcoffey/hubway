@@ -23,6 +23,7 @@ import com.googlecode.mjorm.MongoDao;
 import com.googlecode.mjorm.MongoDaoImpl;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
 import com.googlecode.mjorm.query.DaoQuery;
+import com.javadocmd.simplelatlng.LatLng;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 
@@ -147,7 +148,7 @@ public class galaway {
 
 		// !CL query for lat long using string
 		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder) context.getBean("geocodeQueryBuilder");
-		JSONObject davis = geocodeQueryBuilder.queryByAddress("40 Holland St, Somerville MA");
+		LatLng davis = geocodeQueryBuilder.queryLatLng("40 Holland St, Somerville MA");
 
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
