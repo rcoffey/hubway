@@ -98,6 +98,7 @@ public class galaway {
 			System.out.println("Perhaps you would like to go to " + destStation.station 
 					+ ", the most popular trip from " + startStation.station);
 			produceOutput(stationsOfInterest, context, hubwayQuerier);
+			// can we pause here to allow reading of output?
 			query.clear();
 			query.eq("_id", startStation.penMaxDest);
 			query.setCollection("Stations");
