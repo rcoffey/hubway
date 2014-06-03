@@ -22,8 +22,8 @@ public class TripInput {
 	public Date Date_Start;
 	public Date Date_End;
 
-	public String Station_Start;
-	public String Station_End;
+	public int Station_Start;
+	public int Station_End;
 	
 	public int Duration;
 	

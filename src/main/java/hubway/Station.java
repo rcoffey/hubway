@@ -1,5 +1,7 @@
 package hubway;
 
+import java.util.HashMap;
+
 import com.googlecode.mjorm.annotations.Entity;
 import com.googlecode.mjorm.annotations.Id;
 import com.googlecode.mjorm.annotations.Property;
@@ -20,7 +22,8 @@ public class Station {
 	public String station;
 	public Integer nb_docks;
 	public Double lat, lng;
-	public int tripsFrom, tripsTo, maxDest, penMaxDest;
+	public HashMap<String, Integer> tripsFrom, tripsTo;
+	public int maxDest, penMaxDest;
 
 	public Station() {
 		// TODO Auto-generated constructor stub
@@ -89,20 +92,20 @@ public class Station {
 	}
 	
 	@Property
-	public int getTripsFrom() {
+	public HashMap<String, Integer> getTripsFrom() {
 		return tripsFrom;
 	}
 	
-	public void setTripsFrom(int tripsFrom) {
+	public void setTripsFrom(HashMap<String, Integer> tripsFrom) {
 		this.tripsFrom = tripsFrom;
 	}
 	
 	@Property
-	public int getTripsTo() {
+	public HashMap<String, Integer> getTripsTo() {
 		return tripsTo;
 	}
 	
-	public void setTripsTo(int tripsTo) {
+	public void setTripsTo(HashMap<String, Integer> tripsTo) {
 		this.tripsTo = tripsTo;
 	}
 

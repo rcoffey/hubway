@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -30,7 +29,7 @@ public class TripDataReader {
 			// hasNext() loops line-by-line
 			int k = 0;
 			while (inputStream.hasNextLine()) {
-				k++; if(k>500) break;
+				//k++; if(k>500) break;
 				// read single line, put in string
 				data = inputStream.nextLine();
 				String[] csvLine = data.split(",");
@@ -51,8 +50,8 @@ public class TripDataReader {
 					e.printStackTrace();
 				}
 
-					trip.Station_Start = csvLine[4];
-					trip.Station_End = csvLine[6];
+					trip.Station_Start = Integer.parseInt(csvLine[4].replaceAll("\"", ""));
+					trip.Station_End = Integer.parseInt(csvLine[6].replaceAll("\"", ""));
 					trip.Zip =csvLine[9]; 
 
 				trip.bike_nr = (csvLine[7]);
