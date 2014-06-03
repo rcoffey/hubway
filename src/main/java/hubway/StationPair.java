@@ -87,7 +87,9 @@ public class StationPair {
 		logger.info("Your start station is " + station1.station);
 		logger.info("Your end station is " + station2.station);
 		logger.info("They are " + geoDist + " miles apart as the crow flies.");
-		logger.info("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
+		if (navDist != -1.0){
+			logger.info("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
+		}
 		logger.info("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
 		if (station1.tripsFrom != 0 && station2.tripsTo != 0) {
 			logger.info("That is " + tripCount / (double) station1.tripsFrom * 100 + " percent " + "of the trips from "
