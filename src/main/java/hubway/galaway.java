@@ -3,6 +3,7 @@ package hubway;
 import hubway.json.Route;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
+import hubway.utility.GeocodeQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
@@ -130,7 +131,6 @@ public class galaway {
 			produceOutput(stationsOfInterest, context, hubwayQuerier);
 		}
 
-		System.out.print("Done");
 	}
 
 	private static void produceOutput(StationPair stationsOfInterest, ApplicationContext context,
@@ -141,14 +141,42 @@ public class galaway {
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+
+		//!CL	query for lat long using string
+		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder ) context.getBean("geocodeQueryBuilder");
+		JSONObject davis = geocodeQueryBuilder.queryByAddress("40 Holland St, Somerville MA");
+
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
-		compareRoutes(locationDataMap);
 
 		Map<String, JSONObject> hubways = locationData.getHubways(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng(), 500);
+		
+		compareRoutes(locationDataMap);
+		Route bike = (Route) locationDataMap.get("bikeDirections");
+		Route transit = (Route) locationDataMap.get("transitDirections");
+		
+		long bikeDist = (long) (bike.getTotalDistance() * 0.000621371);
+		double bikeDur = bike.getTotalDuration() / 60;
+		
+		long transitDist = (long) (transit.getTotalDistance() * 0.000621371);
+		double transitDur = transit.getTotalDuration() / 60;
+				
+		System.out.println("Bike Distance " + bikeDist);
+		System.out.println("Bike Duration " + bikeDur);
+		System.out.println("Transit Distance " + transitDist);
+		System.out.println("Transit Duration " + transitDur);
+
+		if (bikeDur > transitDur) {
+			System.out.println("Taking transit is faster");
+		} else {
+			System.out.println("Biking is faster");
+		}
+		
+
 
 	}
+
 
 	private static void compareRoutes(Map<String, Route> routeMap_) {
 		logger.info("Comparing " + routeMap_.size() + " routes for travel types : " + routeMap_.keySet().toString());

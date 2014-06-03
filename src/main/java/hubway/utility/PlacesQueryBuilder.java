@@ -23,5 +23,6 @@ public class PlacesQueryBuilder extends AQueryBuilder {
 		return super.query(url);
 	}
 	
+	
 
 }
