@@ -99,9 +99,9 @@ public class stationModifier {
 			maxStation = station;
 			queryString = "&start_station=" + station.get("_id");
 			for (DBObject dest : stations.find()) {
-				/*if (dest.get("_id") == station.get("maxDest")) {
+				if (dest.get("_id") == station.get("maxDest")) {
 					continue;
-				}*/
+				}
 				queryString += "&end_station=" + dest.get("_id");
 				tripData = hubwayQuerier.query("trip", queryString).getJSONObject("meta");
 				newCount = tripData.getInt("total_count");
@@ -110,7 +110,7 @@ public class stationModifier {
 					count = newCount;
 				}
 			}
-			station.put("maxDest", maxStation.get("_id"));
+			station.put("penMaxDest", maxStation.get("_id"));
 			stations.save(station);
 		}
 	}
