@@ -84,25 +84,27 @@ public class StationPair {
 	}
 
 	public void info() {
-		logger.info("Your start station is " + station1.station);
-		logger.info("Your end station is " + station2.station);
-		logger.info("They are " + geoDist + " miles apart as the crow flies.");
+		System.out.println("Your start station is " + station1.station);
+		System.out.println("Your end station is " + station2.station);
+		System.out.println("They are " + geoDist + " miles apart as the crow flies.");
 		if (navDist != -1.0){
-			logger.info("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
+			System.out.println("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
 		}
-		logger.info("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
-		if (station1.tripsFrom != 0 && station2.tripsTo != 0) {
-			logger.info("That is " + tripCount / (double) station1.tripsFrom * 100 + " percent " + "of the trips from "
-					+ station1.station);
-			logger.info(" and " + tripCount / (double) station2.tripsTo * 100 + " percent " + "of the trips to "
-					+ station2.station + ".");
-		}
-		logger.info("These trips took on average " + avgTime / 60 + " minutes.");
-		logger.info("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60 + " minutes.");
-		if (minTime != 0) {
-			double dist = (navDist == -1.0 ? geoDist : navDist);
-			if (dist != 0) {
-				logger.info("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+		System.out.println("There are " + tripCount + " trips between " + station1.station + " and " + station2.station + ".");
+		if (tripCount != 0){
+			if (station1.tripsFrom != 0 && station2.tripsTo != 0) {
+				System.out.println("That is " + tripCount / (double) station1.tripsFrom * 100 + " percent " + "of the trips from "
+						+ station1.station);
+				System.out.println(" and " + tripCount / (double) station2.tripsTo * 100 + " percent " + "of the trips to "
+						+ station2.station + ".");
+			}
+			System.out.println("These trips took on average " + avgTime / 60 + " minutes.");
+			if (minTime != 0 && minTime != -1) {
+				System.out.println("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60 + " minutes.");
+				double dist = (navDist == -1.0 ? geoDist : navDist);
+				if (dist != 0) {
+					System.out.println("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+				}
 			}
 		}
 	}
