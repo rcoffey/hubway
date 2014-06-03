@@ -34,6 +34,11 @@
 		<constructor-arg value="${google.places.url}" />
 		<constructor-arg value="${google.credentials}" />
 	</bean>
+	
+		<bean id="geocodeQueryBuilder" class="hubway.utility.GeocodeQueryBuilder">
+		<constructor-arg value="${google.geocode.url}" />
+		<constructor-arg value="${google.credentials}" />
+	</bean>
 
 	<bean id="distanceQueryBuilder" class="hubway.utility.DistanceQueryBuilder">
 		<constructor-arg value="${google.distance.url}" />
