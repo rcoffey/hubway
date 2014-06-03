@@ -41,6 +41,13 @@ public class LocationDataEnricher {
 		Route directionsBike = _directionsQueryBuilder.queryString(origin_, destination_, "bicycling");
 		Route directionsTransit = _directionsQueryBuilder.queryString(origin_, destination_, "transit");
 
+
+		JSONObject hubwayNear = _placesQueryBuilder.queryHubwayNear(origin_, radius_);		
+		JSONObject hubwayDest = _placesQueryBuilder.queryHubwayNear(destination_, radius_);
+
+		results.put("hubwayNearOrigin", hubwayNear);
+		results.put("hubwayNearDestination", hubwayDest);
+		
 		results.put("mbtaOrigin", mbtaOrigin);
 		results.put("mbtaDestination", mbtaDest);
 		results.put("bikeDirections", directionsBike);

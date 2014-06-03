@@ -16,4 +16,12 @@ public class PlacesQueryBuilder extends AQueryBuilder {
 		return super.query(url);
 	}
 
+
+	public JSONObject queryHubwayNear(LatLng location_, int radius_) {
+		String url = _url + "location=" + latLngToString(location_) + "&radius=" + radius_
+				+ "&name=hubway&sensor=false&key=" + _credentials;
+		return super.query(url);
+	}
+	
+
 }

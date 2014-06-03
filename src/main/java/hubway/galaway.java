@@ -125,6 +125,7 @@ public class galaway {
 		
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+		
 		Map<String, Object> locationDataMap = locationData.getLocationData(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng(), 500);
 
@@ -132,9 +133,10 @@ public class galaway {
 		Route transit = (Route) locationDataMap.get("transitDirections");
 		long bikeDist = (long) (bike.getTotalDistance() * 0.000621371);
 		long bikeDur = bike.getTotalDuration() / 60;
+		
 		long transitDist = (long) (transit.getTotalDistance() * 0.000621371);
 		long transitDur = transit.getTotalDuration() / 60;
-
+				
 		System.out.println("Bike Distance " + bikeDist);
 		System.out.println("Bike Duration " + bikeDur);
 		System.out.println("Transit Distance " + transitDist);
