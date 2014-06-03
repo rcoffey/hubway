@@ -3,6 +3,7 @@ package hubway;
 import hubway.json.Route;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
+import hubway.utility.GeocodeQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
@@ -126,11 +127,19 @@ public class galaway {
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
 		
+		
+
+		//!CL	query for lat long using string
+		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder ) context.getBean("GeocodeQueryBuilder");
+		JSONObject davis = geocodeQueryBuilder.queryByAddress("40 Holland St, Somerville MA");
+		
+		
 		Map<String, Object> locationDataMap = locationData.getLocationData(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng(), 500);
 
 		Route bike = (Route) locationDataMap.get("bikeDirections");
 		Route transit = (Route) locationDataMap.get("transitDirections");
+		
 		long bikeDist = (long) (bike.getTotalDistance() * 0.000621371);
 		long bikeDur = bike.getTotalDuration() / 60;
 		
@@ -152,5 +161,8 @@ public class galaway {
 		if (bikeDist > transitDist) {
 			System.out.println("You travel farther by bike");
 		}
+		
+
+		
 	}
 }
