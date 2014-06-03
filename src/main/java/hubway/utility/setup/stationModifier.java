@@ -35,9 +35,9 @@ public class stationModifier {
 		DBObject query = new BasicDBObject(); // select * query
 		
 		/* This block is to insert stations */
-		  
-		/* // remove all existing stations from Stations collection
-		//stations.remove(query);
+		/*  
+		// remove all existing stations from Stations collection
+		// stations.remove(query);
 		
 		// get station info from hubway api
 		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
@@ -58,7 +58,10 @@ public class stationModifier {
 							.add("lat", lat).add("lng", lng).get();
 			stations.insert(stationObj);
 			System.out.println("Inserted " + station.getString("name"));
-		}*/
+		}
+		*/
+		
+		// this block is to reformat 
 		
 		/* this block is to add trip data to stations */
 		/*
@@ -82,12 +85,13 @@ public class stationModifier {
 			// set count as tripsTo
 			station.put("tripsTo", count);
 			stations.save(station);
-		}*/
+		}
+		*/
 		
 		// use trips to calculate most popular destination from given station
 		// store the station pair (or just store the station id if there are space constraints)
 		// also calc second most popular in hopes of more interesting results
-		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
+		/*HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
 		String queryString;
 		JSONObject tripData;
 		int count;
@@ -112,6 +116,6 @@ public class stationModifier {
 			}
 			station.put("penMaxDest", maxStation.get("_id"));
 			stations.save(station);
-		}
+		}*/
 	}
 }
