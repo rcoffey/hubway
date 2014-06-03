@@ -35,6 +35,23 @@ public class galaway {
 		// Get the Beans
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring.galaway.beans.xml");
 
+		// Print interesting general station info. (Farthest points, most used
+		// stations...)
+		// This could include the station ids for now so we have points to
+		// search between.
+
+		// Ask for an Address
+
+		// Use GeoCode to get coordinates of the address
+
+		// Use Mongo near query to get nearest hubway station
+
+		// Suggest most common destinations and average trip durations
+
+		// Ask for destination
+
+		// Look up route options between the 2
+
 		// Connect to Mongo
 		MongoTemplate client = (MongoTemplate) context.getBean("mongoTemplate");
 		DB galawayDb = client.getDb();
@@ -181,11 +198,13 @@ public class galaway {
 		String results = "The quickest form of travel is " + quickest.getKey() + ", with a duration of "
 				+ quickest.getValue().getTotalDuration() + " minutes to travel "
 				+ quickest.getValue().getTotalDistance() + " miles.";
-		if (!quickest.getKey().equals(mostEfficient.getKey())) {
-			results = results + "\n However, " + mostEfficient.getKey()
-					+ " has fewer legs to the trip and should take " + mostEfficient.getValue().getTotalDuration()
-					+ " minutes to travel " + mostEfficient.getValue().getTotalDistance() + " miles.";
-		}
+		// if (!quickest.getKey().equals(mostEfficient.getKey())) {
+		// results = results + "\n However, " + mostEfficient.getKey()
+		// + " has fewer legs to the trip and should take " +
+		// mostEfficient.getValue().getTotalDuration()
+		// + " minutes to travel " + mostEfficient.getValue().getTotalDistance()
+		// + " miles.";
+		// }
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
 			if (!entry.getKey().equals(quickest.getKey())) {
 				Route route = entry.getValue();
