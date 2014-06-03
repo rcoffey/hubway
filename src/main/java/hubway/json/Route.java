@@ -1,10 +1,13 @@
 package hubway.json;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Route {
 	private String summary;
 	private List<RouteLeg> legs;
+
+	private DecimalFormat df2 = new DecimalFormat("###.##");
 
 	/**
 	 * Sets the summary of the route
@@ -28,20 +31,30 @@ public class Route {
 		return this.summary;
 	}
 
-	public long getTotalDuration() {
-		long total = 0L;
+	/**
+	 * Sum of duration of every leg in minutes
+	 * 
+	 * @return
+	 */
+	public Double getTotalDuration() {
+		Double total = 0.0;
 		for (RouteLeg leg : legs) {
 			total += leg.getDuration();
 		}
-		return total;
+		return Double.valueOf(df2.format(total / 60));
 	}
 
-	public long getTotalDistance() {
-		long total = 0L;
+	/**
+	 * Sum of all distances converted to miles.
+	 * 
+	 * @return
+	 */
+	public Double getTotalDistance() {
+		Double total = 0.0;
 		for (RouteLeg leg : legs) {
 			total += leg.getDistance();
 		}
-		return total;
+		return Double.valueOf(df2.format(total * 0.000621371));
 	}
 
 	public String toString() {
@@ -50,5 +63,9 @@ public class Route {
 			summary += leg.toString() + "\n";
 		}
 		return summary;
+	}
+
+	public int getNumberOfLegs() {
+		return legs.size();
 	}
 }

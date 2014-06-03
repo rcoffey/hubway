@@ -1,7 +1,6 @@
 package hubway.utility;
 
 import hubway.galaway;
-import hubway.models.Time;
 import hubway.models.TripInput;
 
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -39,8 +37,8 @@ public class TestGetTrips {
 		String trips = "C:\\Users\\cbaltera\\Downloads\\hubway-updated-26-feb-2014\\hubwaydata_10_12_to_11_13.csv";
 
 		// !CL get the list of trips
-		LinkedList<TripInput> tripList = TripDataReader
-				.extractStationCSV(trips);
+		LinkedList<TripInput> tripList = TripDataReader.extractStationCSV(trips);
+
 		
 		Map<Integer, Integer> joyrides = new HashMap<Integer, Integer>();
 		Map<Integer, List<TripInput>> startMap = new HashMap<Integer, List<TripInput>>();

@@ -34,19 +34,27 @@ public class LocationDataEnricher {
 		return _weatherQueryBuilder.queryHistorical(date_, stateCity_);
 	}
 
-	public Map<String, Object> getLocationData(LatLng origin_, LatLng destination_, int radius_) {
-		HashMap<String, Object> results = new HashMap<String, Object>(4);
-		JSONObject mbtaOrigin = _placesQueryBuilder.queryMbtaNear(origin_, radius_);
-		JSONObject mbtaDest = _placesQueryBuilder.queryMbtaNear(destination_, radius_);
+	public Map<String, Route> getRoutes(LatLng origin_, LatLng destination_) {
+		HashMap<String, Route> results = new HashMap<String, Route>(2);
 		Route directionsBike = _directionsQueryBuilder.queryString(origin_, destination_, "bicycling");
 		Route directionsTransit = _directionsQueryBuilder.queryString(origin_, destination_, "transit");
 
-		results.put("mbtaOrigin", mbtaOrigin);
-		results.put("mbtaDestination", mbtaDest);
-		results.put("bikeDirections", directionsBike);
-		results.put("transitDirections", directionsTransit);
+		results.put("bicycling", directionsBike);
+		results.put("transit", directionsTransit);
 
 		return results;
 
 	}
+
+	public Map<String, JSONObject> getHubways(LatLng origin_, LatLng destination_, int radius_) {
+		HashMap<String, JSONObject> results = new HashMap<String, JSONObject>(2);
+
+		JSONObject hubwayNear = _placesQueryBuilder.queryHubwayNear(origin_, radius_);
+		JSONObject hubwayDest = _placesQueryBuilder.queryHubwayNear(destination_, radius_);
+
+		results.put("hubwayNearOrigin", hubwayNear);
+		results.put("hubwayNearDestination", hubwayDest);
+		return results;
+	}
+
 }
