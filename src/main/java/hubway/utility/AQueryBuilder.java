@@ -8,6 +8,8 @@ import hubway.json.RouteLeg;
 import hubway.json.RouteLegDeserializer;
 import hubway.json.RouteStep;
 import hubway.json.RouteStepDeserializer;
+import hubway.json.TransitAlert;
+import hubway.json.TransitAlertDeserializer;
 import hubway.json.Weather;
 
 import java.io.BufferedReader;
@@ -46,6 +48,7 @@ public abstract class AQueryBuilder {
 		gsonBuilder.registerTypeAdapter(RouteStep.class, new RouteStepDeserializer());
 		gsonBuilder.registerTypeAdapter(LatLng.class, new GeocodeDeserializer());
 		gsonBuilder.registerTypeAdapter(Weather.class, new CurrentWeatherDeserializer());
+		gsonBuilder.registerTypeAdapter(TransitAlert.class, new TransitAlertDeserializer());
 		_gson = gsonBuilder.create();
 		_jsonParser = new JsonParser();
 	}

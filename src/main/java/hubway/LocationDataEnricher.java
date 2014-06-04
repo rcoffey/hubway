@@ -1,10 +1,12 @@
 package hubway;
 
 import hubway.json.Route;
+import hubway.json.TransitAlert;
 import hubway.json.Weather;
 import hubway.utility.DirectionsQueryBuilder;
 import hubway.utility.DistanceQueryBuilder;
 import hubway.utility.PlacesQueryBuilder;
+import hubway.utility.TransitAlertQueryBuilder;
 import hubway.utility.WundergroundQueryBuilder;
 
 import java.util.HashMap;
@@ -17,14 +19,16 @@ import org.slf4j.LoggerFactory;
 import com.javadocmd.simplelatlng.LatLng;
 
 public class LocationDataEnricher {
+	protected TransitAlertQueryBuilder _transitAlertQueryBuilder;
 	protected WundergroundQueryBuilder _weatherQueryBuilder;
 	protected PlacesQueryBuilder _placesQueryBuilder;
 	protected DirectionsQueryBuilder _directionsQueryBuilder;
 	protected DistanceQueryBuilder _distanceQueryBuilder;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public LocationDataEnricher(WundergroundQueryBuilder weatherQueryBuilder_, PlacesQueryBuilder placesQueryBuilder_,
+	public LocationDataEnricher(TransitAlertQueryBuilder transitAlertQueryBuilder, WundergroundQueryBuilder weatherQueryBuilder_, PlacesQueryBuilder placesQueryBuilder_,
 			DirectionsQueryBuilder directionsQueryBuilder_, DistanceQueryBuilder distanceQueryBuilder_) {
+		_transitAlertQueryBuilder = transitAlertQueryBuilder;
 		_weatherQueryBuilder = weatherQueryBuilder_;
 		_placesQueryBuilder = placesQueryBuilder_;
 		_directionsQueryBuilder = directionsQueryBuilder_;
@@ -37,6 +41,11 @@ public class LocationDataEnricher {
 
 	public Weather getCurrentWeather(String stateCity_) {
 		return _weatherQueryBuilder.queryCurrent(stateCity_);
+	}
+	
+
+	public TransitAlert getTransitAlerts() {
+		return _transitAlertQueryBuilder.queryTransitAlerts();
 	}
 
 	public Map<String, Route> getRoutes(LatLng origin_, LatLng destination_) {
