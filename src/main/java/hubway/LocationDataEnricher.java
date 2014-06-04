@@ -34,7 +34,8 @@ public class LocationDataEnricher {
 	public JSONObject getHistoricalWeather(String date_, String stateCity_) {
 		return _weatherQueryBuilder.queryHistorical(date_, stateCity_);
 	}
-	public Weather  getCurrentWeather(String stateCity_) {
+
+	public Weather getCurrentWeather(String stateCity_) {
 		return _weatherQueryBuilder.queryCurrent(stateCity_);
 	}
 
@@ -43,10 +44,12 @@ public class LocationDataEnricher {
 		Route directionsBike = _directionsQueryBuilder.queryRoute(origin_, destination_, "bicycling");
 		Route directionsTransit = _directionsQueryBuilder.queryRoute(origin_, destination_, "transit");
 		Route directionsWalking = _directionsQueryBuilder.queryRoute(origin_, destination_, "walking");
+		Route directionsDriving = _directionsQueryBuilder.queryRoute(origin_, destination_, "driving");
 
 		results.put("bicycling", directionsBike);
 		results.put("transit", directionsTransit);
 		results.put("walking", directionsWalking);
+		results.put("driving", directionsDriving);
 
 		return results;
 

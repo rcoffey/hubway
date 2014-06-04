@@ -8,6 +8,7 @@ import hubway.utility.GeocodeQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +32,8 @@ public class GalawayService {
 	final MongoTemplate _mongoTemplate;
 	final HubwayQueryBuilder _hubwayQuerier;
 	final LocationDataEnricher _locationEnricher;
-	final GeocodeQueryBuilder _geocodeQueryBuilder; 
+	final GeocodeQueryBuilder _geocodeQueryBuilder;
+	protected List<StationPair> _stationPairs;
 
 	Logger logger = LoggerFactory.getLogger(GalawayService.class);
 
@@ -43,17 +45,20 @@ public class GalawayService {
 		_hubwayQuerier = hubwayQuerier_;
 		_locationEnricher = locationEnricher_;
 		_geocodeQueryBuilder = geocodeQueryBuilder_;
+		_stationPairs = new ArrayList<StationPair>();
 	}
 
 	public void runGalaway() {
-		initialize();
+		initializeMongo();
 
+		System.out.println("\nDisclaimer: Not all Hubway stations are included in the historical data"
+				+ " on which we've based our results and suggestions.  Some answers may therefore be unexpected.\n");
 		List<Station> stationList = _dao.findObjects("Stations", new BasicDBObject(), Station.class).readAll();
-		Calculator.printMinMaxStations(stationList);
+		_stationPairs = Calculator.createStationPairs(stationList);
 
 	}
 
-	protected void initialize() {
+	protected void initializeMongo() {
 		DB galawayDb = _mongoTemplate.getDb();
 		if (!galawayDb.isAuthenticated()) {
 			logger.error("Authentication failed for mongoDb :" + _mongoTemplate.toString());
@@ -82,7 +87,9 @@ public class GalawayService {
 		weather = new Weather("", "", 77, 1);
 		
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
-			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()) {
+			if (!entry.getKey().equals("driving")
+					&& (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue()
+							.getTotalDuration())) {
 				quickest = entry;
 			}
 
@@ -145,17 +152,17 @@ public class GalawayService {
 		}
 		return startStation;
 	}
-	
+
 	public Station processAddress(String address) {
 		LatLng coords = _geocodeQueryBuilder.queryLatLng(address);
-		if (coords == null){
+		if (coords == null) {
 			System.out.println("Are you sure you entered an address?  Check your syntax and try again.");
 			return null;
 		}
-		double[] loc = {coords.getLongitude(), coords.getLatitude()};
-			
-		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 
-		BasicDBObjectBuilder.start().add("$near", loc).get()).get();
+		double[] loc = { coords.getLongitude(), coords.getLatitude() };
+
+		DBObject nearQuery = BasicDBObjectBuilder.start()
+				.add("geometry.coordinates", BasicDBObjectBuilder.start().add("$near", loc).get()).get();
 		Station nearStation = _dao.findObject("Stations", nearQuery, Station.class);
 		if (nearStation == null) {
 			System.out.println("Alas, no nearby stations.  Try again with another address.");
@@ -169,18 +176,16 @@ public class GalawayService {
 		Station destStation;
 		if (startStation_.maxDest != Integer.parseInt(startStation_.id)) {
 			destStation = processStation(startStation_.maxDest);
-			System.out.println("Perhaps you would like to go to " + destStation.station + ", the most popular trip from "
-					+ startStation_.station + "\n");
+			System.out.println("Perhaps you would like to go to " + destStation.station
+					+ ", the most popular trip from " + startStation_.station + "\n");
 		} else {
-			System.out.println("Perhaps you would like to go for a joyride, starting and ending at " 
-					+ startStation_.station + "\n This is the most popular trip from " 
-					+ startStation_.station + "\n");
+			System.out.println("Perhaps you would like to go for a joyride, starting and ending at "
+					+ startStation_.station + "\n This is the most popular trip from " + startStation_.station + "\n");
 			destStation = processStation(startStation_.penMaxDest);
 			System.out.println("Alternatively, you could go to " + destStation.station
 					+ ", the second most popular trip from " + startStation_.station + "\n");
 		}
 		StationPair stationsOfInterest = new StationPair(startStation_, destStation);
-
 
 		produceOutput(stationsOfInterest);
 	}

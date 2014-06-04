@@ -74,22 +74,22 @@ public class galaway {
 		// Actually go get the stations. The empty BasicDBObject is basically a
 		// select * query
 		List<Station> stationList = dao.findObjects("Stations", new BasicDBObject(), Station.class).readAll();
-		
+
 		System.out.println("There are " + stationList.size() + " stations");
 		System.out.println(stationList.toString());
 
-		StationPair test = Calculator.printMinMaxStations(stationList);
-		
+		List<StationPair> test = Calculator.createStationPairs(stationList);
+
 		// !CL query for lat long using string
 		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder) context.getBean("geocodeQueryBuilder");
 		LatLng davis = geocodeQueryBuilder.queryLatLng("40 Holland St, Somerville MA");
-		double[] loc = {davis.getLongitude(), davis.getLatitude()};
-		
-		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 
-				BasicDBObjectBuilder.start().add("$near", loc).get()).get();
+		double[] loc = { davis.getLongitude(), davis.getLatitude() };
+
+		DBObject nearQuery = BasicDBObjectBuilder.start()
+				.add("geometry.coordinates", BasicDBObjectBuilder.start().add("$near", loc).get()).get();
 		Station nearStation = dao.findObject("Stations", nearQuery, Station.class);
 		System.out.println(nearStation);
-		
+
 		HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
 
 		// does it make sense to print the list of station name / station id
@@ -157,13 +157,10 @@ public class galaway {
 		stationsOfInterest.info();
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
-		
-		
+
 		JSONObject hst = locationData.getHistoricalWeather("20130821", "MA/Boston");
 		Weather cur = locationData.getCurrentWeather("MA/Boston");
-				
-		
-		
+
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
 
