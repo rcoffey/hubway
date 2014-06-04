@@ -1,6 +1,7 @@
 package hubway;
 
 import hubway.json.Route;
+import hubway.json.Weather;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.GeocodeQueryBuilder;
@@ -68,10 +69,18 @@ public class GalawayService {
 		_dao = new MongoDaoImpl(galawayDb, mapper);
 	}
 
-	public void compareRoutes(Map<String, Route> routeMap_) {
+	public void compareRoutes(Weather weather, Map<String, Route> routeMap_) {
 		logger.info("Comparing " + routeMap_.size() + " routes for travel types : " + routeMap_.keySet().toString());
 		Entry<String, Route> quickest = null;
 		Entry<String, Route> mostEfficient = null;
+		Entry<String, Route> recommended = null;
+		Entry<String, Route> badweatherOption = null;
+		
+		
+		Boolean weatherIsGood = weather.tempf > 75 && weather.tempf < 90  && weather.windmph <10 
+				&& !weather.weather.contains("rain") && !weather.weather.contains("snow");
+		weather = new Weather("", "", 77, 1);
+		
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
 			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()) {
 				quickest = entry;
@@ -81,17 +90,45 @@ public class GalawayService {
 					|| entry.getValue().getNumberOfLegs() < mostEfficient.getValue().getNumberOfLegs()) {
 				mostEfficient = entry;
 			}
+			
+			//!CL	we are trying to sell bicycles , so lets take precedence if it is nice out.
+			if (weatherIsGood && (entry.getKey().contains("walk") || entry.getKey().contains("bicycl")))
+			{
+				if (recommended != null && !recommended.getKey().contains("walk"))
+					logger.info("recommended is not null and we are currently bicycling");					
+				else 
+					recommended = entry;
+			}
+			
+			if (!(entry.getKey().contains("walk") || entry.getKey().contains("bicycl")))
+			{
+				if (recommended != null && !recommended.getKey().contains("driving"))
+					logger.info("recommended is not null and we are currently taking transit");					
+				else 
+					badweatherOption = entry;
+			}
 		}
+
+		if (recommended == null)
+			recommended = badweatherOption;
+		
 		String results = "The quickest form of travel is " + quickest.getKey() + ", with a duration of "
 				+ quickest.getValue().getTotalDuration() + " minutes to travel "
 				+ quickest.getValue().getTotalDistance() + " miles.";
+
+		if (recommended != null)
+		results += "\n Recommended Option : " + recommended.getKey() + " would take " + recommended.getValue().getTotalDuration()
+				+ " minutes to travel " + recommended.getValue().getTotalDistance() + " miles over " + recommended.getValue().getNumberOfLegs()
+				+ " legs." + " The weather is " + weather.weather + ". and it feels like " + weather.feelslike + ".";
+		
+		
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
 			if (!entry.getKey().equals(quickest.getKey())) {
 				Route route = entry.getValue();
 				results += "\n Option : " + entry.getKey() + " would take " + route.getTotalDuration()
 						+ " minutes to travel " + route.getTotalDistance() + " miles over " + route.getNumberOfLegs()
 						+ " legs.";
-			}
+			}			
 		}
 		System.out.println(results);
 
@@ -155,7 +192,10 @@ public class GalawayService {
 
 		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
-		compareRoutes(locationDataMap);
+
+		Weather cur = _locationEnricher.getCurrentWeather("MA/Boston");
+		
+		compareRoutes(cur, locationDataMap);
 
 	}
 }
