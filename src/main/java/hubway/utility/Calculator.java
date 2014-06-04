@@ -17,7 +17,6 @@ public class Calculator {
 		Double maxDist = Double.MIN_VALUE;
 		Station mostTotal = null, leastTotal = null, mostJoyRides = null, leastJoyRides = null;
 		StationPair mostTripsBetween, leastTripsBetween;
-		Station maxStationStart = null, maxStationDest = null, minStationStart = null, minStationDest = null;
 
 		for (Iterator<Station> itStart = stations.iterator(); itStart.hasNext();) {
 			Station start = (Station) itStart.next();
@@ -41,26 +40,6 @@ public class Calculator {
 
 			}
 
-			for (Iterator<Station> itDest = stations.iterator(); itDest.hasNext();) {
-				Station dest = (Station) itDest.next();
-				stationPairs.add(new StationPair(start, dest));
-				if (start.station.equalsIgnoreCase(dest.station))
-					continue;
-
-				Double dist = distFrom(dest.lat, dest.lng, start.lat, start.lng);
-
-				if (dist < minDist) {
-					minDist = dist;
-					minStationStart = start;
-					minStationDest = dest;
-				}
-
-				if (dist > maxDist) {
-					maxDist = dist;
-					maxStationStart = start;
-					maxStationDest = dest;
-				}
-			}
 		}
 
 		System.out.println("************************ OVERALL SUMMARY OF HUBWAY USE ************************");
@@ -80,15 +59,7 @@ public class Calculator {
 		System.out.println("The least joyful station (with more than 0 joyrides) is " + leastJoyRides.getStation()
 				+ " with only " + leastJoyRides.getJoyrides().get("total"));
 		printJoyRideBreakdown(leastJoyRides);
-
-		System.out.println("minStationStart.station() = " + minStationStart.station);
-		System.out.println("minStationDest.station() = " + minStationDest.station);
-		System.out.println("minDist() = " + minDist);
-
-		System.out.println("maxStationStart.station() = " + maxStationStart.station);
-		System.out.println("maxStationDest.station() = " + maxStationDest.station);
-
-		System.out.println("maxDist() = " + maxDist);
+		System.out.println("************************");
 
 		return stationPairs;
 	}

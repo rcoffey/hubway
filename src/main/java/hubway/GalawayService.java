@@ -75,21 +75,17 @@ public class GalawayService {
 	}
 
 	public void compareRoutes(Weather weather, Map<String, Route> routeMap_) {
-		logger.info("Comparing " + routeMap_.size() + " routes for travel types : " + routeMap_.keySet().toString());
+		logger.debug("Comparing " + routeMap_.size() + " routes for travel types : " + routeMap_.keySet().toString());
 		Entry<String, Route> quickest = null;
 		Entry<String, Route> mostEfficient = null;
 		Entry<String, Route> recommended = null;
 		Entry<String, Route> badweatherOption = null;
-		
-		
-		Boolean weatherIsGood = weather.tempf > 75 && weather.tempf < 90  && weather.windmph <10 
+
+		Boolean weatherIsGood = weather.tempf > 55 && weather.tempf < 85 && weather.windmph < 10
 				&& !weather.weather.contains("rain") && !weather.weather.contains("snow");
-		weather = new Weather("", "", 77, 1);
-		
+
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
-			if (!entry.getKey().equals("driving")
-					&& (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue()
-							.getTotalDuration())) {
+			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()) {
 				quickest = entry;
 			}
 
@@ -97,45 +93,44 @@ public class GalawayService {
 					|| entry.getValue().getNumberOfLegs() < mostEfficient.getValue().getNumberOfLegs()) {
 				mostEfficient = entry;
 			}
-			
-			//!CL	we are trying to sell bicycles , so lets take precedence if it is nice out.
-			if (weatherIsGood && (entry.getKey().contains("walk") || entry.getKey().contains("bicycl")))
-			{
-				if (recommended != null && !recommended.getKey().contains("walk"))
-					logger.info("recommended is not null and we are currently bicycling");					
-				else 
+
+			// !CL we are trying to sell bicycles , so lets take precedence if
+			// it is nice out.
+			if (weatherIsGood && (entry.getKey().contains("walking") || entry.getKey().contains("bicycling"))) {
+				if (recommended != null && !recommended.getKey().contains("walking"))
+					logger.info("recommended is not null and we are currently bicycling");
+				else
 					recommended = entry;
 			}
-			
-			if (!(entry.getKey().contains("walk") || entry.getKey().contains("bicycl")))
-			{
+
+			if (!(entry.getKey().contains("walking") || entry.getKey().contains("bicycling"))) {
 				if (recommended != null && !recommended.getKey().contains("driving"))
-					logger.info("recommended is not null and we are currently taking transit");					
-				else 
+					logger.info("recommended is not null and we are currently taking transit");
+				else
 					badweatherOption = entry;
 			}
 		}
 
 		if (recommended == null)
 			recommended = badweatherOption;
-		
+		System.out.println("\n***** Route Options *****");
+
 		String results = "The quickest form of travel is " + quickest.getKey() + ", with a duration of "
 				+ quickest.getValue().getTotalDuration() + " minutes to travel "
 				+ quickest.getValue().getTotalDistance() + " miles.";
 
 		if (recommended != null)
-		results += "\n Recommended Option : " + recommended.getKey() + " would take " + recommended.getValue().getTotalDuration()
-				+ " minutes to travel " + recommended.getValue().getTotalDistance() + " miles over " + recommended.getValue().getNumberOfLegs()
-				+ " legs." + " The weather is " + weather.weather + ". and it feels like " + weather.feelslike + ".";
-		
-		
+			results += "\n Recommended Option : " + recommended.getKey() + " would take "
+					+ recommended.getValue().getTotalDuration() + " minutes to travel "
+					+ recommended.getValue().getTotalDistance() + " miles. " + " The weather is " + weather.weather
+					+ " and it feels like " + weather.feelslike + ".";
+
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
 			if (!entry.getKey().equals(quickest.getKey())) {
 				Route route = entry.getValue();
 				results += "\n Option : " + entry.getKey() + " would take " + route.getTotalDuration()
-						+ " minutes to travel " + route.getTotalDistance() + " miles over " + route.getNumberOfLegs()
-						+ " legs.";
-			}			
+						+ " minutes to travel " + route.getTotalDistance() + " miles.";
+			}
 		}
 		System.out.println(results);
 
@@ -176,6 +171,8 @@ public class GalawayService {
 		Station destStation;
 		if (startStation_.maxDest != Integer.parseInt(startStation_.id)) {
 			destStation = processStation(startStation_.maxDest);
+			if (destStation == null)
+				return;
 			System.out.println("Perhaps you would like to go to " + destStation.station
 					+ ", the most popular trip from " + startStation_.station + "\n");
 		} else {
@@ -199,7 +196,7 @@ public class GalawayService {
 				stationsOfInterest.station2.getLatLng());
 
 		Weather cur = _locationEnricher.getCurrentWeather("MA/Boston");
-		
+
 		compareRoutes(cur, locationDataMap);
 
 	}
