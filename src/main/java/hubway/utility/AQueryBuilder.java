@@ -1,5 +1,6 @@
 package hubway.utility;
 
+import hubway.json.CurrentWeatherDeserializer;
 import hubway.json.GeocodeDeserializer;
 import hubway.json.Route;
 import hubway.json.RouteDeserializer;
@@ -7,6 +8,7 @@ import hubway.json.RouteLeg;
 import hubway.json.RouteLegDeserializer;
 import hubway.json.RouteStep;
 import hubway.json.RouteStepDeserializer;
+import hubway.json.Weather;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,6 +45,7 @@ public abstract class AQueryBuilder {
 		gsonBuilder.registerTypeAdapter(RouteLeg.class, new RouteLegDeserializer());
 		gsonBuilder.registerTypeAdapter(RouteStep.class, new RouteStepDeserializer());
 		gsonBuilder.registerTypeAdapter(LatLng.class, new GeocodeDeserializer());
+		gsonBuilder.registerTypeAdapter(Weather.class, new CurrentWeatherDeserializer());
 		_gson = gsonBuilder.create();
 		_jsonParser = new JsonParser();
 	}

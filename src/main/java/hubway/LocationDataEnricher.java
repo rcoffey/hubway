@@ -33,6 +33,9 @@ public class LocationDataEnricher {
 	public JSONObject getHistoricalWeather(String date_, String stateCity_) {
 		return _weatherQueryBuilder.queryHistorical(date_, stateCity_);
 	}
+	public JSONObject getCurrentWeather(String stateCity_) {
+		return _weatherQueryBuilder.queryCurrent(stateCity_);
+	}
 
 	public Map<String, Route> getRoutes(LatLng origin_, LatLng destination_) {
 		HashMap<String, Route> results = new HashMap<String, Route>(2);

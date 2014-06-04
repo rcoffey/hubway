@@ -156,8 +156,13 @@ public class galaway {
 		stationsOfInterest.info();
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
-		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
+		JSONObject hst = locationData.getHistoricalWeather("20130821", "MA/Boston");
+		JSONObject cur = locationData.getCurrentWeather("MA/Boston");
+		
 
+		
+		
+		
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
 
