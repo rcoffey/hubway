@@ -106,8 +106,6 @@ public class GalawayService {
 			System.out.println("No such station as " + startStationId_ + "!");
 			return null;
 		}
-
-		query.clear();
 		return startStation;
 	}
 	
@@ -130,9 +128,8 @@ public class GalawayService {
 		Station destStation = processStation(startStation_.maxDest);
 		StationPair stationsOfInterest = new StationPair(startStation_, destStation);
 
-		DaoQuery query = _dao.createQuery();
 		System.out.println("Perhaps you would like to go to " + destStation.station + ", the most popular trip from "
-				+ startStation_.station);
+				+ startStation_.station + "\n");
 		produceOutput(stationsOfInterest);
 	}
 

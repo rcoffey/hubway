@@ -96,9 +96,11 @@ public class TestGetTrips {
 				station.put("joyrides", 0);
 			// tripsTo
 			// we want to aggregate by day of week and time of day
+			int totalTo = 0;
 			tripsToByTime = new HashMap<String, Integer>(11);
 			if (destMap.containsKey(stationId)){
 				for (TripInput trip : destMap.get(stationId)){
+					totalTo++;
 					String time = computeTime(trip.Date_Start);
 					String day = computeDay(trip.Date_Start);
 					if (tripsToByTime.containsKey(time)){
@@ -117,9 +119,9 @@ public class TestGetTrips {
 			}
 			// add total to tripsToByTime
 			if ("java.lang.Integer".equals(station.get("tripsTo").getClass().getName())){
-				tripsToByTime.put("total", (Integer) station.get("tripsTo"));
+				tripsToByTime.put("total", totalTo);
 			} else {
-				tripsToByTime.put("total",  ((HashMap<String, Integer>)station.get("tripsTo")).get("total"));
+				tripsToByTime.put("total", totalTo);
 			}
 			// put tripsToByTime into station
 			JSONObject jTrips = new JSONObject(tripsToByTime);
@@ -130,8 +132,10 @@ public class TestGetTrips {
 			// tripsFrom
 			// we want to aggregate by day of week and time of day
 			tripsFromByTime = new HashMap<String, Integer>(11);
+			int totalFrom = 0;
 			if (startMap.containsKey(stationId)){
 				for (TripInput trip : startMap.get(stationId)){
+					totalFrom++;
 					String time = computeTime(trip.Date_Start);
 					String day = computeDay(trip.Date_Start);
 					if (tripsFromByTime.containsKey(time)){
@@ -150,9 +154,9 @@ public class TestGetTrips {
 			}
 			// add total to tripsFromByTime
 			if ("java.lang.Integer".equals(station.get("tripsFrom").getClass().getName())){
-				tripsFromByTime.put("total", (Integer) station.get("tripsFrom"));
+				tripsFromByTime.put("total", totalFrom);
 			} else {
-				tripsFromByTime.put("total",  ((HashMap<String, Integer>)station.get("tripsFrom")).get("total"));
+				tripsFromByTime.put("total", totalFrom);
 			}
 			// put tripsFromByTime into station
 			jTrips = new JSONObject(tripsFromByTime);
