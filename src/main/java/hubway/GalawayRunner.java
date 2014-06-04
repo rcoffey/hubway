@@ -19,10 +19,8 @@ public class GalawayRunner {
 		// Print interesting general station info. (Farthest points, most used
 		// stations...)
 		service.runGalaway();
-		// This could include the station ids for now so we have points to
-		// search between.
 
-		// Ask for an Address/Id
+		// Ask for an Address
 		System.out.println("Please enter your start address: ");
 		Scanner input = new Scanner(System.in);
 		String address = input.nextLine();
@@ -30,15 +28,26 @@ public class GalawayRunner {
 		// Use GeoCode to get coordinates of the address
 		// Use Mongo near query to get nearest hubway station
 		Station startStation = service.processAddress(address);
-
-		// TODO let's just get the advised station for now
-		service.adviseDestination(startStation);
-
-		// Suggest most common destinations and average trip durations
-
-		// Ask for destination
-
-		// Look up route options between the 2
+		
+		// ask for destination
+		System.out.println("Please enter your destination address, or 0 if you'd like suggestions: ");
+		while (!input.hasNextLine()) {
+			// wait for input
+		} 			
+		address = input.nextLine();
+		input.close();
+		
+		// detect and act on advice request
+		if ("0".equals(address)) {
+			service.adviseDestination(startStation);
+		} else {
+			// Use GeoCode to get coordinates of the address
+			// Use Mongo near query to get nearest hubway station
+			Station endStation = service.processAddress(address);
+			
+			// look up route options between the two
+			service.produceOutput(new StationPair(startStation, endStation));
+		}
 	}
 
 }

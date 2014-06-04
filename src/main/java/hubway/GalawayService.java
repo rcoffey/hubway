@@ -125,11 +125,22 @@ public class GalawayService {
 	}
 
 	public void adviseDestination(Station startStation_) {
-		Station destStation = processStation(startStation_.maxDest);
+		Station destStation;
+		if (startStation_.maxDest != Integer.parseInt(startStation_.id)) {
+			destStation = processStation(startStation_.maxDest);
+			System.out.println("Perhaps you would like to go to " + destStation.station + ", the most popular trip from "
+					+ startStation_.station + "\n");
+		} else {
+			System.out.println("Perhaps you would like to go for a joyride, starting and ending at " 
+					+ startStation_.station + "\n This is the most popular trip from " 
+					+ startStation_.station + "\n");
+			destStation = processStation(startStation_.penMaxDest);
+			System.out.println("Alternatively, you could go to " + destStation.station
+					+ ", the second most popular trip from " + startStation_.station + "\n");
+		}
 		StationPair stationsOfInterest = new StationPair(startStation_, destStation);
 
-		System.out.println("Perhaps you would like to go to " + destStation.station + ", the most popular trip from "
-				+ startStation_.station + "\n");
+
 		produceOutput(stationsOfInterest);
 	}
 

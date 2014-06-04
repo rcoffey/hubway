@@ -103,12 +103,13 @@ public class StationPair {
 				System.out.println("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60 + " minutes.");
 				double dist = (navDist == -1.0 ? geoDist : navDist);
 				if (dist != 0) {
-					System.out.println("The maximum speed was " + dist / (((double) minTime) / 3600) + " mph.");
+					System.out.println("The maximum speed was about " + dist / (((double) minTime) / 3600) + " mph.");
 				}
 			}
 		} else {
 			System.out.println("No one has made this trip on Hubway before!");
 		}
+		System.out.println("\n");
 	}
 
 	private int computeTime(JSONArray trips) {
