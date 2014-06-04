@@ -20,7 +20,7 @@ public class GalawayRunner {
 		// stations...)
 		service.runGalaway();
 
-		// Ask for an Address/Id
+		// Ask for an Address
 		System.out.println("Please enter your start address: ");
 		Scanner input = new Scanner(System.in);
 		String address = input.nextLine();

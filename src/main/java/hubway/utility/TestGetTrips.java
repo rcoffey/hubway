@@ -40,16 +40,16 @@ public class TestGetTrips {
 		LinkedList<TripInput> tripList = TripDataReader.extractStationCSV(trips);
 
 		
-		Map<Integer, Integer> joyrides = new HashMap<Integer, Integer>();
+		Map<Integer, List<TripInput>> joyrides = new HashMap<Integer, List<TripInput>>();
 		Map<Integer, List<TripInput>> startMap = new HashMap<Integer, List<TripInput>>();
 		Map<Integer, List<TripInput>> destMap = new HashMap<Integer, List<TripInput>>();
 		for (TripInput trip : tripList) {
 			if (trip.Station_Start==trip.Station_End){
 				if (joyrides.containsKey(trip.Station_Start)){
-					int k = joyrides.get(trip.Station_Start);
-					joyrides.put(trip.Station_Start, k+1);
+					joyrides.get(trip.Station_Start).add(trip);
 				} else {
-					joyrides.put(trip.Station_Start, 1);
+					List<TripInput> rides = new ArrayList<TripInput>();
+					joyrides.put(trip.Station_Start, rides);
 				}		
 			} else { // if not a joyride, include in aggregate data
 				if (startMap.containsKey(trip.Station_Start)){
@@ -85,15 +85,37 @@ public class TestGetTrips {
 		DBCollection stations = galawayDb.getCollection("Stations");
 		Map<String, Integer> tripsToByTime;
 		Map<String, Integer> tripsFromByTime;
+		Map<String, Integer> joyTrips;
 		DBCursor cursor = stations.find();
 		for (DBObject station : cursor){
 			logger.info("Beginning aggregation for station " + station.get("station"));
 			int stationId = (Integer) station.get("_id");
 			// joyrides
-			if (joyrides.containsKey(stationId))
-				station.put("joyrides", joyrides.get(stationId));
+			if (joyrides.containsKey(stationId)) {
+				joyTrips = new HashMap<String, Integer>(11);
+				int total = 0;
+				for (TripInput trip : joyrides.get(stationId)){
+					total ++;
+					String time = computeTime(trip.Date_Start);
+					String day = computeDay(trip.Date_Start);
+					if (joyTrips.containsKey(time)){
+						int k = joyTrips.get(time);
+						joyTrips.put(time, k+1);
+					} else {
+						joyTrips.put(time, 1);
+					}
+					if (joyTrips.containsKey(day)){
+						int k = joyTrips.get(day);
+						joyTrips.put(day, k+1);
+					} else {
+						joyTrips.put(day, 1);
+					}
+				}
+				joyTrips.put("total", total);
+				station.put("joyrides", joyTrips);
+			}
 			else
-				station.put("joyrides", 0);
+				station.put("joyrides", new HashMap<String, Integer>());
 			// tripsTo
 			// we want to aggregate by day of week and time of day
 			int totalTo = 0;
