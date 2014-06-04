@@ -16,6 +16,7 @@
 		<constructor-arg ref="mongoTemplate" />
 		<constructor-arg ref="hubwayQuerier" />
 		<constructor-arg ref="locationEnricher" />
+		<constructor-arg ref="geocodeQueryBuilder" />
 	</bean>
 	<mongo:db-factory id="galaway" dbname="galaway"
 		host="${mongo.server.host}" port="${mongo.server.port}" username="${mongo.username}"

@@ -23,17 +23,16 @@ public class GalawayRunner {
 		// search between.
 
 		// Ask for an Address/Id
-		System.out.println("Please enter your start station id:");
+		System.out.println("Please enter your start address: ");
 		Scanner input = new Scanner(System.in);
-		int startStationId = input.nextInt();
-		Station startStation = service.processStation(startStationId);
+		String address = input.nextLine();
+		
+		// Use GeoCode to get coordinates of the address
+		// Use Mongo near query to get nearest hubway station
+		Station startStation = service.processAddress(address);
 
 		// TODO let's just get the advised station for now
 		service.adviseDestination(startStation);
-
-		// Use GeoCode to get coordinates of the address
-
-		// Use Mongo near query to get nearest hubway station
 
 		// Suggest most common destinations and average trip durations
 

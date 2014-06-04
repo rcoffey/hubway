@@ -3,6 +3,7 @@ package hubway;
 import hubway.json.Route;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
+import hubway.utility.GeocodeQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
@@ -18,23 +19,29 @@ import com.googlecode.mjorm.MongoDao;
 import com.googlecode.mjorm.MongoDaoImpl;
 import com.googlecode.mjorm.annotations.AnnotationsDescriptorObjectMapper;
 import com.googlecode.mjorm.query.DaoQuery;
+import com.javadocmd.simplelatlng.LatLng;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 
 public class GalawayService {
 
 	final MongoTemplate _mongoTemplate;
 	final HubwayQueryBuilder _hubwayQuerier;
 	final LocationDataEnricher _locationEnricher;
+	final GeocodeQueryBuilder _geocodeQueryBuilder; 
+
 	Logger logger = LoggerFactory.getLogger(GalawayService.class);
 
 	protected MongoDao _dao = null;
 
 	public GalawayService(final MongoTemplate mongoTemplate_, final HubwayQueryBuilder hubwayQuerier_,
-			final LocationDataEnricher locationEnricher_) {
+			final LocationDataEnricher locationEnricher_, final GeocodeQueryBuilder geocodeQueryBuilder_) {
 		_mongoTemplate = mongoTemplate_;
 		_hubwayQuerier = hubwayQuerier_;
 		_locationEnricher = locationEnricher_;
+		_geocodeQueryBuilder = geocodeQueryBuilder_;
 	}
 
 	public void runGalaway() {
@@ -102,6 +109,21 @@ public class GalawayService {
 
 		query.clear();
 		return startStation;
+	}
+	
+	public Station processAddress(String address) {
+		LatLng coords = _geocodeQueryBuilder.queryLatLng(address);
+		double[] loc = {coords.getLongitude(), coords.getLatitude()};
+			
+		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 
+		BasicDBObjectBuilder.start().add("$near", loc).get()).get();
+		Station nearStation = _dao.findObject("Stations", nearQuery, Station.class);
+		if (nearStation == null) {
+			System.out.println("Alas, no nearby stations.  Try again with another address.");
+			return null;
+		}
+		System.out.println("Your closest station is " + nearStation.station + "\n");
+		return nearStation;
 	}
 
 	public void adviseDestination(Station startStation_) {
