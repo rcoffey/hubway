@@ -8,6 +8,7 @@ import hubway.utility.GeocodeQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ public class GalawayService {
 	final HubwayQueryBuilder _hubwayQuerier;
 	final LocationDataEnricher _locationEnricher;
 	final GeocodeQueryBuilder _geocodeQueryBuilder;
+	protected List<StationPair> _stationPairs;
 
 	Logger logger = LoggerFactory.getLogger(GalawayService.class);
 
@@ -43,17 +45,20 @@ public class GalawayService {
 		_hubwayQuerier = hubwayQuerier_;
 		_locationEnricher = locationEnricher_;
 		_geocodeQueryBuilder = geocodeQueryBuilder_;
+		_stationPairs = new ArrayList<StationPair>();
 	}
 
 	public void runGalaway() {
-		initialize();
+		initializeMongo();
 
+		System.out.println("\nDisclaimer: Not all Hubway stations are included in the historical data"
+				+ " on which we've based our results and suggestions.  Some answers may therefore be unexpected.\n");
 		List<Station> stationList = _dao.findObjects("Stations", new BasicDBObject(), Station.class).readAll();
-		Calculator.printMinMaxStations(stationList);
+		_stationPairs = Calculator.createStationPairs(stationList);
 
 	}
 
-	protected void initialize() {
+	protected void initializeMongo() {
 		DB galawayDb = _mongoTemplate.getDb();
 		if (!galawayDb.isAuthenticated()) {
 			logger.error("Authentication failed for mongoDb :" + _mongoTemplate.toString());
@@ -82,8 +87,9 @@ public class GalawayService {
 		weather = new Weather("", "", 77, 1);
 		
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
-			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()
-					&& entry.getKey() != "driving") {
+			if (!entry.getKey().equals("driving")
+					&& (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue()
+							.getTotalDuration())) {
 				quickest = entry;
 			}
 
