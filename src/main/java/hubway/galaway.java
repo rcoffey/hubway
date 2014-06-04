@@ -152,15 +152,23 @@ public class galaway {
 
 	private static void produceOutput(StationPair stationsOfInterest, ApplicationContext context,
 			HubwayQueryBuilder hubwayQuerier) {
-		stationsOfInterest.addTrips(hubwayQuerier);
+		//stationsOfInterest.addTrips(hubwayQuerier);
 
-		stationsOfInterest.info();
+		//stationsOfInterest.info();
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 
 		JSONObject hst = locationData.getHistoricalWeather("20130821", "MA/Boston");
 		Weather cur = locationData.getCurrentWeather("MA/Boston");
 
+		// need to look up station objects for station1 and station2
+		/*		Station station1, station2;
+				DBObject query =  BasicDBObjectBuilder.start()
+						.add("_id", Integer.parseInt(stationsOfInterest.station1)).get();
+				station1 = dao.findObject("Stations", query, Station.class);
+				DBObject query2 = BasicDBObjectBuilder.start()
+						.add("_id", Integer.parseInt(stationsOfInterest.station2)).get();
+				station2 = dao.findObject("Stations", query2, Station.class);
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
 
@@ -176,6 +184,7 @@ public class galaway {
 
 		long transitDist = (long) (transit.getTotalDistance() * 0.000621371);
 		double transitDur = transit.getTotalDuration() / 60;
+		*/
 
 	}
 

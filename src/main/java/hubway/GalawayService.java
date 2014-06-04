@@ -191,12 +191,20 @@ public class GalawayService {
 	}
 
 	public void produceOutput(StationPair stationsOfInterest) {
-		stationsOfInterest.addTrips(_hubwayQuerier);
+		//stationsOfInterest.addTrips(_hubwayQuerier);
 
-		stationsOfInterest.info();
+		//stationsOfInterest.info();
 
-		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(stationsOfInterest.station1.getLatLng(),
-				stationsOfInterest.station2.getLatLng());
+		// need to look up station objects for station1 and station2
+		Station station1, station2;
+		DBObject query =  BasicDBObjectBuilder.start()
+				.add("_id", Integer.parseInt(stationsOfInterest.station1)).get();
+		station1 = _dao.findObject("Stations", query, Station.class);
+		DBObject query2 = BasicDBObjectBuilder.start()
+				.add("_id", Integer.parseInt(stationsOfInterest.station2)).get();
+		station2 = _dao.findObject("Stations", query2, Station.class);
+		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(station1.getLatLng(),
+				station2.getLatLng());
 
 		Weather cur = _locationEnricher.getCurrentWeather("MA/Boston");
 		

@@ -81,14 +81,11 @@ public class Calculator {
 				+ " with only " + leastJoyRides.getJoyrides().get("total"));
 		printJoyRideBreakdown(leastJoyRides);
 
-		System.out.println("minStationStart.station() = " + minStationStart.station);
-		System.out.println("minStationDest.station() = " + minStationDest.station);
-		System.out.println("minDist() = " + minDist);
+		System.out.println("The two closest stations are " + minStationStart.station + " and " 
+				 + minStationDest.station + " at " + minDist + " miles apart.");
 
-		System.out.println("maxStationStart.station() = " + maxStationStart.station);
-		System.out.println("maxStationDest.station() = " + maxStationDest.station);
-
-		System.out.println("maxDist() = " + maxDist);
+		System.out.println("The two furthest stations are " + maxStationStart.station
+				+" and " + maxStationDest.station + " at " + maxDist + " miles apart.");
 
 		return stationPairs;
 	}
