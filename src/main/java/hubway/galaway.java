@@ -1,6 +1,7 @@
 package hubway;
 
 import hubway.json.Route;
+import hubway.json.TransitAlert;
 import hubway.json.Weather;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
@@ -39,6 +40,9 @@ public class galaway {
 		// Get the Beans
 		ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring.galaway.beans.xml");
 
+		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+		TransitAlert ta = locationData.getTransitAlerts();
+		
 		// Print interesting general station info. (Farthest points, most used
 		// stations...)
 		// This could include the station ids for now so we have points to

@@ -31,12 +31,17 @@
 		<constructor-arg value="${hubway.credentials}" />
 	</bean>
 
+	<bean id="mbtaQuerier" class="hubway.utility.TransitAlertQueryBuilder">
+		<constructor-arg value="${mbta.url}" />
+		<constructor-arg value="${mbta.credentials}" />
+	</bean>
+	
 	<bean id="wundergroundQueryBuilder" class="hubway.utility.WundergroundQueryBuilder">
 		<constructor-arg value="${wunderground.url}" />
 		<constructor-arg value="${wunderground.credentials}" />
 	</bean>
 	
-		<bean id="placesQueryBuilder" class="hubway.utility.PlacesQueryBuilder">
+	<bean id="placesQueryBuilder" class="hubway.utility.PlacesQueryBuilder">
 		<constructor-arg value="${google.places.url}" />
 		<constructor-arg value="${google.credentials}" />
 	</bean>
@@ -57,6 +62,7 @@
 	</bean>
 	
 	<bean id="locationEnricher" class="hubway.LocationDataEnricher">
+		<constructor-arg ref="mbtaQuerier" />
 		<constructor-arg ref="wundergroundQueryBuilder" />
 		<constructor-arg ref="placesQueryBuilder" />
 		<constructor-arg ref="directionsQueryBuilder" />
