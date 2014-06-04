@@ -47,6 +47,8 @@ public class GalawayService {
 	public void runGalaway() {
 		initialize();
 
+		System.out.println("\nDisclaimer: Not all Hubway stations are included in the historical data" 
+				+ " on which we've based our results and suggestions.  Some answers may therefore be unexpected.\n");
 		List<Station> stationList = _dao.findObjects("Stations", new BasicDBObject(), Station.class).readAll();
 		Calculator.printMinMaxStations(stationList);
 
