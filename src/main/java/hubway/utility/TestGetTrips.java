@@ -91,9 +91,9 @@ public class TestGetTrips {
 			logger.info("Beginning aggregation for station " + station.get("station"));
 			int stationId = (Integer) station.get("_id");
 			// joyrides
+			joyTrips = new HashMap<String, Integer>(11);
+			int total = 0;
 			if (joyrides.containsKey(stationId)) {
-				joyTrips = new HashMap<String, Integer>(11);
-				int total = 0;
 				for (TripInput trip : joyrides.get(stationId)){
 					total ++;
 					String time = computeTime(trip.Date_Start);
@@ -111,11 +111,10 @@ public class TestGetTrips {
 						joyTrips.put(day, 1);
 					}
 				}
-				joyTrips.put("total", total);
-				station.put("joyrides", joyTrips);
 			}
-			else
-				station.put("joyrides", new HashMap<String, Integer>());
+			joyTrips.put("total", total);
+			station.put("joyrides", joyTrips);
+
 			// tripsTo
 			// we want to aggregate by day of week and time of day
 			int totalTo = 0;

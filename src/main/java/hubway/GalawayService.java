@@ -111,6 +111,10 @@ public class GalawayService {
 	
 	public Station processAddress(String address) {
 		LatLng coords = _geocodeQueryBuilder.queryLatLng(address);
+		if (coords == null){
+			System.out.println("Are you sure you entered an address?  Check your syntax and try again.");
+			return null;
+		}
 		double[] loc = {coords.getLongitude(), coords.getLatitude()};
 			
 		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 

@@ -28,6 +28,9 @@ public class GalawayRunner {
 		// Use GeoCode to get coordinates of the address
 		// Use Mongo near query to get nearest hubway station
 		Station startStation = service.processAddress(address);
+		if (startStation == null) {
+			return;
+		}
 		
 		// ask for destination
 		System.out.println("Please enter your destination address, or 0 if you'd like suggestions: ");
@@ -44,6 +47,9 @@ public class GalawayRunner {
 			// Use GeoCode to get coordinates of the address
 			// Use Mongo near query to get nearest hubway station
 			Station endStation = service.processAddress(address);
+			if (endStation == null) {
+				return;
+			}
 			
 			// look up route options between the two
 			service.produceOutput(new StationPair(startStation, endStation));
