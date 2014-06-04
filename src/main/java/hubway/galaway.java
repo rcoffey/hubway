@@ -78,7 +78,11 @@ public class galaway {
 		System.out.println(stationList.toString());
 
 		StationPair test = Calculator.printMinMaxStations(stationList);
-		double[] loc = {-71, 42};
+		
+		// !CL query for lat long using string
+		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder) context.getBean("geocodeQueryBuilder");
+		LatLng davis = geocodeQueryBuilder.queryLatLng("40 Holland St, Somerville MA");
+		double[] loc = {davis.getLongitude(), davis.getLatitude()};
 		
 		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 
 				BasicDBObjectBuilder.start().add("$near", loc).get()).get();
@@ -153,10 +157,6 @@ public class galaway {
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
 		JSONObject weather = locationData.getHistoricalWeather("20130821", "MA/Boston");
-
-		// !CL query for lat long using string
-		GeocodeQueryBuilder geocodeQueryBuilder = (GeocodeQueryBuilder) context.getBean("geocodeQueryBuilder");
-		LatLng davis = geocodeQueryBuilder.queryLatLng("40 Holland St, Somerville MA");
 
 		Map<String, Route> locationDataMap = locationData.getRoutes(stationsOfInterest.station1.getLatLng(),
 				stationsOfInterest.station2.getLatLng());
