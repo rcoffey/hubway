@@ -49,6 +49,7 @@ public class TestGetTrips {
 					joyrides.get(trip.Station_Start).add(trip);
 				} else {
 					List<TripInput> rides = new ArrayList<TripInput>();
+					rides.add(trip);
 					joyrides.put(trip.Station_Start, rides);
 				}		
 			} else { // if not a joyride, include in aggregate data
@@ -90,6 +91,28 @@ public class TestGetTrips {
 		for (DBObject station : cursor){
 			logger.info("Beginning aggregation for station " + station.get("station"));
 			int stationId = (Integer) station.get("_id");
+			if (stationId == 13)
+				stationId = 102;
+			else if (stationId==23)
+				stationId = 99;
+			else if (stationId==35)
+				stationId = 112;
+			else if (stationId==37)
+				stationId = 110;
+			else if (stationId==38)
+				stationId = 111;
+			else if (stationId==56)
+				stationId = 100;
+			else if (stationId==60)
+				stationId = 113;
+			else if (stationId==61)
+				stationId = 103;
+			else if (stationId==82)
+				stationId = 126;
+			else if (stationId==85)
+				stationId = 104;
+			else if (stationId==97)
+				stationId = 129;
 			// joyrides
 			joyTrips = new HashMap<String, Integer>(11);
 			int total = 0;
