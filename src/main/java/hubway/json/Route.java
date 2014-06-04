@@ -1,12 +1,16 @@
 package hubway.json;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Route {
 	private String summary;
 	private List<RouteLeg> legs;
-
+	protected Map<String, Set<String>> transitTypes = new HashMap<String, Set<String>>();
 	private DecimalFormat df2 = new DecimalFormat("###.##");
 
 	/**
@@ -66,6 +70,27 @@ public class Route {
 	}
 
 	public int getNumberOfLegs() {
-		return legs.size();
+		int numLegs = 0;
+		for (RouteLeg leg : legs) {
+			numLegs += leg.getSteps().size();
+		}
+		return numLegs;
+
+	}
+
+	public Map<String, Set<String>> getTransitTypes() {
+		for (RouteLeg leg : legs) {
+			for (RouteStep step : leg.getRouteSteps()) {
+				String transitType = step.getTransitType();
+				String line = step.getLineName();
+				Set<String> lines = transitTypes.get(transitType);
+				if (lines == null) {
+					lines = new HashSet<String>();
+				}
+				lines.add(line);
+				transitTypes.put(transitType, lines);
+			}
+		}
+		return transitTypes;
 	}
 }
