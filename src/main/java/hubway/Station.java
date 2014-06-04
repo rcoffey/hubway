@@ -11,10 +11,9 @@ import com.javadocmd.simplelatlng.LatLng;
 public class Station {
 	@Override
 	public String toString() {
-		return "Station [id=" + id + ", station="
-				+ station + ", penMaxDest=" + penMaxDest + ", nb_docks=" 
-				+ nb_docks + ", lat=" + lat + ", lng=" + lng + ", maxDest=" + maxDest 
-				+ ", tripsFrom=" + tripsFrom + ", tripsTo=" + tripsTo +"]";
+		return "Station [id=" + id + ", station=" + station + ", penMaxDest=" + penMaxDest + ", nb_docks=" + nb_docks
+				+ ", lat=" + lat + ", lng=" + lng + ", maxDest=" + maxDest + ", tripsFrom=" + tripsFrom + ", tripsTo="
+				+ tripsTo + "]";
 
 	}
 
@@ -22,7 +21,7 @@ public class Station {
 	public String station;
 	public Integer nb_docks;
 	public Double lat, lng;
-	public HashMap<String, Integer> tripsFrom, tripsTo;
+	public HashMap<String, Integer> tripsFrom, tripsTo, joyrides;
 	public int maxDest, penMaxDest;
 
 	public Station() {
@@ -56,20 +55,22 @@ public class Station {
 	public void setLat(Double lat) {
 		this.lat = lat;
 	}
-	
+
 	@Property
 	public int getMaxDest() {
 		return maxDest;
 	}
-	public void setMaxDest(int dest){
+
+	public void setMaxDest(int dest) {
 		this.maxDest = dest;
 	}
-	
+
 	@Property
 	public int getPenMaxDest() {
 		return penMaxDest;
 	}
-	public void setPenMaxDest(int dest){
+
+	public void setPenMaxDest(int dest) {
 		this.penMaxDest = dest;
 	}
 
@@ -90,21 +91,21 @@ public class Station {
 	public void setNb_docks(Integer nb_docks) {
 		this.nb_docks = nb_docks;
 	}
-	
+
 	@Property
 	public HashMap<String, Integer> getTripsFrom() {
 		return tripsFrom;
 	}
-	
+
 	public void setTripsFrom(HashMap<String, Integer> tripsFrom) {
 		this.tripsFrom = tripsFrom;
 	}
-	
+
 	@Property
 	public HashMap<String, Integer> getTripsTo() {
 		return tripsTo;
 	}
-	
+
 	public void setTripsTo(HashMap<String, Integer> tripsTo) {
 		this.tripsTo = tripsTo;
 	}
@@ -113,4 +114,31 @@ public class Station {
 		return new LatLng(lat, lng);
 	}
 
+	/**
+	 * @return the _joyrides
+	 */
+	@Property
+	public HashMap<String, Integer> getJoyrides() {
+		return this.joyrides;
+	}
+
+	/**
+	 * @param joyrides
+	 *            the _joyrides to set
+	 */
+	public void setJoyrides(HashMap<String, Integer> joyrides) {
+		this.joyrides = joyrides;
+	}
+
+	/**
+	 * Sum of trips to, from and joyrides
+	 * 
+	 * @return
+	 */
+	public int totalTrips() {
+		if (tripsFrom != null && tripsTo != null && joyrides != null && joyrides.size() > 0) {
+			return tripsFrom.get("total") + tripsTo.get("total") + joyrides.get("total");
+		}
+		return 0;
+	}
 }
