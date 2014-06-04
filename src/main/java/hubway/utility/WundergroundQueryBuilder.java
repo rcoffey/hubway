@@ -1,5 +1,7 @@
 package hubway.utility;
 
+import hubway.json.Weather;
+
 import org.json.JSONObject;
 
 public class WundergroundQueryBuilder extends AQueryBuilder {
@@ -16,9 +18,16 @@ public class WundergroundQueryBuilder extends AQueryBuilder {
 		String url = _url + _credentials + HISTORY + date_ + "/q/" + stateCity_ + ".json";
 		return super.query(url);
 	}
+//
+//	public JSONObject queryCurrent(String stateCity_) {
+//		String url = _url + _credentials + CONDITIONS + "/q/" + stateCity_ + ".json";
+//		return super.query(url);
+//	}	
 
-	public JSONObject queryCurrent(String stateCity_) {
+	public Weather queryCurrent(String stateCity_) {
 		String url = _url + _credentials + CONDITIONS + "/q/" + stateCity_ + ".json";
-		return super.query(url);
+		return (Weather) super.queryAndDeserialize(url,Weather.class);
 	}	
+
+
 }

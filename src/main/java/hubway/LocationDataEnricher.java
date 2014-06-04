@@ -1,6 +1,7 @@
 package hubway;
 
 import hubway.json.Route;
+import hubway.json.Weather;
 import hubway.utility.DirectionsQueryBuilder;
 import hubway.utility.DistanceQueryBuilder;
 import hubway.utility.PlacesQueryBuilder;
@@ -33,7 +34,7 @@ public class LocationDataEnricher {
 	public JSONObject getHistoricalWeather(String date_, String stateCity_) {
 		return _weatherQueryBuilder.queryHistorical(date_, stateCity_);
 	}
-	public JSONObject getCurrentWeather(String stateCity_) {
+	public Weather  getCurrentWeather(String stateCity_) {
 		return _weatherQueryBuilder.queryCurrent(stateCity_);
 	}
 

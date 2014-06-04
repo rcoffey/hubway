@@ -14,9 +14,9 @@ public class CurrentWeatherDeserializer implements JsonDeserializer<Weather> {
 
 	public Weather deserialize(JsonElement element, Type arg1, JsonDeserializationContext arg2)
 			throws JsonParseException {
-		final JsonArray results = element.getAsJsonObject().getAsJsonArray("result");
+		final JsonObject results = element.getAsJsonObject().getAsJsonObject("response");
 		
-		if (results != null && results.size() > 0) {
+		if (results != null) {
 
 			final JsonObject obsv = element.getAsJsonObject().getAsJsonObject("current_observation");
 			final String weather = obsv.get("weather").getAsString();

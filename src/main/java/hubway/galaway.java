@@ -1,6 +1,7 @@
 package hubway;
 
 import hubway.json.Route;
+import hubway.json.Weather;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
 import hubway.utility.GeocodeQueryBuilder;
@@ -156,8 +157,10 @@ public class galaway {
 		stationsOfInterest.info();
 
 		LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+		
+		
 		JSONObject hst = locationData.getHistoricalWeather("20130821", "MA/Boston");
-		JSONObject cur = locationData.getCurrentWeather("MA/Boston");
+		Weather cur = locationData.getCurrentWeather("MA/Boston");
 		
 
 		
