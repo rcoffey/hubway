@@ -78,15 +78,9 @@ public class galaway {
 
 		StationPair test = Calculator.printMinMaxStations(stationList);
 		double[] loc = {-71, 42};
-		//DBObject nearAns = dao.executeCommand(BasicDBObjectBuilder.start().add("geoNear", "Stations")
-		//		.add("near", loc).add("num", 1).get());
-		//DBObject nearRes = (DBObject) nearAns.get("results");
-		//System.out.println(((DBObject)nearRes.get("0")).get("obj"));
-		
 		
 		DBObject nearQuery = BasicDBObjectBuilder.start().add("geometry.coordinates", 
 				BasicDBObjectBuilder.start().add("$near", loc).get()).get();
-		System.out.println(nearQuery);
 		Station nearStation = dao.findObject("Stations", nearQuery, Station.class);
 		System.out.println(nearStation);
 		
