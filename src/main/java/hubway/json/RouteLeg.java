@@ -9,15 +9,6 @@ import java.util.List;
  * 
  */
 public class RouteLeg {
-	protected String travel_mode;
-
-	public String getTravelMode() {
-		return travel_mode;
-	}
-
-	public void setTravelMode(String travel_mode) {
-		this.travel_mode = travel_mode;
-	}
 
 	/**
 	 * @return the routeSteps

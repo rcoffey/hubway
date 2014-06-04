@@ -1,12 +1,14 @@
 package hubway.json;
 
 import java.text.DecimalFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Route {
 	private String summary;
 	private List<RouteLeg> legs;
-
+	protected Set<String> transitTypes = new HashSet<String>();
 	private DecimalFormat df2 = new DecimalFormat("###.##");
 
 	/**
@@ -66,6 +68,22 @@ public class Route {
 	}
 
 	public int getNumberOfLegs() {
-		return legs.size();
+		int numLegs = 0;
+		for (RouteLeg leg : legs) {
+			numLegs += leg.getSteps().size();
+		}
+		return numLegs;
+
+	}
+
+	public Set<String> getTransitTypes() {
+		if (transitTypes.size() == 0) {
+			for (RouteLeg leg : legs) {
+				for (RouteStep step : leg.getRouteSteps()) {
+					transitTypes.add(step.getTransitType());
+				}
+			}
+		}
+		return transitTypes;
 	}
 }
