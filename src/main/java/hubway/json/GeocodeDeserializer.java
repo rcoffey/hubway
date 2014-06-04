@@ -2,6 +2,7 @@ package hubway.json;
 
 import java.lang.reflect.Type;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -13,16 +14,17 @@ public class GeocodeDeserializer implements JsonDeserializer<LatLng> {
 
 	public LatLng deserialize(JsonElement element, Type arg1, JsonDeserializationContext arg2)
 			throws JsonParseException {
+		final JsonArray results = element.getAsJsonObject().getAsJsonArray("results");
+		if (results != null && results.size() > 0) {
+			final JsonObject result = results.get(0).getAsJsonObject();
 
-		final JsonObject result = element.getAsJsonObject();
-		
-		final JsonObject loc = result.getAsJsonObject("geometry").getAsJsonObject("location");
-		final long lon = loc.get("lon").getAsLong();
-		final long lat = loc.get("lat").getAsLong();
+			final JsonObject loc = result.getAsJsonObject("geometry").getAsJsonObject("location");
+			final long lon = loc.get("lng").getAsLong();
+			final long lat = loc.get("lat").getAsLong();
 
-		LatLng ll = new LatLng(lat,lon);
-
-		return ll;
+			return new LatLng(lat, lon);
+		}
+		return null;
 	}
 
 }
