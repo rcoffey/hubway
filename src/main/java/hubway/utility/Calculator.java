@@ -3,6 +3,7 @@ package hubway.utility;
 import hubway.Station;
 import hubway.StationPair;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -10,7 +11,8 @@ public class Calculator {
 	static String[] _days = { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" };
 	static String[] _times = { "MORNING", "AFTERNOON", "NIGHT" };
 
-	public static StationPair printMinMaxStations(List<Station> stations) {
+	public static List<StationPair> createStationPairs(List<Station> stations) {
+		List<StationPair> stationPairs = new ArrayList<StationPair>();
 		Double minDist = Double.MAX_VALUE;
 		Double maxDist = Double.MIN_VALUE;
 		Station mostTotal = null, leastTotal = null, mostJoyRides = null, leastJoyRides = null;
@@ -41,7 +43,7 @@ public class Calculator {
 
 			for (Iterator<Station> itDest = stations.iterator(); itDest.hasNext();) {
 				Station dest = (Station) itDest.next();
-
+				stationPairs.add(new StationPair(start, dest));
 				if (start.station.equalsIgnoreCase(dest.station))
 					continue;
 
@@ -88,7 +90,7 @@ public class Calculator {
 
 		System.out.println("maxDist() = " + maxDist);
 
-		return new StationPair(maxStationStart, maxStationDest);
+		return stationPairs;
 	}
 
 	protected static void printBreakdown(Station station_) {
