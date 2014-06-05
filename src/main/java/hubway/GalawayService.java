@@ -131,21 +131,22 @@ public class GalawayService {
 			recommended = badweatherOption;
 		System.out.println("\n***** Route Options *****");
 
-		String results = "The quickest form of travel is " + quickest.getKey() + ", with a duration of "
-				+ quickest.getValue().getTotalDuration() + " minutes to travel "
-				+ quickest.getValue().getTotalDistance() + " miles.";
-
+		String results = "";
 		if (recommended != null)
-			results += "\n Recommended Option : " + recommended.getKey() + " would take "
+			results += "\n Recommended : " + recommended.getKey() + " would take "
 					+ recommended.getValue().getTotalDuration() + " minutes to travel "
 					+ recommended.getValue().getTotalDistance() + " miles. " + " The weather is " + weather.weather
 					+ " and it feels like " + weather.feelslike + ".";
+		results += "\n Quickest : " + quickest.getKey() + ", with a duration of "
+				+ quickest.getValue().getTotalDuration() + " minutes to travel "
+				+ quickest.getValue().getTotalDistance() + " miles.";
 
+		results += "\n Other Options";
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
-			if (!entry.getKey().equals(quickest.getKey())) {
+			if (!entry.getKey().equals(quickest.getKey()) && !entry.getKey().equals(recommended.getKey())) {
 				Route route = entry.getValue();
-				results += "\n Option : " + entry.getKey() + " would take " + route.getTotalDuration()
-						+ " minutes to travel " + route.getTotalDistance() + " miles.";
+				results += "\n\t" + entry.getKey() + " would take " + route.getTotalDuration() + " minutes to travel "
+						+ route.getTotalDistance() + " miles.";
 			}
 		}
 		System.out.println(results);
@@ -204,7 +205,7 @@ public class GalawayService {
 	 */
 	public void adviseDestination(Station startStation_) {
 		Station destStation;
-		if (!startStation_.maxDest.containsKey("total")){
+		if (!startStation_.maxDest.containsKey("total")) {
 			logger.warn("No historical data was found to make a prediction for start station "
 					+ startStation_.getStation());
 			return;
@@ -221,7 +222,7 @@ public class GalawayService {
 		} else {
 			System.out.println("Perhaps you would like to go for a joyride, starting and ending at "
 					+ startStation_.station + "\n This is the most popular trip from " + startStation_.station + "\n");
-			if(!startStation_.penMaxDest.containsKey("total")){
+			if (!startStation_.penMaxDest.containsKey("total")) {
 				return;
 			}
 			destStation = processStation(Integer.parseInt(startStation_.penMaxDest.get("total")));

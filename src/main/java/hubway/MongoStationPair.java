@@ -7,7 +7,8 @@ import com.googlecode.mjorm.annotations.Property;
 
 @Entity
 public class MongoStationPair {
-
+	protected final String[] _days = { "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY" };
+	protected final String[] _times = { "MORNING", "AFTERNOON", "NIGHT" };
 	protected String station1, station2;
 	protected int tripCount;
 	protected Map<String, Integer> tripsByTime;
@@ -94,6 +95,9 @@ public class MongoStationPair {
 				System.out.println("\t and " + tripCount / (double) destination.tripsTo.get("total") * 100
 						+ " percent " + "of the trips to " + destination.station + ".");
 			}
+
+			System.out.println();
+			printBreakdown();
 			// System.out.println("\nThese trips took on average " + avgTime /
 			// 60 +
 			// " minutes."); if (minTime != 0 && minTime != -1) {
@@ -107,6 +111,18 @@ public class MongoStationPair {
 		} else {
 			System.out.println("No one has made this trip on Hubway before!");
 		}
+	}
+
+	protected void printBreakdown() {
+		System.out.println("Daily trip breakdown");
+		for (String day : _days) {
+			System.out.println("\t" + day + ":: " + tripsByTime.get(day));
+		}
+		System.out.println("Time of day breakdown");
+		for (String time : _times) {
+			System.out.println("\t" + time + ":: " + tripsByTime.get(time));
+		}
+		System.out.println();
 	}
 
 }
