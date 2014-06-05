@@ -26,7 +26,8 @@ public class LocationDataEnricher {
 	protected DistanceQueryBuilder _distanceQueryBuilder;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public LocationDataEnricher(TransitAlertQueryBuilder transitAlertQueryBuilder, WundergroundQueryBuilder weatherQueryBuilder_, PlacesQueryBuilder placesQueryBuilder_,
+	public LocationDataEnricher(TransitAlertQueryBuilder transitAlertQueryBuilder,
+			WundergroundQueryBuilder weatherQueryBuilder_, PlacesQueryBuilder placesQueryBuilder_,
 			DirectionsQueryBuilder directionsQueryBuilder_, DistanceQueryBuilder distanceQueryBuilder_) {
 		_transitAlertQueryBuilder = transitAlertQueryBuilder;
 		_weatherQueryBuilder = weatherQueryBuilder_;
@@ -35,19 +36,39 @@ public class LocationDataEnricher {
 		_distanceQueryBuilder = distanceQueryBuilder_;
 	}
 
+	/**
+	 * Get historical weather conditions for a specific date via wunderground
+	 * api
+	 * 
+	 * @param date_
+	 * @param stateCity_
+	 * @return
+	 */
 	public JSONObject getHistoricalWeather(String date_, String stateCity_) {
 		return _weatherQueryBuilder.queryHistorical(date_, stateCity_);
 	}
 
+	/**
+	 * Get current weather conditions via the Wunderground API
+	 * 
+	 * @param stateCity_
+	 * @return
+	 */
 	public Weather getCurrentWeather(String stateCity_) {
 		return _weatherQueryBuilder.queryCurrent(stateCity_);
 	}
-	
 
 	public TransitAlert getTransitAlerts() {
 		return _transitAlertQueryBuilder.queryTransitAlerts();
 	}
 
+	/**
+	 * Get Route information for all modes of transit via Google Directions API
+	 * 
+	 * @param origin_
+	 * @param destination_
+	 * @return
+	 */
 	public Map<String, Route> getRoutes(LatLng origin_, LatLng destination_) {
 		HashMap<String, Route> results = new HashMap<String, Route>(2);
 		Route directionsBike = _directionsQueryBuilder.queryRoute(origin_, destination_, "bicycling");
@@ -64,6 +85,7 @@ public class LocationDataEnricher {
 
 	}
 
+	@Deprecated
 	public Map<String, JSONObject> getHubways(LatLng origin_, LatLng destination_, int radius_) {
 		HashMap<String, JSONObject> results = new HashMap<String, JSONObject>(2);
 

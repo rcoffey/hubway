@@ -18,16 +18,10 @@ public class WundergroundQueryBuilder extends AQueryBuilder {
 		String url = _url + _credentials + HISTORY + date_ + "/q/" + stateCity_ + ".json";
 		return super.query(url);
 	}
-//
-//	public JSONObject queryCurrent(String stateCity_) {
-//		String url = _url + _credentials + CONDITIONS + "/q/" + stateCity_ + ".json";
-//		return super.query(url);
-//	}	
 
 	public Weather queryCurrent(String stateCity_) {
 		String url = _url + _credentials + CONDITIONS + "/q/" + stateCity_ + ".json";
-		return (Weather) super.queryAndDeserialize(url,Weather.class);
-	}	
-
+		return (Weather) super.queryAndDeserialize(url, Weather.class);
+	}
 
 }

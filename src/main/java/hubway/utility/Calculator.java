@@ -13,10 +13,9 @@ public class Calculator {
 
 	public static List<StationPair> createStationPairs(List<Station> stations) {
 		List<StationPair> stationPairs = new ArrayList<StationPair>();
-		Double minDist = Double.MAX_VALUE;
-		Double maxDist = Double.MIN_VALUE;
 		Station mostTotal = null, leastTotal = null, mostJoyRides = null, leastJoyRides = null;
 		StationPair mostTripsBetween, leastTripsBetween;
+		int numMostTripsBetween;
 
 		for (Iterator<Station> itStart = stations.iterator(); itStart.hasNext();) {
 			Station start = (Station) itStart.next();
