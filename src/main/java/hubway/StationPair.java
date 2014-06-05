@@ -1,17 +1,13 @@
 package hubway;
 
-import java.util.HashMap;
-
 import hubway.utility.Calculator;
-import hubway.utility.DistanceQueryBuilder;
-import hubway.utility.HubwayQueryBuilder;
+
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.javadocmd.simplelatlng.LatLng;
 
 public class StationPair {
 	public String station1, station2;
@@ -22,9 +18,10 @@ public class StationPair {
 							// seconds)
 	public double minTime, maxTime; // how long the shortest/longest trip took
 									// (in seconds)
-	public HashMap<String, Integer> tripsByTime; // split up tripCount by day of week
-								// and time of day
-	
+	public HashMap<String, Integer> tripsByTime; // split up tripCount by day of
+													// week
+	// and time of day
+
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public StationPair(Station station1, Station station2) {
@@ -37,41 +34,33 @@ public class StationPair {
 		navDist = -1.0; // impossible default
 	}
 
-
-/*
-	public void info() {
-		System.out.println("************************ YOUR TRIP ************************");
-		System.out.println("Start Station: " + station1.station);
-		System.out.println("End Station: " + station2.station);
-		System.out.println("\n***** Historical Trip Facts *****");
-		// System.out.println("They are " + geoDist +
-		// " miles apart as the crow flies.");
-		if (navDist != -1.0) {
-			System.out.println("But you will have to travel at least " + navDist + " miles " + "to complete the trip.");
-		}
-		if (tripCount != 0) {
-			System.out.println("There are " + tripCount + " trips between " + station1.station + " and "
-					+ station2.station + ".");
-			if (station1.tripsFrom.get("total") != 0 && station2.tripsTo.get("total") != 0) {
-				System.out.println("\tThat is " + tripCount / (double) station1.tripsFrom.get("total") * 100
-						+ " percent " + "of the trips from " + station1.station);
-				System.out.println("\t and " + tripCount / (double) station2.tripsTo.get("total") * 100 + " percent "
-						+ "of the trips to " + station2.station + ".");
-			}
-			System.out.println("\nThese trips took on average " + avgTime / 60 + " minutes.");
-			if (minTime != 0 && minTime != -1) {
-				System.out.println("The longest took " + maxTime / 60 + " minutes, and the shortest " + minTime / 60
-						+ " minutes.");
-				double dist = (navDist == -1.0 ? geoDist : navDist);
-				if (dist != 0) {
-					System.out.println("The maximum speed was about " + dist / (((double) minTime) / 3600) + " mph.");
-				}
-			}
-		} else {
-			System.out.println("No one has made this trip on Hubway before!");
-		}
-	}
-*/
+	/*
+	 * public void info() { System.out.println(
+	 * "************************ YOUR TRIP ************************");
+	 * System.out.println("Start Station: " + station1.station);
+	 * System.out.println("End Station: " + station2.station);
+	 * System.out.println("\n***** Historical Trip Facts *****"); //
+	 * System.out.println("They are " + geoDist + //
+	 * " miles apart as the crow flies."); if (navDist != -1.0) {
+	 * System.out.println("But you will have to travel at least " + navDist +
+	 * " miles " + "to complete the trip."); } if (tripCount != 0) {
+	 * System.out.println("There are " + tripCount + " trips between " +
+	 * station1.station + " and " + station2.station + "."); if
+	 * (station1.tripsFrom.get("total") != 0 && station2.tripsTo.get("total") !=
+	 * 0) { System.out.println("\tThat is " + tripCount / (double)
+	 * station1.tripsFrom.get("total") * 100 + " percent " +
+	 * "of the trips from " + station1.station); System.out.println("\t and " +
+	 * tripCount / (double) station2.tripsTo.get("total") * 100 + " percent " +
+	 * "of the trips to " + station2.station + "."); }
+	 * System.out.println("\nThese trips took on average " + avgTime / 60 +
+	 * " minutes."); if (minTime != 0 && minTime != -1) {
+	 * System.out.println("The longest took " + maxTime / 60 +
+	 * " minutes, and the shortest " + minTime / 60 + " minutes."); double dist
+	 * = (navDist == -1.0 ? geoDist : navDist); if (dist != 0) {
+	 * System.out.println("The maximum speed was about " + dist / (((double)
+	 * minTime) / 3600) + " mph."); } } } else {
+	 * System.out.println("No one has made this trip on Hubway before!"); } }
+	 */
 	private int computeTime(JSONArray trips) {
 		int time = 0;
 		int longest, shortest, tripTime;
