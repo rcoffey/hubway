@@ -24,22 +24,22 @@ public class GalawayRunner {
 		System.out.println("Please enter your start address: ");
 		Scanner input = new Scanner(System.in);
 		String address = input.nextLine();
-		
+
 		// Use GeoCode to get coordinates of the address
 		// Use Mongo near query to get nearest hubway station
 		Station startStation = service.processAddress(address);
 		if (startStation == null) {
 			return;
 		}
-		
+
 		// ask for destination
 		System.out.println("Please enter your destination address, or 0 if you'd like suggestions: ");
 		while (!input.hasNextLine()) {
 			// wait for input
-		} 			
+		}
 		address = input.nextLine();
 		input.close();
-		
+
 		// detect and act on advice request
 		if ("0".equals(address)) {
 			service.adviseDestination(startStation);
@@ -50,9 +50,9 @@ public class GalawayRunner {
 			if (endStation == null) {
 				return;
 			}
-			
+
 			// look up route options between the two
-			service.produceOutput(new StationPair(startStation, endStation));
+			service.produceOutput(startStation, endStation);
 		}
 	}
 

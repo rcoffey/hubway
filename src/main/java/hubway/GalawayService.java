@@ -214,23 +214,18 @@ public class GalawayService {
 			System.out.println("Alternatively, you could go to " + destStation.station
 					+ ", the second most popular trip from " + startStation_.station + "\n");
 		}
-		StationPair stationsOfInterest = new StationPair(startStation_, destStation);
 
-		produceOutput(stationsOfInterest);
+		produceOutput(startStation_, destStation);
 	}
 
 	/**
-	 * Lookup any two stations and compare routes between them.
+	 * Compare routes between two stations.
 	 * 
-	 * @param stationsOfInterest
+	 * @param origin_
+	 * @param destination_
 	 */
-	public void produceOutput(StationPair stationsOfInterest) {
-		Station station1, station2;
-		DBObject query = BasicDBObjectBuilder.start().add("_id", Integer.parseInt(stationsOfInterest.station1)).get();
-		station1 = _dao.findObject("Stations", query, Station.class);
-		DBObject query2 = BasicDBObjectBuilder.start().add("_id", Integer.parseInt(stationsOfInterest.station2)).get();
-		station2 = _dao.findObject("Stations", query2, Station.class);
-		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(station1.getLatLng(), station2.getLatLng());
+	public void produceOutput(Station origin_, Station destination_) {
+		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(origin_.getLatLng(), destination_.getLatLng());
 
 		Weather cur = _locationEnricher.getCurrentWeather("MA/Boston");
 
