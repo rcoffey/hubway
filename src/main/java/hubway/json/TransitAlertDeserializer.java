@@ -1,6 +1,7 @@
 package hubway.json;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -32,7 +33,7 @@ public class TransitAlertDeserializer implements JsonDeserializer<TransitAlert> 
 					final String stop_name = svc.getAsJsonObject().get("stop_name").getAsString(); // orange line	
 					
 					if (!ta.linesAndStations.containsKey(route_name))
-						ta.linesAndStations.put(route_name, new LinkedList<String>());
+						ta.linesAndStations.put(route_name, new HashSet<String>());
 					
 					if (stop_name != null)
 						ta.linesAndStations.get(route_name).add(stop_name);

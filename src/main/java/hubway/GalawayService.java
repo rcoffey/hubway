@@ -11,6 +11,7 @@ import hubway.utility.IntegerConverter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,6 +101,8 @@ public class GalawayService {
 		Boolean weatherIsGood = weather.tempf > 55 && weather.tempf < 85 && weather.windmph < 10
 				&& !weather.weather.contains("Rain") && !weather.weather.contains("Snow");
 
+		String alertWarnings = "";
+		
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
 			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()) {
 				quickest = entry;
@@ -125,6 +128,9 @@ public class GalawayService {
 				else
 					badweatherOption = entry;
 			}
+			
+			alertWarnings += resultTripAlert(entry.getValue());				
+			
 		}
 
 		if (recommended == null)
@@ -148,6 +154,7 @@ public class GalawayService {
 						+ " minutes to travel " + route.getTotalDistance() + " miles.";
 			}
 		}
+		results+= alertWarnings;
 		System.out.println(results);
 
 	}
@@ -267,23 +274,23 @@ public String resultTripAlert(Route r) {
 	for (Iterator<String> iterator = transit.keySet().iterator(); iterator.hasNext();) {
 		String key = iterator.next();
 		
-		if (key.contains("Subway"))
+		if (key.contains("subway"))
 			{
 			Set<String> lines = transit.get(key);
 			
 			for (String line: lines) {
-
-
 				if(alerts.linesAndStations.containsKey(line))
 				{
 					//there is a alert for your line,
 									
 					results += "\n There is an alert for " + line + "! see affected locations : \n";
-					HashMap<String, LinkedList<String>> da = alerts.linesAndStations;
-					LinkedList<String> asd = da.get(line);
-					for (String string : asd) {
+					int k = 0;
+					HashSet<String> stations = alerts.linesAndStations.get(line);
+					for (String string : stations) {
 						results += string + ", ";
+						if (k++>4){k=0;results+="\n";}
 					}
+					results += "\n please check your itinerary as there may be delays on the " + line + "! \n";
 					
 				}
 				
