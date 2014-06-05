@@ -198,6 +198,11 @@ public class GalawayService {
 	 */
 	public void adviseDestination(Station startStation_) {
 		Station destStation;
+		if (!startStation_.maxDest.containsKey("total")){
+			logger.warn("No historical data was found to make a prediction for station station "
+					+ startStation_.getStation());
+			return;
+		}
 		if (!startStation_.maxDest.get("total").equals(startStation_.id)) {
 			destStation = processStation(Integer.parseInt(startStation_.maxDest.get("total")));
 			if (destStation == null) {
@@ -210,6 +215,9 @@ public class GalawayService {
 		} else {
 			System.out.println("Perhaps you would like to go for a joyride, starting and ending at "
 					+ startStation_.station + "\n This is the most popular trip from " + startStation_.station + "\n");
+			if(!startStation_.penMaxDest.containsKey("total")){
+				return;
+			}
 			destStation = processStation(Integer.parseInt(startStation_.penMaxDest.get("total")));
 			System.out.println("Alternatively, you could go to " + destStation.station
 					+ ", the second most popular trip from " + startStation_.station + "\n");
