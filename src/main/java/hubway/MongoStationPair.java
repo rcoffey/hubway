@@ -1,5 +1,6 @@
 package hubway;
 
+import java.util.Date;
 import java.util.Map;
 
 import com.googlecode.mjorm.annotations.Entity;
@@ -12,6 +13,11 @@ public class MongoStationPair {
 	protected String station1, station2;
 	protected int tripCount;
 	protected Map<String, Integer> tripsByTime;
+	protected int minTime;
+	protected int maxTime;
+	protected int avgTime;
+	protected Date minDate;
+	protected Date maxDate;
 
 	public MongoStationPair() {
 		// TODO Auto-generated constructor stub
@@ -81,6 +87,86 @@ public class MongoStationPair {
 		this.tripsByTime = tripsByTime;
 	}
 
+	/**
+	 * @return the minTime
+	 */
+	@Property
+	public int getMinTime() {
+		return minTime;
+	}
+
+	/**
+	 * @param minTime
+	 *            the minTime to set
+	 */
+	public void setMinTime(int minTime) {
+		this.minTime = minTime;
+	}
+
+	/**
+	 * @return the maxTime
+	 */
+	@Property
+	public int getMaxTime() {
+		return maxTime;
+	}
+
+	/**
+	 * @param maxTime
+	 *            the maxTime to set
+	 */
+	public void setMaxTime(int maxTime) {
+		this.maxTime = maxTime;
+	}
+
+	/**
+	 * @return the avgTime
+	 */
+	@Property
+	public int getAvgTime() {
+		return avgTime;
+	}
+
+	/**
+	 * @param avgTime
+	 *            the avgTime to set
+	 */
+	public void setAvgTime(int avgTime) {
+		this.avgTime = avgTime;
+	}
+
+	/**
+	 * @return the minDate
+	 */
+	@Property
+	public Date getMinDate() {
+		return minDate;
+	}
+
+	/**
+	 * @param minDate
+	 *            the minDate to set
+	 */
+	public void setMinDate(Date minDate) {
+		this.minDate = minDate;
+	}
+
+	/**
+	 * @return the maxDate
+	 */
+	@Property
+	public Date getMaxDate() {
+		return maxDate;
+	}
+
+	/**
+	 * @param maxDate
+	 *            the maxDate to set
+	 */
+	public void setMaxDate(Date maxDate) {
+		this.maxDate = maxDate;
+	}
+
 	public void info(Station origin, Station destination) {
 		System.out.println("************************ YOUR TRIP ************************");
 		System.out.println("Start Station: " + origin.getStation());
@@ -94,20 +180,15 @@ public class MongoStationPair {
 						+ " percent " + "of the trips from " + origin.station);
 				System.out.println("\t and " + tripCount / (double) destination.tripsTo.get("total") * 100
 						+ " percent " + "of the trips to " + destination.station + ".");
+				System.out.println("\nThese trips took on average " + avgTime / 60 + " minutes.");
+				if (minTime != 0 && minTime != -1) {
+					System.out.println("The longest took " + maxTime / 60 + " minutes on " + maxDate.toString());
+					System.out.println("The shortest " + minTime / 60 + " minutes on " + minDate.toString());
+				}
 			}
 
 			System.out.println();
 			printBreakdown();
-			// System.out.println("\nThese trips took on average " + avgTime /
-			// 60 +
-			// " minutes."); if (minTime != 0 && minTime != -1) {
-			// System.out.println("The longest took " + maxTime / 60 +
-			// " minutes, and the shortest " + minTime / 60 + " minutes.");
-			// double dist
-			// = (navDist == -1.0 ? geoDist : navDist); if (dist != 0) {
-			// System.out.println("The maximum speed was about " + dist /
-			// (((double)
-			// minTime) / 3600) + " mph."); } }
 		} else {
 			System.out.println("No one has made this trip on Hubway before!");
 		}
