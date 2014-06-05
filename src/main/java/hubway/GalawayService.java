@@ -275,7 +275,7 @@ public String resultTripAlert(Route r) {
 	for (Iterator<String> iterator = transit.keySet().iterator(); iterator.hasNext();) {
 		String key = iterator.next();
 		
-		if (key.contains("subway"))
+		if (key.contains("subway") || key.contains("light rail"))
 			{
 			Set<String> lines = transit.get(key);
 			
