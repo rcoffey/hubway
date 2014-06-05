@@ -22,7 +22,7 @@ public class Station {
 	public Integer nb_docks;
 	public Double lat, lng;
 	public HashMap<String, Integer> tripsFrom, tripsTo, joyrides;
-	public int maxDest, penMaxDest;
+	public HashMap<String, String> maxDest, penMaxDest;
 
 	public Station() {
 		// TODO Auto-generated constructor stub
@@ -57,20 +57,20 @@ public class Station {
 	}
 
 	@Property
-	public int getMaxDest() {
+	public HashMap<String, String> getMaxDest() {
 		return maxDest;
 	}
 
-	public void setMaxDest(int dest) {
+	public void setMaxDest(HashMap<String, String> dest) {
 		this.maxDest = dest;
 	}
 
 	@Property
-	public int getPenMaxDest() {
+	public HashMap<String, String> getPenMaxDest() {
 		return penMaxDest;
 	}
 
-	public void setPenMaxDest(int dest) {
+	public void setPenMaxDest(HashMap<String, String> dest) {
 		this.penMaxDest = dest;
 	}
 
