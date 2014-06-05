@@ -199,7 +199,7 @@ public class GalawayService {
 	public void adviseDestination(Station startStation_) {
 		Station destStation;
 		if (!startStation_.maxDest.containsKey("total")){
-			logger.warn("No historical data was found to make a prediction for station station "
+			logger.warn("No historical data was found to make a prediction for start station "
 					+ startStation_.getStation());
 			return;
 		}
