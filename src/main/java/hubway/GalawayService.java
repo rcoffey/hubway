@@ -9,6 +9,7 @@ import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,6 +71,7 @@ public class GalawayService {
 		// Use mjorm to map our results to our java Stations.
 		AnnotationsDescriptorObjectMapper mapper = new AnnotationsDescriptorObjectMapper();
 		mapper.addClass(Station.class);
+		mapper.addClass(MongoStationPair.class);
 		// Need these custom converters because they didn't think it was
 		// important to go from String -> Common freaking types.
 		mapper.registerTypeConverter(new DateConverter());
@@ -92,7 +94,7 @@ public class GalawayService {
 		Entry<String, Route> badweatherOption = null;
 
 		Boolean weatherIsGood = weather.tempf > 55 && weather.tempf < 85 && weather.windmph < 10
-				&& !weather.weather.contains("rain") && !weather.weather.contains("snow");
+				&& !weather.weather.contains("Rain") && !weather.weather.contains("Snow");
 
 		for (Entry<String, Route> entry : routeMap_.entrySet()) {
 			if (quickest == null || entry.getValue().getTotalDuration() < quickest.getValue().getTotalDuration()) {
@@ -233,8 +235,15 @@ public class GalawayService {
 	 * @param destination_
 	 */
 	public void produceOutput(Station origin_, Station destination_) {
-		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(origin_.getLatLng(), destination_.getLatLng());
 
+		MongoStationPair trip = null;
+		Map<String, String> queryParams = new HashMap<String, String>(2);
+		queryParams.put("station1", origin_.getId());
+		queryParams.put("station2", destination_.getId());
+		DBObject query = BasicDBObjectBuilder.start(queryParams).get();
+		trip = _dao.findObject("Station Pairs", query, MongoStationPair.class);
+		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(origin_.getLatLng(), destination_.getLatLng());
+		trip.info(origin_, destination_);
 		Weather cur = _locationEnricher.getCurrentWeather("MA/Boston");
 
 		compareRoutes(cur, locationDataMap);
