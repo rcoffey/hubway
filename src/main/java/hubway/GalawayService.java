@@ -58,6 +58,9 @@ public class GalawayService {
 
 	}
 
+	/**
+	 * Get mongo database connection, register custom type converters
+	 */
 	protected void initializeMongo() {
 		DB galawayDb = _mongoTemplate.getDb();
 		if (!galawayDb.isAuthenticated()) {
@@ -74,6 +77,13 @@ public class GalawayService {
 		_dao = new MongoDaoImpl(galawayDb, mapper);
 	}
 
+	/**
+	 * Create travel options based on route duration and distance as well as
+	 * current weather conditions.
+	 * 
+	 * @param weather
+	 * @param routeMap_
+	 */
 	public void compareRoutes(Weather weather, Map<String, Route> routeMap_) {
 		logger.debug("Comparing " + routeMap_.size() + " routes for travel types : " + routeMap_.keySet().toString());
 		Entry<String, Route> quickest = null;
@@ -136,6 +146,12 @@ public class GalawayService {
 
 	}
 
+	/**
+	 * Get station data from mongo for a station id
+	 * 
+	 * @param startStationId_
+	 * @return
+	 */
 	public Station processStation(int startStationId_) {
 		DaoQuery query = _dao.createQuery();
 		query.eq("_id", startStationId_);
@@ -148,6 +164,13 @@ public class GalawayService {
 		return startStation;
 	}
 
+	/**
+	 * Get a Station by translating address to a lat, lng via the Google
+	 * Geocoding API then use this location in a mongo near query.
+	 * 
+	 * @param address
+	 * @return
+	 */
 	public Station processAddress(String address) {
 		LatLng coords = _geocodeQueryBuilder.queryLatLng(address);
 		if (coords == null) {
@@ -167,12 +190,21 @@ public class GalawayService {
 		return nearStation;
 	}
 
+	/**
+	 * Advises a the most popular destination from the start, or the second most
+	 * popular if the first returns to the the start.
+	 * 
+	 * @param startStation_
+	 */
 	public void adviseDestination(Station startStation_) {
 		Station destStation;
 		if (startStation_.maxDest != Integer.parseInt(startStation_.id)) {
 			destStation = processStation(startStation_.maxDest);
-			if (destStation == null)
+			if (destStation == null) {
+				logger.warn("No historical data was found to make a prediction for start station "
+						+ startStation_.getStation());
 				return;
+			}
 			System.out.println("Perhaps you would like to go to " + destStation.station
 					+ ", the most popular trip from " + startStation_.station + "\n");
 		} else {
@@ -187,21 +219,18 @@ public class GalawayService {
 		produceOutput(stationsOfInterest);
 	}
 
+	/**
+	 * Lookup any two stations and compare routes between them.
+	 * 
+	 * @param stationsOfInterest
+	 */
 	public void produceOutput(StationPair stationsOfInterest) {
-		//stationsOfInterest.addTrips(_hubwayQuerier);
-
-		//stationsOfInterest.info();
-
-		// need to look up station objects for station1 and station2
 		Station station1, station2;
-		DBObject query =  BasicDBObjectBuilder.start()
-				.add("_id", Integer.parseInt(stationsOfInterest.station1)).get();
+		DBObject query = BasicDBObjectBuilder.start().add("_id", Integer.parseInt(stationsOfInterest.station1)).get();
 		station1 = _dao.findObject("Stations", query, Station.class);
-		DBObject query2 = BasicDBObjectBuilder.start()
-				.add("_id", Integer.parseInt(stationsOfInterest.station2)).get();
+		DBObject query2 = BasicDBObjectBuilder.start().add("_id", Integer.parseInt(stationsOfInterest.station2)).get();
 		station2 = _dao.findObject("Stations", query2, Station.class);
-		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(station1.getLatLng(),
-				station2.getLatLng());
+		Map<String, Route> locationDataMap = _locationEnricher.getRoutes(station1.getLatLng(), station2.getLatLng());
 
 		Weather cur = _locationEnricher.getCurrentWeather("MA/Boston");
 

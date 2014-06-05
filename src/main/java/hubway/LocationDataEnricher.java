@@ -85,6 +85,7 @@ public class LocationDataEnricher {
 
 	}
 
+	@Deprecated
 	public Map<String, JSONObject> getHubways(LatLng origin_, LatLng destination_, int radius_) {
 		HashMap<String, JSONObject> results = new HashMap<String, JSONObject>(2);
 
