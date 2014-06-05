@@ -30,6 +30,14 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import com.javadocmd.simplelatlng.LatLng;
 
+/**
+ * Abstract Query Builder provides base methods for returning results from a
+ * query url as either a JsonObject or a Java Object. For new classes a
+ * deserializer must be registered with the gson builder.
+ * 
+ * @author Rose Coffey
+ * 
+ */
 public abstract class AQueryBuilder {
 
 	protected String _url;
@@ -39,6 +47,13 @@ public abstract class AQueryBuilder {
 	protected JsonParser _jsonParser;
 	final protected Logger logger = LoggerFactory.getLogger(HubwayQueryBuilder.class);
 
+	/**
+	 * The different deserializers could be registered by the more specific
+	 * queries...
+	 * 
+	 * @param url_
+	 * @param credentials_
+	 */
 	public AQueryBuilder(final String url_, final String credentials_) {
 		_url = url_;
 		_credentials = credentials_;
@@ -76,6 +91,14 @@ public abstract class AQueryBuilder {
 		return null;
 	}
 
+	/**
+	 * Query the provided url and attempt to deserialize using registered type
+	 * adapters for the given class
+	 * 
+	 * @param url_
+	 * @param class_
+	 * @return
+	 */
 	public <T> Object queryAndDeserialize(String url_, Class<T> class_) {
 
 		URL query;
@@ -84,16 +107,12 @@ public abstract class AQueryBuilder {
 			JsonReader jreader = new JsonReader(new InputStreamReader(query.openStream()));
 			return _gson.fromJson(_jsonParser.parse(jreader), class_);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonSyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JsonIOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
