@@ -123,7 +123,7 @@ public class galaway {
 
 		boolean advice = false;
 		if (destStationId == 0) {
-			destStationId = startStation.maxDest;
+			destStationId = Integer.parseInt(startStation.maxDest.get("total"));
 			advice = true;
 		}
 
