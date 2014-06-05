@@ -1,6 +1,7 @@
 package hubway;
 
 import hubway.json.Route;
+import hubway.json.TransitAlert;
 import hubway.json.Weather;
 import hubway.utility.Calculator;
 import hubway.utility.DateConverter;
@@ -9,9 +10,13 @@ import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,4 +237,53 @@ public class GalawayService {
 		compareRoutes(cur, locationDataMap);
 
 	}
+	
+	
+
+public String resultTripAlert(Route r) {	
+
+	TransitAlert alerts = _locationEnricher.getTransitAlerts();
+	
+	String results = "";
+	
+	Map<String, Set<String>> transit = r.getTransitTypes();
+	
+	for (Iterator<String> iterator = transit.keySet().iterator(); iterator.hasNext();) {
+		String key = iterator.next();
+		
+		if (key.contains("Subway"))
+			{
+			Set<String> lines = transit.get(key);
+			
+			for (String line: lines) {
+
+
+				if(alerts.linesAndStations.containsKey(line))
+				{
+					//there is a alert for your line,
+									
+					results += "\n There is an alert for " + line + "! see affected locations : \n";
+					HashMap<String, LinkedList<String>> da = alerts.linesAndStations;
+					LinkedList<String> asd = da.get(line);
+					for (String string : asd) {
+						results += string + ", ";
+					}
+					
+				}
+				
+				
+			}
+
+			
+			}
+			}
+
+
+	
+	
+	return results;
+	
 }
+}
+
+

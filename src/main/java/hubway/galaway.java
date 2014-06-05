@@ -9,10 +9,14 @@ import hubway.utility.GeocodeQueryBuilder;
 import hubway.utility.HubwayQueryBuilder;
 import hubway.utility.IntegerConverter;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -227,4 +231,52 @@ public class galaway {
 		System.out.println(results);
 
 	}
+	
+
+//
+//public String resultTripAlert(Route r) {	
+//
+//	LocationDataEnricher locationData = (LocationDataEnricher) context.getBean("locationEnricher");
+//	TransitAlert alerts = locationData.getTransitAlerts();
+//	
+//	String results = "";
+//	
+//	Map<String, Set<String>> transit = r.getTransitTypes();
+//	
+//	for (Iterator<String> iterator = transit.keySet().iterator(); iterator.hasNext();) {
+//		String key = iterator.next();
+//		
+//		if (key.contains("Subway"))
+//			{
+//			Set<String> lines = transit.get(key);
+//			
+//			for (String line: lines) {
+//
+//
+//				if(alerts.linesAndStations.containsKey(line))
+//				{
+//					//there is a alert for your line,
+//									
+//					results += "\n There is an alert for " + line + "! see affected locations : \n";
+//					HashMap<String, LinkedList<String>> da = alerts.linesAndStations;
+//					LinkedList<String> asd = da.get(line);
+//					for (String string : asd) {
+//						results += string + ", ";
+//					}
+//					
+//				}
+//				
+//				
+//			}
+//
+//			
+//			}
+//			}
+//
+//
+//	
+//	
+//	return results;
+//	
+//}
 }
