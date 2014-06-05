@@ -1,5 +1,8 @@
 package hubway.utility.setup;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hubway.galaway;
 import hubway.utility.HubwayQueryBuilder;
 
@@ -33,7 +36,7 @@ public class stationModifier {
 		}
 		
 		DBCollection stations = galawayDb.getCollection("Stations");
-		DBObject query = new BasicDBObject(); // select * query
+		DBObject query;
 		
 		/* This block is to insert stations */
 		/*  
@@ -108,33 +111,93 @@ public class stationModifier {
 		*/
 		
 		// use trips to calculate most popular destination from given station
-		// store the station pair (or just store the station id if there are space constraints)
+		// store the station id
 		// also calc second most popular in hopes of more interesting results
-		/*HubwayQueryBuilder hubwayQuerier = (HubwayQueryBuilder) context.getBean("hubwayQuerier");
-		String queryString;
-		JSONObject tripData;
-		int count;
-		int newCount;
-		DBObject maxStation;
+		Map<String, Integer> count = new HashMap<String, Integer>(11);
+		Map<String, String> maxDestByTime;
 		for (DBObject station : stations.find()) {
-			count = 0;
+			count.put("total", 0);
+			count.put("MONDAY", 0);
+			count.put("TUESDAY", 0);
+			count.put("WEDNESDAY", 0);
+			count.put("THURSDAY", 0);
+			count.put("FRIDAY", 0);
+			count.put("SATURDAY", 0);
+			count.put("SUNDAY", 0);
+			count.put("MORNING", 0);
+			count.put("AFTERNOON", 0);
+			count.put("NIGHT", 0);
+			maxDestByTime = new HashMap<String, String>(11);
+			DBObject maxDest = (DBObject) station.get("maxDest");
+			// get all station pairs starting at this station
+			query = BasicDBObjectBuilder.start()
+					.add("station1", station.get("_id").toString()).get();
+			DBCollection stationPairs = galawayDb.getCollection("Station Pairs");
+			
 			System.out.println("Calculating most popular destinations from " + station.get("station"));
-			maxStation = station;
-			queryString = "&start_station=" + station.get("_id");
-			for (DBObject dest : stations.find()) {
-				if (dest.get("_id") == station.get("maxDest")) {
-					continue;
+
+			for (DBObject pair : stationPairs.find(query)) {
+				DBObject trips = (DBObject) pair.get("tripsByTime");
+				if ((Integer)trips.get("total") > count.get("total")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("total"))){
+					count.put("total", (Integer)trips.get("total"));
+					maxDestByTime.put("total", (String)pair.get("station2"));}
 				}
-				queryString += "&end_station=" + dest.get("_id");
-				tripData = hubwayQuerier.query("trip", queryString).getJSONObject("meta");
-				newCount = tripData.getInt("total_count");
-				if (count < newCount) {
-					maxStation = dest;
-					count = newCount;
+				if (trips.containsField("MONDAY")&&(Integer)trips.get("MONDAY") > count.get("MONDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("MONDAY"))){
+					count.put("MONDAY", (Integer)trips.get("MONDAY"));
+					maxDestByTime.put("MONDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("TUESDAY")&&(Integer)trips.get("TUESDAY") > count.get("TUESDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("TUESDAY"))){
+					count.put("TUESDAY", (Integer)trips.get("TUESDAY"));
+					maxDestByTime.put("TUESDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("WEDNESDAY")&&(Integer)trips.get("WEDNESDAY") > count.get("WEDNESDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("WEDNESDAY"))){
+					count.put("WEDNESDAY", (Integer)trips.get("WEDNESDAY"));
+					maxDestByTime.put("WEDNESDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("THURSDAY")&&(Integer)trips.get("THURSDAY") > count.get("THURSDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("THURSDAY"))){
+					count.put("THURSDAY", (Integer)trips.get("THURSDAY"));
+					maxDestByTime.put("THURSDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("FRIDAY")&&(Integer)trips.get("FRIDAY") > count.get("FRIDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("FRIDAY"))){
+					count.put("FRIDAY", (Integer)trips.get("FRIDAY"));
+					maxDestByTime.put("FRIDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("SATURDAY")&&(Integer)trips.get("SATURDAY") > count.get("SATURDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("SATURDAY"))){
+					count.put("SATURDAY", (Integer)trips.get("SATURDAY"));
+					maxDestByTime.put("SATURDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("SUNDAY")&&(Integer)trips.get("SUNDAY") > count.get("SUNDAY")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("SUNDAY"))){
+					count.put("SUNDAY", (Integer)trips.get("SUNDAY"));
+					maxDestByTime.put("SUNDAY", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("MORNING")&&(Integer)trips.get("MORNING") > count.get("MORNING")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("MORNING"))){
+					count.put("MORNING", (Integer)trips.get("MORNING"));
+					maxDestByTime.put("MORNING", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("AFTERNOON")&&(Integer)trips.get("AFTERNOON") > count.get("AFTERNOON")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("AFTERNOON"))){
+					count.put("AFTERNOON", (Integer)trips.get("AFTERNOON"));
+					maxDestByTime.put("AFTERNOON", (String)pair.get("station2"));}
+				}
+				if (trips.containsField("NIGHT")&&(Integer)trips.get("NIGHT") > count.get("NIGHT")){
+					if (!((String)pair.get("station2")).equals((String)maxDest.get("NIGHT"))){
+					count.put("NIGHT", (Integer)trips.get("NIGHT"));
+					maxDestByTime.put("NIGHT", (String)pair.get("station2"));}
 				}
 			}
-			station.put("penMaxDest", maxStation.get("_id"));
+
+			station.put("penMaxDest", maxDestByTime);
+			
 			stations.save(station);
-		}*/
+		}
 	}
 }
